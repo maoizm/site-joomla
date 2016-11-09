@@ -610,7 +610,17 @@ crashlytics.properties
 crashlytics-build.properties
 fabric.properties
 
+<<<<<<< HEAD
 
+=======
+/.idea/dataSources/
+/.idea/copyright
+.idea/site-joomla.iws
+.idea/workspace.xml
+.idea/dataSources.local.xml
+.idea/shelf/
+0joomla-virgin/
+>>>>>>> 7f53429... install node, gulp; create tasks
 ### Node template
 # Logs
 logs
