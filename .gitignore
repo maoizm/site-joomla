@@ -233,6 +233,8 @@
 /administrator/language/en-GB/en-GB.plg_system_debug.sys.ini
 /administrator/language/en-GB/en-GB.plg_system_highlight.ini
 /administrator/language/en-GB/en-GB.plg_system_highlight.sys.ini
+/administrator/language/en-GB/en-GB.plg_system_jscsscontrol.ini
+/administrator/language/en-GB/en-GB.plg_system_jscsscontrol.sys.ini
 /administrator/language/en-GB/en-GB.plg_system_languagefilter.ini
 /administrator/language/en-GB/en-GB.plg_system_languagefilter.sys.ini
 /administrator/language/en-GB/en-GB.plg_system_log.ini
@@ -559,6 +561,8 @@
 /templates/index.html
 /tmp/*
 /configuration.php
+/configuration-docker.php
+/configuration-laragon.php
 /index.php
 /joomla.xml
 /*.txt
@@ -610,17 +614,6 @@ crashlytics.properties
 crashlytics-build.properties
 fabric.properties
 
-<<<<<<< HEAD
-
-=======
-/.idea/dataSources/
-/.idea/copyright
-.idea/site-joomla.iws
-.idea/workspace.xml
-.idea/dataSources.local.xml
-.idea/shelf/
-0joomla-virgin/
->>>>>>> 7f53429... install node, gulp; create tasks
 ### Node template
 # Logs
 logs
@@ -661,17 +654,96 @@ jspm_packages
 .node_repl_history
 ### node template
 
+### mao - joomla 3rd party components
+#/administrator
+#/components/com_advancedmodules
+#/libraries/regularlabs
+#/media/advancedmodules
+#/media/regularlabs
+#/plugins
+#/plugins/editors-xtd
+#/plugins/system
+
+*.jpa
+/administrator/components/com_admintools/
+/administrator/components/com_akeeba/
+/administrator/components/com_arkeditor/
+/administrator/components/com_jce/
+/administrator/components/com_j2xml
+/administrator/language/en-GB/en-GB.*admintools*.*
+/administrator/language/en-GB/en-GB.*akeeba*.*
+/administrator/language/en-GB/en-GB.*arkeditor*.*
+/administrator/language/en-GB/en-GB.*backuponupdate*.*
+/administrator/language/en-GB/en-GB.*jce*.*
+/administrator/modules/mod_ark*/
+/components/com_admintools/
+/components/com_akeeba/
+/components/com_arkeditor/
+/components/com_jce/
+/components/com_j2xml/
+/language/en-GB/en-GB.com_admintools.ini
+/language/en-GB/en-GB.com_akeeba.ini
+/language/en-GB/en-GB.*fof30.ini
+/language/en-GB/en-GB.com_jce.ini
+/language/en-GB/en-GB.pkg_arkeditor.sys.ini
+/language/en-GB/en-GB.pkg_jce.sys.ini
+/language/*/*_j2xml.*
+/language/*/*_eshiol.*
+/libraries/fof30/
+/libraries/eshiol/
+/media/com_akeeba/
+/media/editors/arkeditor/
+/media/jce/
+/media/com_j2xml/
+/media/lib_eshiol_core/
+/media/whatnothing/
+/modules/mod_inlinecustom/
+/plugins/ajax/
+/plugins/ark*/
+/plugins/content/ark*/
+/plugins/content/jce/
+/plugins/editors/arkeditor/
+/plugins/editors/jce/
+/plugins/editors-xtd/arkeditor/
+/plugins/editors-xtd/jce/
+/plugins/editors-xtd/sourcerer/language/it-IT/
+/plugins/extension/arkeditor/
+/plugins/extension/inline/
+/plugins/extension/jce/
+/plugins/inline/
+/plugins/quickicon/akeebabackup/
+/plugins/quickicon/arkquickicon/
+/plugins/quickicon/jce/
+/plugins/system/admintools/
+/plugins/system/akeeba*check/
+/plugins/system/ark*/
+/plugins/system/backuponupdate/
+/plugins/system/inlinecontent/
+/plugins/system/inlinehistory/
+/plugins/system/j2xml/
+/plugins/system/jce/
+/plugins/system/jscsscontrol/
+/plugins/system/k2extrafields/
+/plugins/system/modulehistory/
+/plugins/system/sefbase/
+/plugins/system/sourcerer/language/it-IT/
+
 
 ### mao
 .idea
-.idea/dataSources/
-.idea/copyright
-.idea/site-joomla.iws
-.idea/shelf/
 0-joomla-virgin
 .dist
-.src/0install/**/*.sql
-administrator/components/com_akeeba/backup
-*.jpa
-.src
-### mao
+.build
+
+.src/vendor/basscss/css/
+.src/vendor/bootstrap/css/
+.src/vendor/bootstrap/js/bootstrap.min.js
+/templates/starlink*/
+/media/mod_starlink*/
+/modules/mod_starlink*/
+
+/db2file.sh
+/db2file.cmd
+/file2db.sh
+.[0-9][0-9]*_[0-9][0-9]*.sql.gz
+
