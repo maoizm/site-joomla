@@ -1,12 +1,7 @@
+SETLOCAL
 SET _host=localhost
-SET _port=13306
-SET _database=starlink.dev
-SET _user=dev
+SET _port=3306
+SET _database=somedatabase
+SET _user=someuser
 
-gzip -d < %1 | mysql -h%_host% -P%_port% -u%_user% -pdev --database=%_database%
-
-@ECHO OFF
-SET _host=
-SET _port=
-SET _database=
-SET _user=
+gzip -d < %1 | mysql -h%_host% -P%_port% -u%_user% -p --database=%_database%

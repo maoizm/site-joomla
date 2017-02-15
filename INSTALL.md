@@ -49,7 +49,7 @@ Installation
   2. `cp .src/0_database/file2db.sh . && chmod +x file2db.sh `
   3. add host, port, user name and password (optionally) to `file2db.sh`
   4. `./file2db.sh .20170214_1618_full.sql.gz`  
-(файл с последним бекапом базы данных https://www.dropbox.com/s/y9z4xj9v1aqff0d/.20170214_1618_full.sql.gz?dl=0)
+(файл с последним бекапом базы данных - см. Dropbox)
 
 #### 7. finish Joomla installation
   * create/copy prepared before Joomla `configuration.php` in `site-joomla/` directory  

@@ -4,19 +4,27 @@
 
 ## Installation
 
-1. Clone & cd to the new folder
-2. Have your Node & npm installed and in working condition
-3. `npm install`
+[Detailed instructions in INSTALL.md](https://github.com/maoizm/site-joomla/blob/develop/INSTALL.md "Installation instructions")
+
+## Configuration
+
+[See INSTALL.md](https://github.com/maoizm/site-joomla/blob/develop/INSTALL.md "Configuration instructions")
+
 
 ## Usage
 
 1. Edit source files in `.src/**`
-2. Compile `.src/**` and copy to Joomla folders: `gulp build`
+2. Compile `.src/**` and copy to Joomla folders: `gulp compile`
 3. Compile only `mod_starlink`:  `gulp modstarlink:compile`
     1. Compile only `mod_starlink`'s css:  `gulp modstarlink:compile:css`
-4. Compile & put in `.zip` package ready for installation in Joomla: `gulp modstarlink:build`
+4. Compile & put in `.zip` package ready for offline installation in Joomla: `gulp modstarlink:build`  
+   *(.zip files will be copied to* `.dist/` *)*
 5. Delete and rebuild all production files from .src:
-   `Gulp cleanBuild`
+   ````bash
+   gulp clean
+   gulp build
+   ````
+   
    
 ### Database operations
 
@@ -24,18 +32,18 @@
 
 Database will be copied to file `.YYYYMMDD_HHMM.sql.gz`
 
-- ##### Linux
+ - ##### Linux
    `.src/0_database/db2file.sh`
  
-- ##### Windows 
+ - ##### Windows 
    `.src\0_database\db2file.cmd`
 
 #### Restore Joomla db from file 
 
-- ##### Linux
+ - ##### Linux
    `.src/0_database/file2db.sh .20161201_1901.sql.gz`
 
-### Other
+## Other
 
 ####svg icons
 
