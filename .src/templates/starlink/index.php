@@ -32,7 +32,7 @@
       <div class="col-xs-12 col-sm-8 col-md-3 col-lg-4">
         <a title="StarLink" href="<?php echo JURI::base(); ?>">
           <div class="b-logo">
-            <img class="b-logo__image" src="<?/*=$assetsPath*/?>/images/logo-vector.svg">
+            <img class="b-logo__image" src="<?=$assetsPath?>/images/logo-vector.svg">
             <!--<svg class="b-logo__image">
               <use xlink:href="#iconStarlink" class="" />
             </svg>-->
