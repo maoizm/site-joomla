@@ -17,10 +17,6 @@
   display                    : flex;
   align-items                : center;
   position                   : relative;
-/*  background-image: url("data:image/svg+xml,%3Csvg width='700' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cg%3E%3Crect id='canvas_white' height='100' width='700' y='0' x='0' fill='#fff'/%3E%3C/g%3E%3Cg%3E%3Crect id='rect_black' height='100' width='690' y='0' x='10' fill='$(softBlack)'/%3E%3C/g%3E%3C/svg%3E");
-  background-position: 160px top;
-  background-repeat: no-repeat;
-  background-size: cover;*/
   color                      : #fff;
   height                     : var(--mobileHeight);
   transition                 : height 300ms, margin 300ms, background-position 300ms;
@@ -130,10 +126,6 @@
   position       : relative;
   color          : #fff;
   background     : var(--softBlack);
-/*  background-image: url("data:image/svg+xml,%3Csvg width='700' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cg%3E%3Crect id='canvas_white' height='100' width='700' y='0' x='0' fill='#fff'/%3E%3C/g%3E%3Cg%3E%3Crect id='rect_black' height='100' width='690' y='0' x='10' fill='$(softBlack)'/%3E%3C/g%3E%3C/svg%3E");
-  background-position: 160px top;
-  background-repeat: no-repeat;
-  background-size: cover;*/
 
   font-size      : 15px;
   line-height    : 15px;
@@ -266,6 +258,11 @@
 /*   SEARCH element */
 .searchButton {
   display: none;
+  @media (min-width: 992px) {
+      margin-left: 15px;
+      display: inline-block;
+      line-height: normal;
+  }
 }
 #searchForm{
   display: none;
@@ -280,10 +277,6 @@
   outline     : none;
   width       : 100%;
 }
-/*#mod-search-searchword::-webkit-input-placeholder {color:#333;}
-#mod-search-searchword::-moz-placeholder          {color:#333;}!* Firefox 19+ *!
-#mod-search-searchword:-moz-placeholder           {color:#333;}!* Firefox 18- *!
-#mod-search-searchword:-ms-input-placeholder      {color:#333;}*/
 
 .search{
   margin     : 15px 0;
@@ -293,30 +286,32 @@
   display: none;
 }
 
-@media (min-width: 992px) {
-  .searchButton{
-    margin-left: 15px;
-    display: inline-block;
-    line-height: normal;
-  }
-}
-
-
-
-
-
-
-
-
-
-
-/* Logo & phone */
 
 .b-topRow {
   position: relative;
   background : rgb(51, 56, 63);
   color      : #fff;
   height     : 50px;
+
+  @media (min-width: 768px) {
+      background : transparent;
+      color      : black;
+      height     : auto;
+      width      : 720px;
+      margin     : 0 auto;
+      transition : all 500ms ease-in-out;
+  }
+  @media (min-width: 992px)  {
+    height: 75px;
+    width : 970px;
+    position : static;
+  }
+  @media (min-width: 1200px) {
+      width : 1170px;
+  }
+  @media (min-width: 1600px) {
+      width : 1560px;
+  }
 }
 .b-logo {
   position         : absolute;
@@ -326,12 +321,44 @@
   overflow         : hidden;
   z-index          : 1;
   background-color : #ddd;
+
+  @media (max-width : 480px) {
+      width: 56px;
+  }
+  @media (min-width: 768px) {
+      position: relative;
+      margin: 0;
+      overflow: visible;
+      height: 70px;
+      background-color : transparent;
+      transition : all 500ms ease-in-out;
+  }
+  @media (min-width: 992px)  {
+      position : static;
+  }
 }
 .b-logo__image {
   height: 100%;
   width: auto;
   -webkit-transition: 0.5s;
   transition: 0.5s;
+
+  @media (min-width: 992px)  {
+      position   : absolute;
+      top        : 2px;
+      right      : -40px;
+      height     : 90px;
+      z-index    : 1000;
+      transition : all 300ms ease-in-out;
+  }
+  @media (min-width: 1200px) {
+      left : 20px;
+      transition : all 300ms ease-in-out;
+  }
+  @media (min-width: 1600px) {
+      left: 200px;
+      transition : all 500ms ease-in-out;
+  }
 }
 .b-logo__image:hover {
   filter: drop-shadow(1px 0px 1px rgba(1,1,1,.8));
@@ -354,9 +381,38 @@
   letter-spacing : -1px;
   line-height    : 25px;
   transition     : background 300ms ease-in-out;
+
+  @media (max-width : 480px) {
+      background : rgba(51, 56, 63, 0.95);
+      left       : 56px;   /* Logo graphics to remain visible on the left */
+      right      : 85px;
+  }
+
+  @media (min-width: 768px) {
+      position         : relative;
+      font-size        : 24px;
+      font-weight      : 600;
+      text-align       : left;
+      top              : 26px;
+      bottom           : 0;
+      left             : 0;
+      right            : 0;
+      margin           : 0;
+      padding          : 0;
+      color            : black;
+      background-color : transparent;
+  }
+
+  @media (min-width: 992px)  {
+      text-align : right;
+  }
 }
 .b-phone__link, .b-phone__link:hover {
   color : inherit;
+  @media (max-width : 360px) {
+    font-weight: 100;
+  }
+
 }
 .b-phone__areaCode {
   font-weight: lighter;
@@ -368,116 +424,26 @@
 .b-phone__areaCode::after {
   content:") ";
 }
+
 .b-phone__areaCode::before,
 .b-phone__areaCode::after {
-  position: relative;
-  top: -0.09em;
+  position  : relative;
+  top       : -0.09em;
   font-size : 85%;
-  color: slategray;
+  color     : slategray;
 }
+
 .b-phone__image {
-  position: relative;
-  top: -0.075em;
-}
+  position : relative;
+  top      : -0.075em;
 
-/* phone media query */
-@media (max-width : 480px) {
-  .b-phone {
-    background : rgba(51, 56, 63, 0.95);
-    left       : 56px;   /* Logo graphics to remain visible on the left */
-    right      : 85px;
+  @media (max-width : 300px) {
+    display : none;
   }
-  .b-logo {
-    width: 56px;
-  }
-}
-/* phone media query */
-@media (max-width : 360px) {
-  .b-phone__link {
-    font-weight: 100;
-  }
-  .b-phone__image {
-    width: 18px;
-    height: 18px;
-  }
-}
-/* phone media query */
-@media (max-width : 300px) {
-  .b-phone__image {
-    display: none;
-  }
-}
 
-/* phone & logo media query */
-@media (min-width: 768px) {
-  .b-topRow {
-    background : transparent;
-    color      : black;
-    height     : auto;
-    width      : 720px;
-    margin     : 0 auto;
-    transition : all 500ms ease-in-out;
-  }
-  .b-phone {
-    position         : relative;
-    font-size        : 24px;
-    font-weight      : 600;
-    text-align       : left;
-    top              : 26px;
-    bottom           : 0;
-    left             : 0;
-    right            : 0;
-    margin           : 0;
-    padding          : 0;
-    color            : black;
-    background-color : transparent;
-  }
-  .b-logo {
-    position: relative;
-    margin: 0;
-    overflow: visible;
-    height: 70px;
-    background-color : transparent;
-    transition : all 500ms ease-in-out;
-  }
-}
-/* phone media query */
-@media (min-width: 992px)  {
-  .b-topRow {
-    height: 75px;
-    width : 970px;
-  }
-  .b-phone {
-    text-align : right;
-  }
-  .b-topRow, .b-logo {
-    position : static;
-  }
-  .b-logo__image {
-    position   : absolute;
-    top        : 2px;
-    right      : -40px;
-    height     : 90px;
-    z-index    : 1000;
-    transition : all 300ms ease-in-out;
-  }
-}
-/* phone media query */
-@media (min-width: 1200px) {
-  .b-topRow {
-    width : 1170px; }
-  .b-logo__image {
-    left : 20px;
-    transition : all 300ms ease-in-out;
-  }
-}
-/* phone media query */
-@media (min-width: 1600px) {
-  .b-topRow {
-    width : 1560px; }
-  .b-logo__image {
-    left: 200px;
-    transition : all 500ms ease-in-out;
+  @media (max-width : 360px) {
+    width  : 18px;
+    height : 18px;
   }
 }
 
@@ -488,9 +454,15 @@
   margin-top    : 48px;
   margin-bottom : 0;
   margin-right  : 49px;
+  @media (min-width : 768px) {
+    margin : 0;
+  }
 }
 .navbar-default {
   background-color : transparent;
+  @media (max-width : 767px) {
+      min-height : 0;
+  }
 }
 .navbar-nav {
   margin : 0;
@@ -569,12 +541,10 @@
 
 /* for higher resolutions (android and retina) */
 
-@media screen and (-webkit-min-device-pixel-ratio : 1.5) ,
+/*@media screen and (-webkit-min-device-pixel-ratio : 1.5) ,
 screen and (min--moz-device-pixel-ratio : 1.5),
-(max-width : 767px) {  /* was 767 */
-  .navbar-default {
-    min-height : 0;
-  }
+(max-width : 767px) {  */
+@media (max-width : 767px) {
   .navbar-collapse {
     padding-right : 0;
     padding-left  : 0;
@@ -621,10 +591,7 @@ screen and (min--moz-device-pixel-ratio : 1.5),
   }
 }
 
-@media (min-width : 768px) { /* 768 */
-  .navbar {
-    margin: 0;
-  }
+@media (min-width : 768px) {
   #mainCollapse {
     line-height : 75px;  /* to help vertically align child "search" inline-block using line-height: normal;*/
   }
