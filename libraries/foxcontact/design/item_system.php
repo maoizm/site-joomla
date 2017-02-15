@@ -13,18 +13,17 @@ class FoxDesignItemSystem extends FoxDesignItem
 	
 	public function __construct($value = array())
 	{
-		parent::__construct(array_merge_recursive($value, array('type' => 'system', 'unique_id' => 'System')));
+		parent::__construct(array_merge_recursive($value, array('type' => 'system', 'unique_id' => 'system')));
 	}
 	
 	
 	public function onBeforeRender()
 	{
-		$uid = $this->get('uid');
-		FoxDiagnosticConflicting::check($uid);
+		FoxDiagnosticConflicting::check($this->get('uid'));
 	}
 	
 	
-	public function update($post_data)
+	public function update(array $post_data)
 	{
 		$post = JFactory::getApplication()->input->post;
 		$this->setValue(array('title' => $post->get('fox_form_page_title', null, 'raw'), 'uri' => $post->get('fox_form_page_uri', null, 'raw')));

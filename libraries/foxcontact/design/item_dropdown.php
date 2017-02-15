@@ -11,7 +11,7 @@ jimport('foxcontact.design.item_options');
 class FoxDesignItemDropdown extends FoxDesignItemOptions
 {
 	
-	public function addResources($document)
+	public function addResources(JDocument $document)
 	{
 		$uncompressed = JDEBUG ? '-uncompressed' : '';
 		$min = JDEBUG ? '' : '.min';

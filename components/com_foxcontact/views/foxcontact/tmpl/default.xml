@@ -31,7 +31,7 @@
 							<field name="email_subject" type="ftext" size="26" label="COM_FOXCONTACT_SUBJECT" description="COM_FOXCONTACT_SUBJECT_DSC" wizard="COM_FOXCONTACT_SUBJECT_DFLT"/>
 						</field>
 						<field type="container" element="div" class="span8">
-							<field name="email_body" type="fhtmleditor" filter="raw" label="COM_FOXCONTACT_EMAIL_TEMPLATE_LBL" template="admin_email_tmpl"/>
+							<field name="email_body" type="fhtmleditor" filter="raw" template="admin_email_tmpl"/>
 						</field>
 					</field>
 				</field>
@@ -50,7 +50,7 @@
 							<field name="email_copy_subject" type="ftext" size="26" label="COM_FOXCONTACT_SUBJECT" description="COM_FOXCONTACT_SUBJECT_DSC" wizard="COM_FOXCONTACT_EMAIL_COPY_SUBJECT_DFLT"/>
 						</field>
 						<field type="container" element="div" class="span8">
-							<field name="email_copy_body" type="fhtmleditor" filter="raw" label="COM_FOXCONTACT_EMAIL_TEMPLATE_LBL" showon="user_notification:1" template="user_email_tmpl"/>
+							<field name="email_copy_body" type="fhtmleditor" filter="raw" showon="user_notification:1" template="user_email_tmpl"/>
 						</field>
 					</field>
 				</field>
@@ -67,7 +67,7 @@
 							<field type="fspacer" label="COM_FOXCONTACT_JMESSENGER_LINK" url="index.php?option=com_messages"/>
 						</field>
 						<field type="container" element="div" class="span8">
-							<field name="jmessenger_body" type="fhtmleditor" filter="raw" label="COM_FOXCONTACT_EMAIL_TEMPLATE_LBL" template="jmessenger_tmpl"/>
+							<field name="jmessenger_body" type="fhtmleditor" filter="raw" template="jmessenger_tmpl"/>
 						</field>
 					</field>
 				</field>
@@ -87,7 +87,7 @@
 							<field name="onscreen_redirect_item" type="menuitem" label="COM_FOXCONTACT_ONSCREEN_REDIRECT_ITEM" showon="do_onscreen_redirect:1"/>
 						</field>
 						<field type="container" element="div" class="span8">
-							<field name="onscreen_message_content" type="fhtmleditor" filter="raw" label="COM_FOXCONTACT_ONSCREEN_MESSAGE_CONTENT" showon="show_onscreen_message:1" template="onscreen_tmpl"/>
+							<field name="onscreen_message_content" type="fhtmleditor" filter="raw" showon="show_onscreen_message:1" template="onscreen_tmpl"/>
 						</field>
 					</field>
 				</field>

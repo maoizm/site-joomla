@@ -45,7 +45,7 @@ class FoxStructManager
 	}
 	
 	
-	public static function up3_5_0($struct)
+	public static function up3_5_0(array $struct)
 	{
 		self::fixItems($struct, array('text_area'), function (&$item)
 		{
@@ -59,7 +59,7 @@ class FoxStructManager
 	}
 	
 	
-	public static function up3_5_4($struct)
+	public static function up3_5_4(array $struct)
 	{
 		self::fixItems($struct, array('dropdown', 'radio'), function (&$item)
 		{
@@ -77,7 +77,35 @@ class FoxStructManager
 	}
 	
 	
-	private static function fixItems(&$struct, $types, $function)
+	public static function up3_6_0(array $struct)
+	{
+		self::fixItems($struct, array('board'), function (&$item)
+		{
+			FoxStructManager::def($item, 'alignment', 'labels');
+		});
+		self::fixItems($struct, array('board', 'html'), function (&$item)
+		{
+			FoxStructManager::def($item, 'width', array('value' => 230, 'unit' => 'inherited'));
+		});
+		self::fixItems($struct, array('radio'), function (&$item)
+		{
+			FoxStructManager::def($item, 'render', 'stacked');
+		});
+		return $struct;
+	}
+	
+	
+	public static function def(array &$item, $prop, $val)
+	{
+		if (!isset($item[$prop]))
+		{
+			$item[$prop] = $val;
+		}
+	
+	}
+	
+	
+	private static function fixItems(array &$struct, array $types, $function)
 	{
 		foreach ($struct['rows'] as &$row)
 		{

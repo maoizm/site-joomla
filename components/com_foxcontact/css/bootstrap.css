@@ -111,10 +111,6 @@ div#fox-container-uid ul.fox-messages
 	padding: 0;
 }
 
-div#fox-container-uid ul.fox-messages > li
-{
-}
-
 /* Twitter bootstrap buttons */
 div#fox-container-uid .btn
 {
@@ -124,7 +120,7 @@ div#fox-container-uid .btn
 	vertical-align: middle;
 	cursor: pointer;
 	text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
-	background-color: #f5f5f5;
+	background-color: #e6e6e6;
 	background-image: -moz-linear-gradient(top, #ffffff, #e6e6e6);
 	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#e6e6e6));
 	background-image: -webkit-linear-gradient(top, #ffffff, #e6e6e6);
@@ -143,16 +139,15 @@ div#fox-container-uid .btn
 	line-height: 20px;
 }
 
-/* button when mouse hover */
-div#fox-container-uid .btn:hover
+div#fox-container-uid .btn:hover, div#fox-container-uid .btn:focus
 {
 	text-decoration: none;
-	background-color: #e6e6e6;
 	background-position: 0 -15px;
 	transition: background-position .1s linear;
 }
 
-div#fox-container-uid .btn span
+div#fox-container-uid .btn, /* Inputs */
+div#fox-container-uid .btn span /* Buttons */
 {
 	color: #333333;
 }
@@ -211,20 +206,22 @@ div#fox-container-uid .control-group .checkbox
 
 div#fox-container-uid .fox-form select,
 div#fox-container-uid .fox-form textarea,
-div#fox-container-uid .fox-form input[type="text"],
-div#fox-container-uid .fox-form input[type="email"]
+div#fox-container-uid .fox-form input[type="text"]
 {
 	border-radius: 4px;
 	color: #555555;
 	background-color: #ffffff;
 }
 
+div#fox-container-uid .fox-form input[type="text"]:disabled
+{
+	background-color: #eeeeee;
+}
+
 /* Background highlight when hover or selected */
 div#fox-container-uid .fox-form input[type="text"]:hover,
-div#fox-container-uid .fox-form input[type="email"]:hover,
 div#fox-container-uid .fox-form textarea:hover,
 div#fox-container-uid .fox-form input[type="text"]:focus,
-div#fox-container-uid .fox-form input[type="email"]:focus,
 div#fox-container-uid .fox-form textarea:focus
 {
 	background-color: #ffffe0;
@@ -233,9 +230,7 @@ div#fox-container-uid .fox-form textarea:focus
 /* Border of fields */
 div#fox-container-uid select,
 div#fox-container-uid textarea,
-div#fox-container-uid input[type="text"],
-div#fox-container-uid input[type="email"],
-div#fox-container-uid input[type="password"]
+div#fox-container-uid input[type="text"]
 {
 	background-color: #ffffff;
 	border: 1px solid #aaaaaa;
@@ -246,20 +241,22 @@ div#fox-container-uid input[type="password"]
 div#fox-container-uid .control-group.success > label,
 div#fox-container-uid .control-group.success .checkbox,
 div#fox-container-uid .control-group.success .radio,
+div#fox-container-uid .control-group.success.fox-item-radio .controls label,
+div#fox-container-uid .control-group.success.fox-item-checkbox-group .controls label,
 div#fox-container-uid .control-group.success input,
 div#fox-container-uid .control-group.success select,
 div#fox-container-uid .control-group.success textarea,
-div#fox-container-uid .control-group.success a.chzn-single,
-div#fox-container-uid .control-group.success.fox-item-radio .controls label
+div#fox-container-uid .control-group.success a.chzn-single
 {
 	color: #468847;
 }
 
 /* Green border */
-div#fox-container-uid .control-group.success input,
+div#fox-container-uid .control-group.success input[type="text"],
 div#fox-container-uid .control-group.success select,
 div#fox-container-uid .control-group.success textarea,
-div#fox-container-uid .control-group.success a.chzn-single
+div#fox-container-uid .control-group.success a.chzn-single,
+div#fox-container-uid .control-group.success .fox-item-captcha-cnt img
 {
 	border-color: #468847;
 }
@@ -268,29 +265,29 @@ div#fox-container-uid .control-group.success a.chzn-single
 div#fox-container-uid .control-group.error > label,
 div#fox-container-uid .control-group.error .checkbox,
 div#fox-container-uid .control-group.error .radio,
+div#fox-container-uid .control-group.error.fox-item-radio .controls label,
+div#fox-container-uid .control-group.error.fox-item-checkbox-group .controls label,
 div#fox-container-uid .control-group.error input,
 div#fox-container-uid .control-group.error select,
 div#fox-container-uid .control-group.error textarea,
-div#fox-container-uid .control-group.error a.chzn-single,
-div#fox-container-uid .control-group.error.fox-item-radio .controls label
+div#fox-container-uid .control-group.error a.chzn-single
 {
 	color: #b94a48;
 }
 
 /* Red border */
-div#fox-container-uid .control-group.error input,
+div#fox-container-uid .control-group.error input[type="text"],
 div#fox-container-uid .control-group.error select,
 div#fox-container-uid .control-group.error textarea,
-div#fox-container-uid .control-group.error a.chzn-single
+div#fox-container-uid .control-group.error a.chzn-single,
+div#fox-container-uid .control-group.error .fox-item-captcha-cnt img
 {
 	border-color: #b94a48;
 }
 
 /* Blue border when focused */
 div#fox-container-uid textarea:focus,
-div#fox-container-uid input[type="text"]:focus,
-div#fox-container-uid input[type="email"]:focus,
-div#fox-container-uid input[type="password"]:focus
+div#fox-container-uid input[type="text"]:focus
 {
 	border-color: rgba(82, 168, 236, 0.8);
 	outline: 0;

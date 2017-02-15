@@ -6,13 +6,10 @@
  * @see       Documentation: http://www.fox.ra.it/forum/2-documentation.html
  */
 list($uid, $board, $current, $form) = FoxFormRender::listFormVariables('uid,board');
-FoxHtmlElem::create('div')->attr('id', $current->getBoxId())->classes('fox-item fox-item-radio control-group')->classes($current->get('classes'))->classes($board->getItemDecorationClass($current->get('unique_id')))->append(FoxFormRender::render('label'))->append(FoxHtmlElem::create('div')->classes('controls')->append(FoxHtmlElem::create('div')->attr('id', $current->getItemId())->attr('style', "{$current->getStyleWidth()}{$current->getStyleHeight()}")->append(FoxFormRender::render('label_inside_no_placeholder'))->appends($current->get('options'), function ($source) use($current, $form, $board)
+FoxHtmlElem::create('div')->attr('id', $current->getBoxId())->classes('fox-item fox-item-radio control-group')->classes($current->get('classes'))->classes($board->getItemDecorationClass($current->get('unique_id')))->append(FoxFormRender::render('label'))->append(FoxHtmlElem::create('div')->classes('controls')->append(FoxHtmlElem::create('div')->attr('id', $current->getItemId())->attr('style', "{$current->getStyleWidth()}{$current->getStyleHeight()}")->append(FoxFormRender::render('label_inside_no_placeholder'))->appends($current->get('options'), function (FoxDesignBase $source) use($current, $form, $board)
 {
-	return FoxHtmlElem::create()->append(FoxHtmlElem::create('label')->append(FoxHtmlElem::create('input')->attr('type', 'radio')->attr('name', $current->getInputName())->checked($source->get('text') === $current->getInputValue())->attr('value', $source->get('text')))->append(FoxHtmlElem::create()->text($source->get('text')))->conditional($board->isValidated() && $board->isFieldInvalid($current->get('unique_id')), function ()
+	return FoxHtmlElem::create()->append(FoxHtmlElem::create('div')->classes($current->getLabelValuesClasses($form))->append(FoxHtmlElem::create('label')->append(FoxHtmlElem::create('input')->attr('type', 'radio')->attr('name', $current->getInputName())->checked($source->get('text') === $current->getInputValue())->attr('value', $source->get('text')))->append($source->get('text'))->conditional($board->isValidated() && $board->isFieldInvalid($current->get('unique_id')), function ()
 	{
 		return FoxHtmlElem::create('span')->classes('asterisk');
-	}))->conditional($form->getDesign()->get('option.form.render') === 'stacked', function ()
-	{
-		return FoxHtmlElem::create('br');
-	});
+	})));
 })))->show();

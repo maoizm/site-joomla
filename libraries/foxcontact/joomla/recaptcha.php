@@ -20,7 +20,7 @@ class FoxJoomlaRecaptcha extends JCaptcha
 	}
 	
 	
-	public static function getInstance($namespace = 'fox', $options = array())
+	public static function getInstance($namespace = 'fox', array $options = array())
 	{
 		return self::exec(function () use($namespace)
 		{
@@ -33,9 +33,9 @@ class FoxJoomlaRecaptcha extends JCaptcha
 	private static function exec($function, $instance = null)
 	{
 		$application = JFactory::getApplication();
-		$messages0 = JFactory::getApplication()->getMessageQueue();
+		$messages0 = $application->getMessageQueue();
 		$result = !is_null($instance) ? $function($instance->captcha) : $function();
-		$messages1 = JFactory::getApplication()->getMessageQueue();
+		$messages1 = $application->getMessageQueue();
 		$has_error = count($messages1) > count($messages0);
 		if (!is_null($instance))
 		{
@@ -44,21 +44,7 @@ class FoxJoomlaRecaptcha extends JCaptcha
 		
 		if ($has_error)
 		{
-			if (class_exists('ReflectionClass'))
-			{
-				try
-				{
-					$class = new ReflectionClass(get_class($application));
-					$property = $class->getProperty('_messageQueue');
-					$property->setAccessible(true);
-					$property->setValue($application, $messages0);
-				}
-				catch (Exception $e)
-				{
-				}
-			
-			}
-		
+			FoxJApplicationCms::writeMessageQueueOnApplication($application, $messages0);
 		}
 		
 		return $result;
@@ -155,6 +141,17 @@ class FoxJoomlaRecaptcha extends JCaptcha
 		{
 			return $captcha->detach($observer);
 		}, $this);
+	}
+
+}
+
+
+class FoxJApplicationCms extends JApplicationCms
+{
+	
+	public static function writeMessageQueueOnApplication(JApplicationCms $application, array $queue)
+	{
+		$application->_messageQueue = $queue;
 	}
 
 }

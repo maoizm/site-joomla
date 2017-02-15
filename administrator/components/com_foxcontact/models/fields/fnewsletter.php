@@ -14,7 +14,7 @@ class JFormFieldFNewsletter extends JFormFieldList
 	protected function getOptions()
 	{
 		$options = array();
-		$db = JFactory::getDBO();
+		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
 		$query->select($db->quoteName('extension_id'));
 		$query->from($db->quoteName('#__extensions'));
@@ -31,7 +31,7 @@ class JFormFieldFNewsletter extends JFormFieldList
 		$query->where($db->quoteName('published') . ' = ' . $db->quote('1'));
 		$query->order($db->quoteName((string) $this->element['order']) . ' ASC');
 		$db->setQuery($query);
-		$items = $db->loadObjectlist() or $items = new stdClass();
+		$items = $db->loadObjectList() or $items = new stdClass();
 		foreach ($items as $item)
 		{
 			$options[] = JHtml::_('select.option', $item->{(string) $this->element['key']}, $item->{(string) $this->element['value']});

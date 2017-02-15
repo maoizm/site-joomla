@@ -5,22 +5,21 @@
  * @license   Distributed under the terms of the GNU General Public License GNU/GPL v3 http://www.gnu.org/licenses/gpl-3.0.html
  * @see       Documentation: http://www.fox.ra.it/forum/2-documentation.html
  */
+jimport('foxcontact.form.sequencer');
 
-class FoxJoomlaComp
+class FoxDesignItemUniqueIdentifier extends FoxDesignItem
 {
 	
-	public static final function newJRegistry($params)
+	public function update(array $post_data)
 	{
-		foreach (array('\\Joomla\\Registry\\Registry', 'JRegistry') as $name)
-		{
-			if (class_exists($name))
-			{
-				return new $name($params);
-			}
-		
-		}
-		
-		throw new RuntimeException('Can\'t create a new JRegistry');
+	}
+	
+	
+	public function onBeforeProcess()
+	{
+		$class = 'FoxSequencer' . $this->get('mode', 'N');
+		$sequencer = new $class(trim($this->get('series')));
+		$this->setValue($sequencer->getNextValue());
 	}
 
 }

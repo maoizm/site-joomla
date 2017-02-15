@@ -23,12 +23,16 @@ class com_foxcontactInstallerScript
 	
 	public function install($parent)
 	{
+		$this->check_ftp_mode_bug();
 		JLog::addLogger(array('text_file' => 'foxcontact.install.txt', 'text_entry_format' => "{DATE}\t{TIME}\t{PRIORITY}\t{CATEGORY}\t{MESSAGE}"), JLog::ALL, array('install'));
 		try
 		{
 			JLog::add("Running {$this->event} on: " . PHP_OS . " | {$_SERVER['SERVER_SOFTWARE']} | php " . PHP_VERSION . ' | safe_mode: ' . intval(ini_get('safe_mode')) . ' | interface: ' . php_sapi_name(), JLog::INFO, 'install');
 		}
-		catch (RuntimeException $e)
+		catch (Throwable $t)
+		{
+		}
+		catch (Exception $e)
 		{
 		}
 		
@@ -37,6 +41,19 @@ class com_foxcontactInstallerScript
 		$this->clear_cache();
 		$this->clear_obsolete();
 		$this->logo($parent);
+	}
+	
+	
+	private function check_ftp_mode_bug()
+	{
+		$ftp_option = JClientHelper::getCredentials('ftp');
+		$version = new JVersion();
+		if ($version->getShortVersion() === '3.6.0' && $ftp_option['enabled'] == 1)
+		{
+			JFactory::getApplication()->enqueueMessage('<h3><i class="icon-lock"></i> Installation aborted</h3>' . '<p>A known Joomla bug prevents Fox Contact and other extensions from running when FTP mode is enabled.<br />Go to "Joomla Global configuration" > "Server" > "Ftp Settings" and disable "FTP mode".</p>', 'error');
+			JFactory::getApplication()->redirect(JRoute::_('index.php?option=com_installer', false));
+		}
+	
 	}
 	
 	
@@ -54,7 +71,7 @@ class com_foxcontactInstallerScript
 	}
 	
 	
-	public function preflight($type, $parent)
+	public function preflight($type, JInstallerAdapterComponent $parent)
 	{
 		$this->component_name = $parent->get('element');
 		$this->extension_name = substr($this->component_name, 4);
@@ -64,7 +81,7 @@ class com_foxcontactInstallerScript
 	}
 	
 	
-	private function check_previous_version($parent)
+	private function check_previous_version(JInstallerAdapterComponent $parent)
 	{
 		if ($this->event === 'update')
 		{
@@ -73,7 +90,7 @@ class com_foxcontactInstallerScript
 			if ($installed_version !== '' && version_compare($installed_version, $required_version, '<'))
 			{
 				$current_version = (string) $parent->get('manifest')->{'version'};
-				$msg = '<h3><i class="icon-lock"></i> ' . JText::sprintf('COM_FOXCONTACT_INCOMPATIBLE_UPGRADE', $current_version, $installed_version) . '</h3>' . '<p>' . JText::sprintf('COM_FOXCONTACT_UNINSTALL', $installed_version, $current_version) . '</p>' . '<p>' . JText::_('COM_FOXCONTACT_ANNOTATE_CONFIGURATION') . '</p>';
+				$msg = '<h3><i class="icon-lock"></i> ' . JText::sprintf('COM_FOXCONTACT_INCOMPATIBLE_UPGRADE', $installed_version, $current_version) . '</h3>' . '<p>' . JText::sprintf('COM_FOXCONTACT_UNINSTALL', $installed_version, $current_version) . '</p>' . '<p>' . JText::_('COM_FOXCONTACT_ANNOTATE_CONFIGURATION') . '</p>';
 				JFactory::getApplication()->enqueueMessage($msg, 'error');
 				JFactory::getApplication()->redirect(JRoute::_('index.php?option=com_installer', false));
 			}
@@ -94,15 +111,20 @@ class com_foxcontactInstallerScript
 	}
 	
 	
-	private function check_joomla_version($parent)
+	private function check_joomla_version(JInstallerAdapterComponent $parent)
 	{
-		$j_version = new JVersion();
-		$j_min = (string) $parent->get('manifest')->attributes()->{'version'};
-		$j_max = (string) $parent->get('manifest')->{'version'};
-		if (version_compare($j_version->RELEASE, $j_min, '<') || version_compare($j_version->RELEASE, $j_max, '>'))
+		$joomla_version = new JVersion();
+		$joomla = array('min' => (string) $parent->get('manifest')->{'minJoomlaRelease'}, 'max' => (string) $parent->get('manifest')->{'maxJoomlaRelease'}, 'current' => $joomla_version->RELEASE);
+		$fox = preg_replace('/\\.[0-9]+$/', '', (string) $parent->get('manifest')->{'version'});
+		if (version_compare($joomla['current'], $joomla['min'], '<'))
 		{
-			$j_max = preg_replace('/\\.[0-9]+$/', '', $j_max);
-			JFactory::getApplication()->enqueueMessage('<h3><i class="icon-warning"></i> Fox Contact ' . $j_max . ' has not been tested on Joomla ' . $j_version->RELEASE . '</h3>' . 'The installation process will continue, but the current version may be incompatible with your current Joomla version.<br/>' . '<b>You should upgrade to Fox Contact ' . $j_version->RELEASE . ' series as soon as possible.</b><br/>' . 'If you have an active subscription, download the latest release through the <a href="http://www.fox.ra.it/account-recovery.html">account recovery form</a> now.<br/>' . 'Please do it before <a href="http://www.fox.ra.it/forum/">asking for technical support</a>.', 'warning');
+			JFactory::getApplication()->enqueueMessage('<h3><i class="icon-lock"></i> ' . JText::sprintf('COM_FOXCONTACT_INCOMPATIBLE_PLATFORM', $fox, $joomla['current']) . '</h3>' . '<p>' . JText::_('COM_FOXCONTACT_INSTALLATION_STOPPED') . '</p>' . '<p><strong>' . JText::_('COM_FOXCONTACT_INSTALLATION_DOWNGRADE') . '</strong></p>' . '<p>If you have an active subscription, download the proper version through the <a href="http://www.fox.ra.it/account-recovery.html">account recovery form</a> now.<br/>' . 'Please do it before <a href="http://www.fox.ra.it/forum/">asking for technical support</a>.</p>', 'error');
+			JFactory::getApplication()->redirect(JRoute::_('index.php?option=com_installer', false));
+		}
+		
+		if (version_compare($joomla['current'], $joomla['max'], '>'))
+		{
+			JFactory::getApplication()->enqueueMessage('<h3><i class="icon-lock"></i> ' . JText::sprintf('COM_FOXCONTACT_UNCHECKED_PLATFORM', $fox, $joomla['current']) . '</h3>' . '<p>' . JText::_('COM_FOXCONTACT_INSTALLATION_CONTINUED') . '</p>' . '<p><strong>' . JText::_('COM_FOXCONTACT_INSTALLATION_UPGRADE') . '</strong></p>' . '<p>If you have an active subscription, download the proper version through the <a href="http://www.fox.ra.it/account-recovery.html">account recovery form</a> now.<br/>' . 'Please do it before <a href="http://www.fox.ra.it/forum/">asking for technical support</a>.</p>', 'warning');
 		}
 	
 	}
@@ -121,7 +143,7 @@ class com_foxcontactInstallerScript
 	}
 	
 	
-	public function postflight($type, $parent)
+	public function postflight($type, JInstallerAdapterComponent $parent)
 	{
 		$this->check_environment();
 		$extra_query = $this->getDownloadIdUrlParam($parent->getParent()->getPath('source'));
@@ -134,10 +156,11 @@ class com_foxcontactInstallerScript
 			}
 		
 		});
+		JFactory::getCache('_system', '')->cache->clean();
 	}
 	
 	
-	private function chain_install($parent)
+	private function chain_install(JInstallerAdapterComponent $parent)
 	{
 		$manifest = $parent->get('manifest');
 		$extensions = isset($manifest->chain->extension) ? $manifest->chain->extension : array();
@@ -175,7 +198,7 @@ class com_foxcontactInstallerScript
 	}
 	
 	
-	private function logo($parent)
+	private function logo(JInstallerAdapterComponent $parent)
 	{
 		$manifest = $parent->get('manifest');
 		$title = explode(' ', JText::_((string) $manifest->name));
@@ -230,6 +253,7 @@ class com_foxcontactInstallerScript
 	{
 		@unlink(JPATH_ROOT . '/libraries/foxcontact/html/security.php');
 		@unlink(JPATH_ROOT . '/libraries/foxcontact/html/mimetype.php');
+		@unlink(JPATH_ROOT . '/libraries/foxcontact/joomla/comp.php');
 		foreach (array(JPATH_ROOT, JPATH_ADMINISTRATOR) as $path)
 		{
 			$folders = glob($path . '/language/*-*', GLOB_ONLYDIR | GLOB_NOSORT) or $files = array();

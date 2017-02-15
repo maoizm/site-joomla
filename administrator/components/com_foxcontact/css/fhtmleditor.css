@@ -13,6 +13,8 @@ div.fox-html-editor
 	padding: 0;
 
 	height: 152px;
+
+	overflow: hidden;
 }
 
 iframe.fox-html-editor-iframe
@@ -115,7 +117,7 @@ iframe:hover + div.fox-html-editor-toolbar
 	opacity: 1;
 }
 
-div.fox-html-editor-pupup
+div.fox-html-editor-popup
 {
 	display: none;
 
@@ -131,7 +133,7 @@ div.fox-html-editor-pupup
 	z-index: 9999;
 }
 
-div.fox-html-editor-pupup-container
+div.fox-html-editor-popup-container
 {
 	position: absolute;
 	left: 10%;
@@ -242,4 +244,9 @@ textarea.fvd-html-edt-mce
 	height: 100%;
 
 	resize: none;
+}
+
+div.fox-html-editor-popup-main .mce-toolbar:not(.mce-menubar)
+{
+	display: inline-block;
 }

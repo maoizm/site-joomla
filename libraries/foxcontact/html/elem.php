@@ -20,7 +20,7 @@ class FoxHtmlElem
 		switch ($safe_type)
 		{
 			case '-':
-				return new FoxHtmlTrasparentContainerElem($type);
+				return new FoxHtmlTransparentContainerElem($type);
 			case 'input':
 			case 'img':
 			case 'hr':
@@ -239,7 +239,7 @@ class FoxHtmlElem
 }
 
 
-class FoxHtmlTrasparentContainerElem extends FoxHtmlElem
+class FoxHtmlTransparentContainerElem extends FoxHtmlElem
 {
 	
 	public function attr($name, $value = null)

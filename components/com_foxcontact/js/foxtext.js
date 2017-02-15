@@ -18,7 +18,7 @@ if (typeof Fox == 'undefined')
 		{
 			var o = {};
 			o[key] = data;
-            jQuery.extend(this, o);
+			jQuery.extend(this, o);
 			return this;
 		},
 
@@ -44,7 +44,6 @@ if (typeof Fox == 'undefined')
 			COM_FOXCONTACT_MULTIPLE_JQUERY: "<?php echo JText::_('COM_FOXCONTACT_MULTIPLE_JQUERY') ?>",
 			COM_FOXCONTACT_READ_MORE: "<?php echo JText::_('COM_FOXCONTACT_READ_MORE') ?>",
 			COM_FOXCONTACT_REMOVE_ALT: "<?php echo JText::_('COM_FOXCONTACT_REMOVE_ALT') ?>",
-			COM_FOXCONTACT_REMOVE_TITLE: "<?php echo JText::_('COM_FOXCONTACT_REMOVE_TITLE') ?>",
 			JURI_ROOT: "<?php echo JUri::root(true) ?>"
 		}
 	);
@@ -98,7 +97,10 @@ jQuery(document).ready(function ($)
 			}
 
 			// Update the image src
-			image.src = image.src.replace(/uniqueid=[0-9]{8}/, "uniqueid=" + uniqueid);
+			image.src = image.src
+				.replace(/uniqueid=[0-9]{8}/, "uniqueid=" + uniqueid)  // non SEF case
+				.replace(/uniqueid\/[0-9]{8}/, "uniqueid/" + uniqueid) // SEF case
+			;
 		}).show();
 	});
 });

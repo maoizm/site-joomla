@@ -14,5 +14,12 @@ class FoxDesignItemRadio extends FoxDesignItemOptions
 	{
 		return '';
 	}
+	
+	
+	public function getLabelValuesClasses($form)
+	{
+		$render_type = $form->getDesign()->get('option.form.render') === 'inline' ? 'inline' : $this->get('render');
+		return "fox-item-radio-label-{$render_type}";
+	}
 
 }

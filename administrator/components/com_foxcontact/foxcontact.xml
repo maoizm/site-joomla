@@ -3,14 +3,16 @@
 <extension type="component" version="3.2" method="upgrade">
 
 	<name>COM_FOXCONTACT</name>
-	<creationDate>Feb 2016</creationDate>
+	<creationDate>August 2016</creationDate>
 	<author>Demis Palma</author>
 	<authorEmail>demis@fox.ra.it</authorEmail>
 	<authorUrl>http://www.fox.ra.it/</authorUrl>
 	<copyright>Copyright (c) 2010 - 2015 Demis Palma. All rights reserved.</copyright>
 	<license>GNU/GPL v3</license>
-	<version>3.6.0</version>
+	<version>3.6.5</version>
 	<requiredVersion>3.5.0</requiredVersion>
+	<minJoomlaRelease>3.3</minJoomlaRelease>
+	<maxJoomlaRelease>3.6</maxJoomlaRelease>
 	<description>COM_FOXCONTACT_DESCRIPTION</description>
 	<forum>http://www.fox.ra.it/forum/1-fox-contact-form.html</forum>
 	<rating>http://extensions.joomla.org/extensions/extension/contacts-and-feedback/contact-forms/fox-contact-form</rating>
@@ -97,3 +99,8 @@
 	</chain>
 
 </extension>
+ 
+    
+    
+ 
+      

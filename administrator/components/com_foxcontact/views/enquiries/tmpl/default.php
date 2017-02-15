@@ -81,14 +81,14 @@ $listDirn = $this->escape($this->state->get("list.direction"));
 								<div class="pull-left sender">
 									<?php foreach ($item->from_data as $from_data) : ?>
 										<div class="small">
-											<?php echo $from_data ?>
+											<?php echo $this->escape($from_data) ?>
 										</div>
 									<?php endforeach ?>
 								</div>
 							</td>
 							<td class="hidden-phone nowrap">
 								<div class="small pull-left">
-									<?php echo $item->form ?>
+									<?php echo $this->escape($item->form) ?>
 								</div>
 							</td>
 							<td class="hidden-phone nowrap">

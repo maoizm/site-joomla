@@ -13,8 +13,8 @@
 }
 
 /* Fix: A bug affecting both twitter bootstrap 2.1 and Joomla Protostar 1.0 template which is derived from bootstrap */
-.control-group.error .checkbox, .control-group.error .radio,
-.control-group.success .checkbox, .control-group.success .radio
+.control-group.error input[type="checkbox"], .control-group.error input[type="radio"],
+.control-group.success input[type="checkbox"], .control-group.success input[type="radio"]
 {
 	box-shadow: none !important;
 }
@@ -64,6 +64,17 @@ div.chzn-search input[type=text]
 
 /* ----- end - reset some general properties ----- */
 
+/* Fix the offset problem with a fixed header or menu bar
+	http://www.fox.ra.it/forum/22-how-to/10643-why-is-there-a-in-the-url-on-thank-you-page.html
+   The height of the offset depends on the height of your menu bar. */
+.fox-container > a
+{
+	display: block;
+	position: relative;
+	top: -120px;
+	visibility: hidden;
+}
+
 /* Form framework */
 /* The control over the width has been moved from the form to the rows to allow separate settings */
 div#fox-container-uid form .fox-row
@@ -104,6 +115,7 @@ div#fox-container-uid .asterisk
 {
 	color: #b94a48;
 	font-weight: bold;
+	font-size: 1.2em;
 }
 
 div#fox-container-uid .fox-item-attachments-btn-cnt div,
@@ -236,17 +248,6 @@ div#fox-container-uid li.qq-upload-success span.qq-upload-success-text
 	display: inline-block;
 }
 
-/* Spinner while uploading */
-div#fox-container-uid span.qq-upload-spinner
-{
-	background: url("../../../media/com_foxcontact/images/spinner.gif");
-	width: 15px;
-	height: 15px;
-	vertical-align: text-bottom;
-	padding: 0;
-	margin: 0;
-}
-
 /* Help text under some fields */
 div#fox-container-uid span.help-block
 {
@@ -270,6 +271,11 @@ div#fox-container-uid .fox-item-captcha-cnt div div
 {
 	position: relative;
 	display: inline;
+}
+
+div#fox-container-uid .fox-item-captcha-cnt div div input
+{
+	display: inline-block;
 }
 
 /* Built-in captcha reload image */
@@ -496,14 +502,15 @@ div#fox-container-uid .chzn-container .chzn-results li.highlighted
 }
 
 div#fox-container-uid .control-label,
-div#fox-container-uid .control-label label
+div#fox-container-uid .control-label label,
+div#fox-container-uid .fox-item-attachments .controls label
 {
 	display: inline-block;
 }
 
 div#fox-container-uid .fox-label-inside-no-placeholder
 {
-	display: block;
+	display: inline-block;
 }
 
 div#fox-container-uid .fox-form-inline .control-group,
@@ -565,7 +572,9 @@ div#fox-container-uid .fox-form-stacked .fox-item-captcha .controls,
 div#fox-container-uid .fox-form-stacked .fox-item-checkbox .controls,
 div#fox-container-uid .fox-form-stacked .fox-item-newsletter .controls,
 div#fox-container-uid .fox-form-stacked .fox-item-attachments .controls,
-div#fox-container-uid .fox-form-stacked .fox-item-html-fields .controls
+div#fox-container-uid .fox-form-stacked .fox-item-html-fields .controls,
+div#fox-container-uid .fox-form-stacked .fox-item-board-fields .controls,
+div#fox-container-uid .fox-form-stacked .fox-item-checkbox-group .controls
 {
 	width: /*$this->getControlWidth()*/ 0 /*;*/;
 }
@@ -610,7 +619,6 @@ div#fox-container-uid .control-label
 {
 	max-width: 100%;
 	margin: 0; /* Some templates including ProtoStar apply margin-bottom to labels */
-	line-height: 28px;
 }
 
 div#fox-container-uid .fox-item-html .control-label
@@ -788,19 +796,22 @@ div#fox-container-uid button[type="reset"]
 /* Icons inside Submit and Reset buttons */
 div#fox-container-uid button span
 {
+	/*
+	 Fix an issue with the icons on Microsoft Edge and RTL language: icon shown on the wrong side
+	 Todo: Font icons will make this fix not necessary
+	 */
 	display: inline-block;
 }
 
-div#fox-container-uid button span span.with-icon
+div#fox-container-uid button span.with-icon
 {
 	background: no-repeat left center;
 	padding: 0 0 0 20px;
 }
 
-html[dir="rtl"] div#fox-container-uid button span span.with-icon
+html[dir="rtl"] div#fox-container-uid button span.with-icon
 {
-	/* firefox don't use correctly "background-position-x" property so just redefine the entire "background-position" */
-	/* background-position-x: right; */
+	/* firefox doesn't use correctly "background-position-x" property so just redefine the entire "background-position" */
 	background-position: right center;
 	padding: 0 20px 0 0;
 }
@@ -815,21 +826,44 @@ div#fox-container-uid input.fox-item-calendar-input
 	user-select: none;
 }
 
-div#fox-container-uid div.fox-item-radio label input[type="radio"]
+div#fox-container-uid div.fox-item-radio label input[type="radio"],
+div#fox-container-uid div.fox-item-checkbox-group label input[type="checkbox"]
 {
 	margin-top: 0;
 	margin-right: 7px;
 }
 
-html[dir="rtl"] div#fox-container-uid div.fox-item-radio label input[type="radio"]
+html[dir="rtl"] div#fox-container-uid div.fox-item-radio label input[type="radio"],
+html[dir="rtl"] div#fox-container-uid div.fox-item-checkbox-group label input[type="checkbox"]
 {
 	margin-right: 0;
 	margin-left: 7px;
 }
 
+div#fox-container-uid div.fox-item-radio div.fox-item-radio-label-inline,
+div#fox-container-uid div.fox-item-checkbox-group div.fox-item-checkbox-group-label-inline
+{
+	display: inline-block;
+}
+
+div#fox-container-uid div.fox-item-radio div.fox-item-radio-label-inline:not(:last-child),
+div#fox-container-uid div.fox-item-checkbox-group div.fox-item-checkbox-group-label-inline:not(:last-child)
+{
+	margin-right: 16px;
+}
+
+html[dir="rtl"] div#fox-container-uid div.fox-item-radio div.fox-item-radio-label-inline:not(:last-child),
+html[dir="rtl"] div#fox-container-uid div.fox-item-checkbox-group div.fox-item-checkbox-group-label-inline:not(:last-child)
+{
+	margin-right: 0;
+	margin-left: 16px;
+}
+
 div#fox-container-uid .fox-form-inline div.fox-item-newsletter div.controls span:not(.required),
 div#fox-container-uid .fox-form-inline div.fox-item-radio div.controls span:not(.required),
-div#fox-container-uid div.fox-item-radio div.controls label
+div#fox-container-uid .fox-form-inline div.fox-item-checkbox-group div.controls span:not(.required),
+div#fox-container-uid div.fox-item-radio div.controls label,
+div#fox-container-uid div.fox-item-checkbox-group div.controls label
 {
 	display: inline-block;
 	min-height: 20px;
@@ -838,14 +872,18 @@ div#fox-container-uid div.fox-item-radio div.controls label
 
 div#fox-container-uid .fox-form-inline div.fox-item-newsletter div.controls span:not(.required),
 div#fox-container-uid .fox-form-inline div.fox-item-radio div.controls span:not(.required),
-div#fox-container-uid .fox-form-inline div.fox-item-radio div.controls label:not(:last-child)
+div#fox-container-uid .fox-form-inline div.fox-item-radio div.controls label:not(:last-child),
+div#fox-container-uid .fox-form-inline div.fox-item-checkbox-group div.controls span:not(.required),
+div#fox-container-uid .fox-form-inline div.fox-item-checkbox-group div.controls label:not(:last-child)
 {
 	margin-right: 16px;
 }
 
 html[dir="rtl"] div#fox-container-uid .fox-form-inline div.fox-item-newsletter div.controls span:not(.required),
 html[dir="rtl"] div#fox-container-uid .fox-form-inline div.fox-item-radio div.controls span:not(.required),
-html[dir="rtl"] div#fox-container-uid .fox-form-inline div.fox-item-radio div.controls label:not(:last-child)
+html[dir="rtl"] div#fox-container-uid .fox-form-inline div.fox-item-radio div.controls label:not(:last-child),
+html[dir="rtl"] div#fox-container-uid .fox-form-inline div.fox-item-checkbox-group div.controls span:not(.required),
+html[dir="rtl"] div#fox-container-uid .fox-form-inline div.fox-item-checkbox-group div.controls label:not(:last-child)
 {
 	margin-right: 0;
 	margin-left: 16px;
@@ -859,12 +897,134 @@ div#fox-container-uid div.controls span.alert
 	margin: 0;
 }
 
+div#fox-container-uid .control-group.error .fox-label-inside-no-placeholder
+{
+	color: #b94a48;
+}
+
 /* ----- recaptcha ----- */
 
 div#fox-container-uid .fox-item-recaptcha div.controls .fox-item-recaptcha-display
 {
 	display: inline-block;
 }
+
+/* Ensure that the template does not opacifies the whole button, or our spinner will be opacified too */
+/* [disabled] or :disabled ? http://stackoverflow.com/questions/20141450/ */
+div#fox-container-uid button:disabled
+{
+	opacity: 1;
+}
+
+div#fox-container-uid button:disabled .caption
+{
+	opacity: .3;
+}
+
+/* Spinner */
+.fox-item-submit button, .upload-spinner-container
+{
+	position: relative;
+}
+
+.upload-spinner-container
+{
+	vertical-align: middle;
+}
+
+.fox-item-submit .spinner,
+div#fox-container-uid span.qq-upload-spinner
+{
+	padding: 0;
+	width: 1em;
+	height: 1em;
+	border-radius: 50%;
+	-webkit-transform: translateZ(0);
+	-ms-transform: translateZ(0);
+	transform: translateZ(0);
+
+	-webkit-animation: circle1 1.7s infinite ease;
+	animation: circle1 1.7s infinite ease;
+}
+
+.fox-item-submit .spinner
+{
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	margin-left: -.5em;
+	margin-top: -.5em;
+}
+
+@-webkit-keyframes circle1
+{
+	0%
+	{
+		-webkit-transform: rotate(0deg);
+		transform: rotate(0deg);
+		box-shadow: 0 -0.83em 0 -0.4em, 0 -0.83em 0 -0.42em, 0 -0.83em 0 -0.44em, 0 -0.83em 0 -0.46em, 0 -0.83em 0 -0.477em;
+	}
+	5%,
+	95%
+	{
+		box-shadow: 0 -0.83em 0 -0.4em, 0 -0.83em 0 -0.42em, 0 -0.83em 0 -0.44em, 0 -0.83em 0 -0.46em, 0 -0.83em 0 -0.477em;
+	}
+	10%,
+	59%
+	{
+		box-shadow: 0 -0.83em 0 -0.4em, -0.087em -0.825em 0 -0.42em, -0.173em -0.812em 0 -0.44em, -0.256em -0.789em 0 -0.46em, -0.297em -0.775em 0 -0.477em;
+	}
+	20%
+	{
+		box-shadow: 0 -0.83em 0 -0.4em, -0.338em -0.758em 0 -0.42em, -0.555em -0.617em 0 -0.44em, -0.671em -0.488em 0 -0.46em, -0.749em -0.34em 0 -0.477em;
+	}
+	38%
+	{
+		box-shadow: 0 -0.83em 0 -0.4em, -0.377em -0.74em 0 -0.42em, -0.645em -0.522em 0 -0.44em, -0.775em -0.297em 0 -0.46em, -0.82em -0.09em 0 -0.477em;
+	}
+	100%
+	{
+		-webkit-transform: rotate(360deg);
+		transform: rotate(360deg);
+		box-shadow: 0 -0.83em 0 -0.4em, 0 -0.83em 0 -0.42em, 0 -0.83em 0 -0.44em, 0 -0.83em 0 -0.46em, 0 -0.83em 0 -0.477em;
+	}
+}
+
+@keyframes circle1
+{
+	0%
+	{
+		-webkit-transform: rotate(0deg);
+		transform: rotate(0deg);
+		box-shadow: 0 -0.83em 0 -0.4em, 0 -0.83em 0 -0.42em, 0 -0.83em 0 -0.44em, 0 -0.83em 0 -0.46em, 0 -0.83em 0 -0.477em;
+	}
+	5%,
+	95%
+	{
+		box-shadow: 0 -0.83em 0 -0.4em, 0 -0.83em 0 -0.42em, 0 -0.83em 0 -0.44em, 0 -0.83em 0 -0.46em, 0 -0.83em 0 -0.477em;
+	}
+	10%,
+	59%
+	{
+		box-shadow: 0 -0.83em 0 -0.4em, -0.087em -0.825em 0 -0.42em, -0.173em -0.812em 0 -0.44em, -0.256em -0.789em 0 -0.46em, -0.297em -0.775em 0 -0.477em;
+	}
+	20%
+	{
+		box-shadow: 0 -0.83em 0 -0.4em, -0.338em -0.758em 0 -0.42em, -0.555em -0.617em 0 -0.44em, -0.671em -0.488em 0 -0.46em, -0.749em -0.34em 0 -0.477em;
+	}
+	38%
+	{
+		box-shadow: 0 -0.83em 0 -0.4em, -0.377em -0.74em 0 -0.42em, -0.645em -0.522em 0 -0.44em, -0.775em -0.297em 0 -0.46em, -0.82em -0.09em 0 -0.477em;
+	}
+	100%
+	{
+		-webkit-transform: rotate(360deg);
+		transform: rotate(360deg);
+		box-shadow: 0 -0.83em 0 -0.4em, 0 -0.83em 0 -0.42em, 0 -0.83em 0 -0.44em, 0 -0.83em 0 -0.46em, 0 -0.83em 0 -0.477em;
+	}
+}
+
+/* /Spinner */
 
 /* ----- [START] Bootstrap v2.3.2 grid system [START] ----- */
 

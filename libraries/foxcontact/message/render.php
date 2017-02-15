@@ -63,7 +63,7 @@ class FoxMessageRender
 		}
 		
 		$body = $this->replaceVariables($body, true);
-		return JMailHelper::cleanBody(FoxHtmlElem::create('div')->attr('dir', JFactory::getLanguage()->isRTL() ? 'rtl' : 'ltr')->html($body)->render());
+		return JMailHelper::cleanBody(FoxHtmlElem::create('div')->attr('dir', JFactory::getLanguage()->isRtl() ? 'rtl' : 'ltr')->html($body)->render());
 	}
 	
 	
@@ -143,7 +143,7 @@ class FoxMessageRender
 	
 	private function getFieldTable($include_attachments, $include_user_info)
 	{
-		$elems = FoxHtmlElem::create();
+		$elements = FoxHtmlElem::create();
 		foreach ($this->form->getDesign()->getItems() as $item)
 		{
 			switch ($item->getType())
@@ -153,7 +153,7 @@ class FoxMessageRender
 					break;
 				default:
 					list($value, $encode) = $this->getItemValue($item);
-					$elems->append($this->getFieldRow($item->get('label'), $value, $encode));
+					$elements->append($this->getFieldRow($item->get('label'), $value, $encode));
 					break;
 			}
 		
@@ -165,27 +165,27 @@ class FoxMessageRender
 			if (!is_null($item))
 			{
 				list($value, $encode) = $this->getItemValue($item);
-				$elems->append($this->getFieldRow(JText::_('COM_FOXCONTACT_ATTACHMENTS'), $value, $encode));
+				$elements->append($this->getFieldRow(JText::_('COM_FOXCONTACT_ATTACHMENTS'), $value, $encode));
 			}
 		
 		}
 		
 		if ($include_user_info)
 		{
-			$elems->append($this->getFieldRow(JText::_('COM_FOXCONTACT_SITE_NAME'), $this->getSiteName()));
-			$elems->append($this->getFieldRow(JText::_('COM_FOXCONTACT_CURRENT_URL'), $this->getFormPageLink(), false));
+			$elements->append($this->getFieldRow(JText::_('COM_FOXCONTACT_SITE_NAME'), $this->getSiteName()));
+			$elements->append($this->getFieldRow(JText::_('COM_FOXCONTACT_CURRENT_URL'), $this->getFormPageLink(), false));
 			$item = $this->form->getDesign()->getFoxDesignItemByType('user_info');
 			if (!is_null($item))
 			{
-				$elems->append($this->getFieldRow(JText::_('COM_FOXCONTACT_CLIENT_DEVICE'), $item->getDeviceText()));
-				$elems->append($this->getFieldRow(JText::_('COM_FOXCONTACT_CLIENT_OS'), $item->getOsText()));
-				$elems->append($this->getFieldRow(JText::_('COM_FOXCONTACT_CLIENT_BROWSER'), $item->getBrowserText()));
-				$elems->append($this->getFieldRow(JText::_('COM_FOXCONTACT_CLIENT_IP_ADDRESS'), $item->getIpText()));
+				$elements->append($this->getFieldRow(JText::_('COM_FOXCONTACT_CLIENT_DEVICE'), $item->getDeviceText()));
+				$elements->append($this->getFieldRow(JText::_('COM_FOXCONTACT_CLIENT_OS'), $item->getOsText()));
+				$elements->append($this->getFieldRow(JText::_('COM_FOXCONTACT_CLIENT_BROWSER'), $item->getBrowserText()));
+				$elements->append($this->getFieldRow(JText::_('COM_FOXCONTACT_CLIENT_IP_ADDRESS'), $item->getIpText()));
 			}
 		
 		}
 		
-		return FoxHtmlElem::create('dl')->attr('class', 'fields-list')->append($elems)->render();
+		return FoxHtmlElem::create('dl')->attr('class', 'fields-list')->append($elements)->render();
 	}
 	
 	
@@ -202,7 +202,7 @@ class FoxMessageRender
 	
 	protected function getFieldRow($label, $value, $encode = true)
 	{
-		if (empty($value))
+		if (is_null($value) || trim($value) === '')
 		{
 			return '';
 		}

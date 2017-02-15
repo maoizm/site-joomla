@@ -8,6 +8,19 @@
 
 class FoxLog extends JLog
 {
+	private static $category_by_file = array();
+	
+	public static function addLogger(array $options, $priority = self::ALL, $categories = array(), $exclude = false)
+	{
+		$key = $exclude ? "1:{$options['text_file']}" : "0:{$options['text_file']}";
+		foreach ($categories as $category)
+		{
+			self::$category_by_file[$key][$category] = true;
+		}
+		
+		JLog::addLogger($options, $priority, array_keys(self::$category_by_file[$key]), $exclude);
+	}
+	
 	
 	public static function add($entry, $priority = self::INFO, $category = '', $date = null)
 	{
@@ -15,7 +28,10 @@ class FoxLog extends JLog
 		{
 			JLog::add($entry, $priority, $category, $date);
 		}
-		catch (RuntimeException $e)
+		catch (Throwable $t)
+		{
+		}
+		catch (Exception $e)
 		{
 		}
 	

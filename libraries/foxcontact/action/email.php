@@ -9,6 +9,7 @@ jimport('foxcontact.action.base');
 jimport('foxcontact.html.encoder');
 jimport('foxcontact.design.item_attachments');
 jimport('foxcontact.joomla.log');
+jimport('foxcontact.mail.mail');
 
 abstract class FoxActionEmail extends FoxActionBase
 {
@@ -18,7 +19,7 @@ abstract class FoxActionEmail extends FoxActionBase
 	{
 		if ($this->isEnable())
 		{
-			$mail = JFactory::getMailer();
+			$mail = FoxMailMail::getInstance();
 			$this->prepare($mail);
 			return $this->send($mail);
 		}
@@ -34,42 +35,6 @@ abstract class FoxActionEmail extends FoxActionBase
 	
 	
 	protected abstract function prepare($mail);
-	
-	protected function setFrom($mail, $from_email = '', $from_name = '', $reply_to_email = '', $reply_to_name = '')
-	{
-		$this->setFromSafe($mail, trim($from_email), trim($from_name), trim($reply_to_email), trim($reply_to_name));
-	}
-	
-	
-	private function setFromSafe($mail, $from_email, $from_name, $reply_to_email, $reply_to_name)
-	{
-		$config = JFactory::getConfig();
-		$mail->setSender(array(JMailHelper::cleanAddress(!empty($from_email) ? $from_email : $config->get('mailfrom', '')), !empty($from_name) ? $from_name : $config->get('fromname', '')));
-		$mail->clearReplyTos();
-		if (!empty($reply_to_email))
-		{
-			$mail->addReplyTo(JMailHelper::cleanAddress($reply_to_email), $reply_to_name);
-		}
-	
-	}
-	
-	
-	protected function prepareAlternateBody($mail)
-	{
-		$html2text = JPATH_ROOT . '/libraries/vendor/phpmailer/phpmailer/extras/class.html2text.php';
-		if (file_exists($html2text))
-		{
-			require_once $html2text;
-			$html2text = new Html2Text($mail->Body);
-			$mail->AltBody = $html2text->get_text();
-		}
-		else
-		{
-			$mail->isHtml(true);
-		}
-	
-	}
-	
 	
 	protected function addAttachments($mail)
 	{
@@ -95,27 +60,11 @@ abstract class FoxActionEmail extends FoxActionBase
 	
 	private function send($mail)
 	{
-		$result = $mail->Send();
+		$result = $mail->send();
 		if ($result !== true)
 		{
-			if (is_object($result))
-			{
-				$info = $result->getMessage();
-			}
-			else
-			{
-				if (!empty($mail->ErrorInfo))
-				{
-					$info = $mail->ErrorInfo;
-				}
-				else
-				{
-					$info = JText::_('JLIB_MAIL_FUNCTION_OFFLINE');
-				}
-			
-			}
-			
-			FoxLog::add("{$this->getClassName()} Unable to send email. ({$info})", JLog::ERROR, 'action');
+			$info = (string) $result;
+			FoxLog::add("{$this->type} Unable to send email. ({$info})", JLog::ERROR, 'action');
 			$info = FoxHtmlEncoder::encode($info);
 			$this->form->getBoard()->add(JText::_('COM_FOXCONTACT_ERR_SENDING_MAIL') . ". {$info}", FoxFormBoard::error);
 			return false;
@@ -123,12 +72,6 @@ abstract class FoxActionEmail extends FoxActionBase
 		
 		FoxLog::add("{$this->type} sent.", JLog::INFO, 'action');
 		return true;
-	}
-	
-	
-	private function getClassName()
-	{
-		return get_class($this);
 	}
 
 }

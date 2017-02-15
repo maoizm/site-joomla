@@ -77,7 +77,7 @@ class FoxDesignItemCaptcha extends FoxDesignItem
 	}
 	
 	
-	protected function check($value, &$messages)
+	protected function check($value, array &$messages)
 	{
 		$answer = $this->getAnswer();
 		if (empty($answer) || empty($value) || self::faultTolerance($value) !== self::faultTolerance($answer))

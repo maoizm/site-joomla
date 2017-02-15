@@ -11,14 +11,20 @@ class FoxHtmlResource
 	
 	public static function path($path, $type, $use_min_file = true)
 	{
-		$root = JUri::root(true);
 		if (!$use_min_file)
 		{
-			return "{$root}{$path}.{$type}";
+			return self::getVersionedPath("{$path}.{$type}");
 		}
 		
 		$min = JDEBUG && file_exists(JPATH_ROOT . "{$path}.{$type}") ? '' : '.min';
-		return "{$root}{$path}{$min}.{$type}";
+		return self::getVersionedPath("{$path}{$min}.{$type}");
+	}
+	
+	
+	private static function getVersionedPath($file)
+	{
+		$time = @filemtime(JPATH_ROOT . $file) or $time = 0;
+		return JUri::root(true) . "{$file}?v={$time}";
 	}
 
 }

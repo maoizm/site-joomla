@@ -7,9 +7,17 @@
  */
 jimport('foxcontact.form.model');
 jimport('foxcontact.action.target');
+jimport('foxcontact.joomla.log');
 
 class FoxContactControllerForm extends JControllerLegacy
 {
+	
+	public function __construct($config = array())
+	{
+		parent::__construct($config);
+		FoxLog::addLogger(array('text_file' => 'foxcontact.php', 'text_entry_format' => "{DATE}\t{TIME}\t{PRIORITY}\t{CATEGORY}\t{MESSAGE}"), JLog::ALL, array('form'));
+	}
+	
 	
 	public function reset()
 	{
@@ -21,6 +29,7 @@ class FoxContactControllerForm extends JControllerLegacy
 	
 	public function send()
 	{
+		FoxLog::add('A form has been submitted.', JLog::INFO, 'form');
 		$post = JFactory::getApplication()->input->post;
 		$form = FoxFormModel::getFormByUid($post->get('uid'));
 		$board = $form->getBoard();
@@ -32,6 +41,7 @@ class FoxContactControllerForm extends JControllerLegacy
 		$board->setAsValidated();
 		if (!$valid)
 		{
+			FoxLog::add('Form data validation failed. This is not an error: the user just entered void or incorrect data.', JLog::INFO, 'form');
 			foreach ($messages as $message)
 			{
 				$board->addInvalidField($message['src']);
@@ -41,6 +51,7 @@ class FoxContactControllerForm extends JControllerLegacy
 			$this->doRedirect($form, false, $this->getFormUrlWithFragment($post, $form));
 		}
 		
+		FoxLog::add('Form data validation success.', JLog::INFO, 'form');
 		$target = new FoxActionTarget();
 		$target->setUrl($this->getFormUrlWithFragment($post, $form), true);
 		if (!$form->process($target))
@@ -78,7 +89,7 @@ class FoxContactControllerForm extends JControllerLegacy
 	
 	private function getFormUrlWithFragment($post, $form)
 	{
-		return "{$post->get('fox_form_page_uri', null, 'raw')}#fox_{$form->getUid()}";
+		return "{$post->get('fox_form_page_uri', null, 'raw')}#{$form->getUid()}";
 	}
 
 }

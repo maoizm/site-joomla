@@ -29,7 +29,7 @@ class FoxDesignItemCheckbox extends FoxDesignItem
 	}
 	
 	
-	public function update($post_data)
+	public function update(array $post_data)
 	{
 		$this->setValue(isset($post_data[$this->get('unique_id')]) ? JText::_('JYES') : JText::_('JNO'));
 	}

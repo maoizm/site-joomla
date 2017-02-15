@@ -5,142 +5,52 @@
  * @license   Distributed under the terms of the GNU General Public License GNU/GPL v3 http://www.gnu.org/licenses/gpl-3.0.html
  * @see       Documentation: http://www.fox.ra.it/forum/2-documentation.html
  */
-jimport('foxcontact.joomla.log');
+jimport('foxcontact.newsletter.driver');
 
 class FoxFormNewsletter
 {
-	private static $enabled = array();
+	private static $drivers = array();
 	
-	public static function isEnable($extension)
+	private static function getDriver($newsletter)
 	{
-		if (!isset(self::$enabled[$extension]))
+		if (!isset(self::$drivers[$newsletter]))
 		{
-			self::$enabled[$extension] = self::isInstalled($extension) && self::config($extension);
+			jimport("foxcontact.newsletter.{$newsletter}");
+			$class_name = "FoxNewsletter{$newsletter}Driver";
+			self::$drivers[$newsletter] = !class_exists($class_name) ? new FoxNewsletterDummyDriver() : new $class_name();
 		}
 		
-		return self::$enabled[$extension];
+		return self::$drivers[$newsletter];
 	}
 	
 	
-	private static function isInstalled($extension)
+	public static function loadAll()
 	{
-		$db = JFactory::getDBO();
-		$query = $db->getQuery(true);
-		$query->select($db->quoteName('extension_id'));
-		$query->from($db->quoteName('#__extensions'));
-		$query->where($db->quoteName('name') . ' = ' . $db->quote($extension));
-		$db->setQuery($query);
-		return $db->loadResult();
-	}
-	
-	
-	private static function config($extension)
-	{
-		switch ($extension)
+		$newsletters = array();
+		foreach (array('acymailing', 'jnews') as $newsletter)
 		{
-			case 'acymailing':
-				$enabled = self::configAcyMailing();
-				break;
-			case 'jnews':
-				$enabled = self::configJNews();
-				break;
-			default:
-				$enabled = false;
-				break;
+			$newsletters[] = self::load($newsletter);
 		}
 		
-		return $enabled;
+		return array_values(array_filter($newsletters));
 	}
 	
 	
-	private static function configAcyMailing()
+	public static function load($newsletter, $ids = array())
 	{
-		return (bool) @(include_once JPATH_ADMINISTRATOR . '/components/com_acymailing/helpers/helper.php');
+		$driver = self::getDriver($newsletter);
+		return $driver->isEnable() ? $driver->load($ids) : null;
 	}
 	
 	
-	private static function configJNews()
+	public static function subscribe($newsletter, $ids, $name, $email)
 	{
-		$enable = true;
-		defined('JNEWS_JPATH_ROOT') or define('JNEWS_JPATH_ROOT', JPATH_ROOT);
-		$enable &= (bool) @(include_once JPATH_ROOT . '/components/com_jnews/defines.php');
-		if (defined('JNEWS_OPTION'))
+		$driver = self::getDriver($newsletter);
+		if ($driver->isEnable())
 		{
-			$enable &= (bool) @(include_once JNEWS_JPATH_ROOT . '/administrator/components/' . JNEWS_OPTION . '/classes/class.jnews.php');
-		}
-		else
-		{
-			$enable = false;
-		}
-		
-		return $enable;
-	}
-	
-	
-	public static function load($extension, $filters = array())
-	{
-		switch ($extension)
-		{
-			case 'acymailing':
-				return self::loadAcyMailing($filters);
-			case 'jnews':
-				return self::loadJNews($filters);
-			default:
-				return null;
+			$driver->subscribe($ids, $name, $email);
 		}
 	
-	}
-	
-	
-	private static function loadAcyMailing($filters)
-	{
-		return FoxFormNewsletter::query('acymailing', 'listid', 'name', '#__acymailing_list', 'ordering', $filters);
-	}
-	
-	
-	private static function loadJNews($filters)
-	{
-		return FoxFormNewsletter::query('jnews', 'id', 'list_name', '#__jnews_lists', 'id', $filters);
-	}
-	
-	
-	private static function query($extension, $key, $value, $table, $order, $filters)
-	{
-		if (!self::isEnable($extension))
-		{
-			return null;
-		}
-		
-		$options = array();
-		$db = JFactory::getDBO();
-		$query = $db->getQuery(true);
-		$query->select($db->quoteName($key) . ',' . $db->quoteName($value));
-		$query->from($db->quoteName($table));
-		$query->where($db->quoteName('published') . ' = ' . $db->quote('1'));
-		$query->order($db->quoteName($order) . ' ASC');
-		if (count($filters) > 0)
-		{
-			foreach ($filters as $k => $filter)
-			{
-				$filters[$k] = $db->quote($filter);
-			}
-			
-			$query->where($db->quoteName($key) . ' IN (' . implode(',', $filters) . ')');
-		}
-		
-		$db->setQuery($query);
-		$items = $db->loadObjectlist() or $items = new stdClass();
-		if (count($items) === 0)
-		{
-			return null;
-		}
-		
-		foreach ($items as $item)
-		{
-			$options[] = array('value' => $item->{$key}, 'label' => $item->{$value});
-		}
-		
-		return array('type' => $extension, 'name' => JText::_("COM_FOXCONTACT_ITEM_NEWSLETTER_{$extension}_LBL"), 'options' => $options);
 	}
 
 }

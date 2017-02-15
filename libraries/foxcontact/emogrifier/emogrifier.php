@@ -90,7 +90,7 @@ class Emogrifier
 	}
 	
 	
-	protected function process($xmlDocument)
+	protected function process(\DOMDocument $xmlDocument)
 	{
 		$xpath = new \DOMXPath($xmlDocument);
 		$this->clearAllCaches();
@@ -298,7 +298,7 @@ class Emogrifier
 	}
 	
 	
-	private function removeInvisibleNodes($xpath)
+	private function removeInvisibleNodes(\DOMXPath $xpath)
 	{
 		$nodesWithStyleDisplayNone = $xpath->query('//*[contains(translate(translate(@style," ",""),"NOE","noe"),"display:none")]');
 		if ($nodesWithStyleDisplayNone->length === 0)
@@ -318,9 +318,9 @@ class Emogrifier
 	}
 	
 	
-	private function normalizeStyleAttributes($node)
+	private function normalizeStyleAttributes(\DOMElement $node)
 	{
-		$normalizedOriginalStyle = preg_replace_callback('/[A-z\\-]+(?=\\:)/S', function ($m)
+		$normalizedOriginalStyle = preg_replace_callback('/[A-z\\-]+(?=\\:)/S', function (array $m)
 		{
 			return strtolower($m[0]);
 		}, $node->getAttribute('style'));
@@ -347,7 +347,7 @@ class Emogrifier
 	}
 	
 	
-	private function generateStyleStringFromDeclarationsArrays($oldStyles, $newStyles)
+	private function generateStyleStringFromDeclarationsArrays(array $oldStyles, array $newStyles)
 	{
 		$combinedStyles = array_merge($oldStyles, $newStyles);
 		$cacheKey = serialize($combinedStyles);
@@ -377,7 +377,7 @@ class Emogrifier
 	}
 	
 	
-	private function copyCssWithMediaToStyleNode($xmlDocument, $xpath, $css)
+	private function copyCssWithMediaToStyleNode(\DOMDocument $xmlDocument, \DOMXPath $xpath, $css)
 	{
 		if ($css === '')
 		{
@@ -416,14 +416,14 @@ class Emogrifier
 	}
 	
 	
-	private function existsMatchForCssSelector($xpath, $cssSelector)
+	private function existsMatchForCssSelector(\DOMXPath $xpath, $cssSelector)
 	{
 		$nodesMatchingSelector = $xpath->query($this->translateCssToXpath($cssSelector));
 		return $nodesMatchingSelector !== false && $nodesMatchingSelector->length !== 0;
 	}
 	
 	
-	private function getCssFromAllStyleNodes($xpath)
+	private function getCssFromAllStyleNodes(\DOMXPath $xpath)
 	{
 		$styleNodes = $xpath->query('//style');
 		if ($styleNodes === false)
@@ -442,7 +442,7 @@ class Emogrifier
 	}
 	
 	
-	protected function addStyleElementToDocument($document, $css)
+	protected function addStyleElementToDocument(\DOMDocument $document, $css)
 	{
 		$styleElement = $document->createElement('style', $css);
 		$styleAttribute = $document->createAttribute('type');
@@ -453,7 +453,7 @@ class Emogrifier
 	}
 	
 	
-	private function getOrCreateHeadElement($document)
+	private function getOrCreateHeadElement(\DOMDocument $document)
 	{
 		$head = $document->getElementsByTagName('head')->item(0);
 		if ($head === null)
@@ -561,7 +561,7 @@ class Emogrifier
 	}
 	
 	
-	private function sortBySelectorPrecedence($a, $b)
+	private function sortBySelectorPrecedence(array $a, array $b)
 	{
 		$precedenceA = $this->getCssSelectorPrecedence($a['selector']);
 		$precedenceB = $this->getCssSelectorPrecedence($b['selector']);
@@ -602,7 +602,7 @@ class Emogrifier
 	private function translateCssToXpath($cssSelector)
 	{
 		$paddedSelector = ' ' . $cssSelector . ' ';
-		$lowercasePaddedSelector = preg_replace_callback('/\\s+\\w+\\s+/', function ($matches)
+		$lowercasePaddedSelector = preg_replace_callback('/\\s+\\w+\\s+/', function (array $matches)
 		{
 			return strtolower($matches[0]);
 		}, $paddedSelector);
@@ -624,19 +624,19 @@ class Emogrifier
 	}
 	
 	
-	private function matchIdAttributes($match)
+	private function matchIdAttributes(array $match)
 	{
 		return ($match[1] !== '' ? $match[1] : '*') . '[@id="' . $match[2] . '"]';
 	}
 	
 	
-	private function matchClassAttributes($match)
+	private function matchClassAttributes(array $match)
 	{
 		return ($match[1] !== '' ? $match[1] : '*') . '[contains(concat(" ",@class," "),concat(" ","' . implode('"," "))][contains(concat(" ",@class," "),concat(" ","', explode('.', substr($match[2], 1))) . '"," "))]';
 	}
 	
 	
-	private function translateNthChild($match)
+	private function translateNthChild(array $match)
 	{
 		$parseResult = $this->parseNth($match);
 		if (isset($parseResult[self::MULTIPLIER]))
@@ -661,7 +661,7 @@ class Emogrifier
 	}
 	
 	
-	private function translateNthOfType($match)
+	private function translateNthOfType(array $match)
 	{
 		$parseResult = $this->parseNth($match);
 		if (isset($parseResult[self::MULTIPLIER]))
@@ -686,7 +686,7 @@ class Emogrifier
 	}
 	
 	
-	private function parseNth($match)
+	private function parseNth(array $match)
 	{
 		if (in_array(strtolower($match[2]), array('even', 'odd'), true))
 		{
@@ -761,7 +761,7 @@ class Emogrifier
 	}
 	
 	
-	private function getNodesToExclude($xpath)
+	private function getNodesToExclude(\DOMXPath $xpath)
 	{
 		$excludedNodes = array();
 		foreach (array_keys($this->excludedSelectors) as $selectorToExclude)

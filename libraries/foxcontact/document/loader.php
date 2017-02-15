@@ -33,7 +33,7 @@ abstract class FoxDocumentLoader
 	}
 	
 	
-	public function addResource($values)
+	public function addResource(array $values)
 	{
 		$slug = '';
 		foreach ($values as $key => $value)
@@ -42,7 +42,7 @@ abstract class FoxDocumentLoader
 		}
 		
 		$method = 'add' . ucwords($values['type']);
-		$this->{$method}(JRoute::_("{$this->prefix}{$slug}"));
+		$this->{$method}(JRoute::_("{$this->prefix}{$slug}", false));
 		return $this;
 	}
 	
@@ -58,13 +58,13 @@ class FoxDocumentLoaderPerformance extends FoxDocumentLoader
 	
 	protected function addCss($url)
 	{
-		$this->document->addStyleSheet($url);
+		$this->document->addStyleSheet(htmlspecialchars($url));
 	}
 	
 	
 	protected function addJs($url)
 	{
-		$this->document->addScript($url);
+		$this->document->addScript(htmlspecialchars($url));
 	}
 
 }

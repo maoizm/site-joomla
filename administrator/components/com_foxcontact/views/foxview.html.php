@@ -5,6 +5,7 @@
  * @license   Distributed under the terms of the GNU General Public License GNU/GPL v3 http://www.gnu.org/licenses/gpl-3.0.html
  * @see       Documentation: http://www.fox.ra.it/forum/2-documentation.html
  */
+jimport('foxcontact.html.resource');
 
 class FoxView extends JViewLegacy
 {
@@ -12,7 +13,7 @@ class FoxView extends JViewLegacy
 	
 	public function display($tpl = null)
 	{
-		JFactory::getDocument()->addStyleSheet(JUri::base(true) . '/components/com_foxcontact/css/component.css');
+		JFactory::getDocument()->addStyleSheet(FoxHtmlResource::path('/administrator/components/com_foxcontact/css/component', 'css', false));
 		$this->sidebar = JHtmlSidebar::render();
 		return parent::display($tpl);
 	}

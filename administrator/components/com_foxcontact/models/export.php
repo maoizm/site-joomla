@@ -34,7 +34,7 @@ class FoxContactModelExport extends FoxContactModelEnquiries
 	}
 	
 	
-	public function mark($items)
+	public function mark(array $items)
 	{
 		$ids = array();
 		foreach ($items as $item)

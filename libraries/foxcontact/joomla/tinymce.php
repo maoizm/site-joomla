@@ -16,11 +16,12 @@ class FoxJoomlaTinyMCE
 		if (!self::$inited)
 		{
 			$document = JFactory::getDocument();
-			if ($document instanceof JDocumentHTML && is_file(JPATH_PLUGINS . '/editors/tinymce/tinymce.php'))
+			if ($document instanceof JDocumentHtml && is_file(JPATH_PLUGINS . '/editors/tinymce/tinymce.php'))
 			{
 				require_once JPATH_PLUGINS . '/editors/tinymce/tinymce.php';
-				$mce_editor = new plgEditortinymce(new JEditor('tinymce'), array('type' => 'editors', 'name' => 'tinymce', 'params' => '{"lang_mode":1,"valid_elements":"*[*]","relative_urls":0,"skin_admin":99}'));
+				$mce_editor = new PlgEditorTinymce(new JEditor('tinymce'), array('type' => 'editors', 'name' => 'tinymce', 'params' => '{"lang_mode":1,"valid_elements":"*[*]","relative_urls":0,"skin_admin":99}'));
 				$document->addCustomTag($mce_editor->onInit());
+				$mce_editor->onDisplay('fake', 'fake', 640, 480, 80, 25, false);
 				self::$result = true;
 			}
 			

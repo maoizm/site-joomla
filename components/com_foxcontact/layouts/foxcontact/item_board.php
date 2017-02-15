@@ -6,4 +6,4 @@
  * @see       Documentation: http://www.fox.ra.it/forum/2-documentation.html
  */
 list($uid, $board, $current, $form) = FoxFormRender::listFormVariables('uid,board');
-FoxHtmlElem::create('div')->attr('id', $current->getBoxId())->classes('fox-item fox-item-board control-group')->classes($board->getItemDecorationClass($current->get('unique_id')))->append(FoxFormRender::render('form_board'))->show();
+FoxHtmlElem::create()->append(FoxFormRender::render("item_board_{$current->get('alignment')}"))->show();

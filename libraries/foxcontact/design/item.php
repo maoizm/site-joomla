@@ -28,7 +28,7 @@ class FoxDesignItem extends FoxDesignBase
 	}
 	
 	
-	public function addResources($document)
+	public function addResources(JDocument $document)
 	{
 	}
 	
@@ -64,16 +64,23 @@ class FoxDesignItem extends FoxDesignBase
 	
 	public function getPlaceholder()
 	{
+		$placeholder = '';
 		switch (FoxFormModel::getFormByUid($this->get('uid'))->getDesign()->get('option.label.position'))
 		{
 			case 'inside':
-				return !$this->isEmpty('label') ? $this->get('label') : $this->get('placeholder');
+				$placeholder = !$this->isEmpty('label') ? $this->get('label') : $this->get('placeholder');
+				if ($this->get('required'))
+				{
+					$placeholder .= '*';
+				}
+				
 				break;
 			case 'beside':
-				return $this->get('placeholder');
+				$placeholder = $this->get('placeholder');
+				break;
 		}
 		
-		return '';
+		return $placeholder;
 	}
 	
 	
@@ -139,14 +146,13 @@ class FoxDesignItem extends FoxDesignBase
 	
 	public function hasValue()
 	{
-		$value = $this->getValue();
-		return !empty($value);
+		return !$this->isValueEmpty($this->getValue());
 	}
 	
 	
 	protected function getDefaultValue()
 	{
-		return $this->get('def_val', null);
+		return $this->get('def_val', !$this->hasSingleValue() ? array() : null);
 	}
 	
 	
@@ -156,13 +162,13 @@ class FoxDesignItem extends FoxDesignBase
 	}
 	
 	
-	public function update($post_data)
+	public function update(array $post_data)
 	{
 		$this->setValue(isset($post_data[$this->get('unique_id')]) ? $post_data[$this->get('unique_id')] : '');
 	}
 	
 	
-	public function validate(&$messages)
+	public function validate(array &$messages)
 	{
 		$current_count = count($messages);
 		$this->check($this->getValue(), $messages);
@@ -170,7 +176,7 @@ class FoxDesignItem extends FoxDesignBase
 	}
 	
 	
-	protected function check($value, &$messages)
+	protected function check($value, array &$messages)
 	{
 		if ($this->get('required') && $this->isValueEmpty($value))
 		{
@@ -182,7 +188,7 @@ class FoxDesignItem extends FoxDesignBase
 	
 	protected function isValueEmpty($value)
 	{
-		return is_null($value) || trim($value) === '' || is_array($value) && count($value) === 0;
+		return is_null($value) || !is_array($value) && trim($value) === '' || is_array($value) && count($value) === 0;
 	}
 	
 	

@@ -5,47 +5,85 @@
  * @license   Distributed under the terms of the GNU General Public License GNU/GPL v3 http://www.gnu.org/licenses/gpl-3.0.html
  * @see       Documentation: http://www.fox.ra.it/forum/2-documentation.html
  */
-function getFoxContactParameters()
+
+class FoxContactRouter extends JComponentRouterBase
 {
-	static $result = array(0 => 'view', 1 => 'owner', 2 => 'id', 3 => 'root', 4 => 'filename', 5 => 'type');
-	return $result;
-}
-function FoxContactBuildRoute(&$query)
-{
-	$segments = array();
-	$parameters = getFoxContactParameters();
-	foreach ($parameters as $name)
-	{
-		if (isset($query[$name]))
-		{
-			$segments[] = $query[$name];
-			unset($query[$name]);
-		}
-		else
-		{
-			break;
-		}
 	
+	public function build(&$query)
+	{
+		$segments = array();
+		$keys = array();
+		foreach ($query as $key => $val)
+		{
+			if ($key !== 'option' && $key !== 'Itemid' && $key !== 'lang')
+			{
+				$keys[] = $key;
+			}
+		
+		}
+		
+		sort($keys);
+		foreach ($keys as $key)
+		{
+			switch ($key)
+			{
+				case 'view':
+					if (!isset($query['Itemid']) || empty($query['Itemid']))
+					{
+						$segments[] = (string) $key;
+						$segments[] = (string) $query[$key];
+					}
+					
+					break;
+				default:
+					if (strlen($query[$key]) > 0)
+					{
+						$segments[] = (string) $key;
+						$segments[] = (string) $query[$key];
+					}
+			
+			}
+			
+			unset($query[$key]);
+		}
+		
+		return $segments;
 	}
 	
-	return $segments;
-}
-function FoxContactParseRoute($segments)
-{
-	$vars = array();
-	$parameters = getFoxContactParameters();
-	foreach ($parameters as $index => $name)
-	{
-		if (isset($segments[$index]))
-		{
-			$vars[$name] = preg_replace('/[^A-Z0-9_]/i', '', $segments[$index]);
-		}
-		else
-		{
-			break;
-		}
 	
+	public function parse(&$segments)
+	{
+		$active_menu = JFactory::getApplication()->getMenu()->getActive();
+		$vars = !is_null($active_menu) ? $active_menu->query : array();
+		if (count($segments) % 2 !== 0)
+		{
+			throw new Exception(JText::_('JERROR_PAGE_NOT_FOUND'), 404);
+		}
+		
+		$segments = array_values($segments);
+		for ($i = 0, $len = count($segments); $i < $len; $i += 2)
+		{
+			$vars[self::clean($segments[$i])] = self::clean($segments[$i + 1]);
+		}
+		
+		return $vars;
 	}
 	
-	return $vars;
+	
+	private static function clean($value)
+	{
+		return (string) preg_replace('/[^A-Z0-9_\\.]/i', '', $value);
+	}
+
+}
+
+function FoxContactBuildRoute(array &$query)
+{
+	$router = new FoxContactRouter();
+	return $router->build($query);
+}
+function FoxContactParseRoute(array &$segments)
+{
+	$router = new FoxContactRouter();
+	return $router->parse($segments);
 }

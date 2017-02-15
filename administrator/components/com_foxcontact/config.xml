@@ -9,6 +9,10 @@
 	</fieldset>
 
 	<fieldset name="troubleshoot" label="COM_FOXCONTACT_TROUBLESHOOT_LBL" description="COM_FOXCONTACT_TROUBLESHOOT_DSC">
+		<field name="mail_sender_type" type="list" label="COM_FOXCONTACT_MAIL_SENDER_TYPE_LBL" description="COM_FOXCONTACT_MAIL_SENDER_TYPE_DSC">
+			<option value="Joomla">COM_FOXCONTACT_MAIL_SENDER_JOOMLA_OPT</option>
+			<option value="Swift">COM_FOXCONTACT_MAIL_SENDER_SWIFT_OPT</option>
+		</field>
 		<field name="use_dns" type="list" label="COM_FOXCONTACT_ADVANCED_EMAIL_VERIFICATION_LBL" description="COM_FOXCONTACT_EMAIL_DOMAIN_VERIFICATION_DSC">
 			<option value="dns_check">JYES</option>
 			<option value="0">JNO</option>

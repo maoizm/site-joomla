@@ -36,12 +36,13 @@ class FoxContactControllerUploader extends JControllerLegacy
 	
 	private function getUploaderRequestManager()
 	{
-		if (isset($_GET['qqfile']))
+		$input = JFactory::getApplication()->input;
+		if ($input->get('qqfile'))
 		{
 			return new XhrUploadRequestManager();
 		}
 		
-		if (isset($_FILES['qqfile']))
+		if (count($input->files->get('qqfile', array(), 'array')))
 		{
 			return new FormUploadRequestManager();
 		}
@@ -62,7 +63,7 @@ abstract class RequestManager
 	
 	public function __construct()
 	{
-		JLog::addLogger(array('text_file' => 'foxcontact.php', 'text_entry_format' => "{DATE}\t{TIME}\t{PRIORITY}\t{CATEGORY}\t{MESSAGE}"), JLog::ALL, array('upload'));
+		FoxLog::addLogger(array('text_file' => 'foxcontact.php', 'text_entry_format' => "{DATE}\t{TIME}\t{PRIORITY}\t{CATEGORY}\t{MESSAGE}"), JLog::ALL, array('upload'));
 	}
 	
 	
@@ -102,9 +103,10 @@ abstract class UploadRequestManager extends RequestManager
 			return array('error' => JText::_('COM_FOXCONTACT_ERR_MIME') . ' [forbidden extension]');
 		}
 		
-		if (!$this->checkMimeType($_SERVER['CONTENT_TYPE'], $item))
+		$content_type = JFactory::getApplication()->input->server->get('CONTENT_TYPE', '', 'string');
+		if (!$this->checkMimeType($content_type, $item))
 		{
-			$type = preg_replace('/;.*/', '', $_SERVER['CONTENT_TYPE']);
+			$type = preg_replace('/;.*/', '', $content_type);
 			return array('error' => JText::_('COM_FOXCONTACT_ERR_MIME') . " [{$type}]");
 		}
 		
@@ -248,13 +250,13 @@ class XhrUploadRequestManager extends UploadRequestManager
 	
 	protected function getFileName()
 	{
-		return JFactory::getApplication()->input->get->get('qqfile');
+		return JFactory::getApplication()->input->get->get('qqfile', '', 'string');
 	}
 	
 	
 	protected function getFileSize()
 	{
-		return isset($_SERVER['CONTENT_LENGTH']) ? (int) $_SERVER['CONTENT_LENGTH'] : 0;
+		return JFactory::getApplication()->input->server->get('CONTENT_LENGTH', 0, 'int');
 	}
 
 }
@@ -262,22 +264,30 @@ class XhrUploadRequestManager extends UploadRequestManager
 
 class FormUploadRequestManager extends UploadRequestManager
 {
+	private $files;
+	
+	public function __construct()
+	{
+		$this->files = JFactory::getApplication()->input->files->get('qqfile', array('size' => 0), 'array');
+		parent::__construct();
+	}
+	
 	
 	protected function saveFile($path)
 	{
-		return move_uploaded_file($_FILES['qqfile']['tmp_name'], $path);
+		return move_uploaded_file($this->files['tmp_name'], $path);
 	}
 	
 	
 	protected function getFileName()
 	{
-		return $_FILES['qqfile']['name'];
+		return $this->files['name'];
 	}
 	
 	
 	protected function getFileSize()
 	{
-		return $_FILES['qqfile']['size'];
+		return $this->files['size'];
 	}
 
 }

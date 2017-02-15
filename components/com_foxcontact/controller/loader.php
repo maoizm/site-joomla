@@ -5,6 +5,7 @@
  * @license   Distributed under the terms of the GNU General Public License GNU/GPL v3 http://www.gnu.org/licenses/gpl-3.0.html
  * @see       Documentation: http://www.fox.ra.it/forum/2-documentation.html
  */
+jimport('joomla.filesystem.folder');
 jimport('foxcontact.form.model');
 jimport('foxcontact.html.header');
 
@@ -16,9 +17,9 @@ class FoxContactControllerLoader extends JControllerLegacy
 	{
 		$input = JFactory::getApplication()->input;
 		$uid = $input->get('uid');
-		$root = $input->get('root');
-		$name = $input->get('name');
-		$type = $input->get('type');
+		$root = $input->get('root', '', 'word');
+		$name = $input->get('name', '', 'cmd');
+		$type = $input->get('type', '', 'word');
 		$headers = FoxHtmlHeader::getUncachableHeader();
 		if (isset(self::$mime_types[$type]))
 		{
@@ -35,29 +36,43 @@ class FoxContactControllerLoader extends JControllerLegacy
 	{
 		$juri_root = JUri::root(true);
 		$form = FoxFormModel::getFormByUid($uid);
-		ob_start(function ($text) use($uid, $juri_root, $form, $type)
+		$file_path = self::getFilePath($root, $name, $type);
+		if (!empty($file_path))
 		{
-			$processor_name = "FoxContactControllerLoader{$type}PostProcessor";
-			$processor = class_exists($processor_name) ? new $processor_name($uid, $juri_root, $form) : null;
-			return !is_null($processor) ? $processor->process($text) : $text;
-		});
-		require_once self::getFilePath($root, $name, $type);
-		ob_end_flush();
+			ob_start(function ($text) use($uid, $juri_root, $form, $type)
+			{
+				$processor_name = "FoxContactControllerLoader{$type}PostProcessor";
+				$processor = class_exists($processor_name) ? new $processor_name($uid, $juri_root, $form) : null;
+				return !is_null($processor) ? $processor->process($text) : $text;
+			});
+			require_once $file_path;
+			ob_end_flush();
+		}
+	
 	}
 	
 	
 	private static function getFilePath($root, $name, $type)
 	{
+		if (strtolower($type) !== 'css' && strtolower($type) !== 'js')
+		{
+			throw new RuntimeException('Unknown type, must be css or js.');
+		}
+		
 		switch ($root)
 		{
 			case 'media':
-				return JPATH_ROOT . "/media/com_foxcontact/{$type}/{$name}.{$type}";
+				$dir = JPATH_ROOT . "/media/com_foxcontact/{$type}";
+				break;
 			case 'components':
-				return JPATH_ROOT . "/components/com_foxcontact/{$type}/{$name}.{$type}";
+				$dir = JPATH_ROOT . "/components/com_foxcontact/{$type}";
+				break;
 			default:
-				throw new RuntimeException("Unknow root: '{$root}'.'");
+				throw new RuntimeException('Unknown root, must be media or components.');
 		}
-	
+		
+		$files = JFolder::files($dir, "\\.{$type}\$");
+		return in_array("{$name}.{$type}", $files) ? "{$dir}/{$name}.{$type}" : '';
 	}
 
 }
