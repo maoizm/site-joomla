@@ -32,7 +32,6 @@
     "css-mqpacker": "^5.0.1",
     "cssnano": "^3.9.1",
     "del": "^2.2.2",
-    "dictionaryjs-es6": "^1.0.2",
     "globby": "^6.1.0",
     "gulp": "github:gulpjs/gulp#4.0",
     "gulp-4.0.build": "^4.0.0-build.a271520",
