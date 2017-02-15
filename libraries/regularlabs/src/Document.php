@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.2.10818
+ * @version         17.2.11804
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -183,7 +183,7 @@ class Document
 	{
 		if (strpos($file, 'regularlabs/') === 0)
 		{
-			$version = '17.2.10818';
+			$version = '17.2.11804';
 		}
 
 		if (!$file = File::getMediaFile('js', $file))
@@ -209,7 +209,7 @@ class Document
 	{
 		if (strpos($file, 'regularlabs/') === 0)
 		{
-			$version = '17.2.10818';
+			$version = '17.2.11804';
 		}
 
 		if (!$file = File::getMediaFile('css', $file))
