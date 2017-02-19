@@ -5,13 +5,15 @@
   "main": "index.js",
   "scripts": {
     "start": "gulp",
-    "build": "gulp build",
+    "develop": "gulp develop",
+    "dist": "gulp dist",
     "tasks": "gulp --tasks",
-    "serve": "browser-sync start --proxy \"localhost:8000\" --browser \"chrome\" --files \"templates/starlink/**/*.*\" "
+    "test": "gulp test:functions",
+    "serve": "browser-sync start --server \"_build\" --browser \"chrome\" --files \"_build/**/*.{html,css}\" "
   },
   "repository": {},
   "keywords": [
-    "gulp"
+    "gulp", "gulp4"
   ],
   "author": "Mao",
   "license": "MIT",
@@ -26,6 +28,7 @@
     "gulp-cssnano": "^2.1.2",
     "gulp-debug": "^3.0.0",
     "gulp-filter": "^5.0.0",
+    "gulp-html-replace": "^1.6.2",
     "gulp-if": "^2.0.2",
     "gulp-load-plugins": "^1.4.0",
     "gulp-newy": "^2.0.4",

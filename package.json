@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "gulptest": "gulp --gulpfile gulptest.js",
-    "gulp2":    "gulp --gulpfile gulp2.js",
+    "gulp2": "gulp --gulpfile gulp2.js",
     "s--tart": "gulp",
     "build": "gulp build",
     "tasks": "gulp --tasks",
