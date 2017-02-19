@@ -5,4 +5,4 @@
 const del = require('del');
 
 module.exports = (gulp, plugins) =>
-  del([ '_build/css/basscss*.{css,map}' ]);
+  del([ '_build/css/base*.{css,map}' ]);
