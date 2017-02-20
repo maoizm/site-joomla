@@ -95,9 +95,6 @@ module.exports = {
         ],
       browserSync: browserSync
     },
-/*    'bootstrap/clean': {
-      src: [ '_build/css/bootstrap*.{css,map}' ]
-    },*/
 
     'basscss/styles': {
       src:  '_src/vendor/basscss/base.css',
@@ -156,9 +153,6 @@ module.exports = {
       ],
       browserSync: browserSync
     },
-    'template/clean': {
-      src: '_build/css/template.*'
-    },
 
     'all/styles-clean': {
       src: '_build/css/*.*'
@@ -203,89 +197,6 @@ module.exports = {
     },
 
 
-/*    'basscss/clean': {
-      src: [ '_build/css/base*.{css,map}' ]
-    },*/
-
-/*    'mod_starlink/styles': {
-      src:  '_src/mod_starlink/styles/starlink.pcss',
-      dest: '_build/css',
-      postcss: [
-        [ 'postcss-import', { path: [ paths.include, '_build/css' ] } ],
-        [ 'postcss-simple-vars', {} ],
-        [ 'postcss-custom-properties', {preserve: false} ],
-        [ 'postcss-apply', {} ],
-        [ 'postcss-calc', {precision: 10} ],
-        [ 'postcss-nesting', {} ],
-        [ 'postcss-custom-media', {} ],
-        [ 'postcss-media-minmax', {} ],
-        [ 'postcss-custom-selectors', {} ],
-        [ 'postcss-color-gray', {} ],
-        [ 'postcss-color-hex-alpha', {} ],
-        [ 'postcss-color-function', {} ],
-        [ 'css-mqpacker', {sort: true} ],
-        [ 'postcss-prettify', {} ]
-      ].map( pluginPrepare ),
-      watchFiles: run.watch ? false : [
-          paths.include + '*.css',
-          '_src/mod_starlink/styles/!*.pcss',
-          '_build/css/{bootstrap,base}.css'
-        ],
-      browserSync: browserSync
-    },
-    'mod_starlink/clean': {
-      src: [ '_build/css/starlink.*' ]
-    },
-
-    'mod_calc/styles': {
-      src:  '_src/mod_starlink_calculator_outsourcing/styles/!*.pcss',
-      dest: '_build/css',
-      postcss: [
-         [ 'postcss-custom-properties', {preserve: false} ],
-         [ 'postcss-calc', {precision: 10} ],
-         [ 'postcss-nesting', {} ],
-         [ 'postcss-color-function', {} ],
-         [ 'css-mqpacker', {sort: true} ],
-         [ 'postcss-prettify', {} ]
-       ].map( pluginPrepare ),
-      watchFiles: run.watch ? false : [
-          '_src/starlink_calculator_outsourcing/styles/!*.pcss',
-          '_build/css/{bootstrap,base}.css'
-        ],
-      browserSync: browserSync
-    },
-    'mod_calc/clean': {
-      src: [ '_build/css/starlink_calculator_outsourcing.*' ]
-    },
-
-    'mod_services/styles': {
-      src:  '_src/mod_starlink_services/styles/!*.pcss',
-      dest: '_build/css',
-      postcss: [
-              [ 'postcss-import', { path: [ paths.include, '_build/css' ] } ],
-              [ 'postcss-custom-properties', {preserve: false} ],
-              [ 'postcss-calc', {precision: 10} ],
-              [ 'postcss-nesting', {} ],
-              [ 'postcss-color-function', {} ],
-              [ 'css-mqpacker', {sort: true} ],
-              [ 'postcss-prettify', {} ]
-            ].map( pluginPrepare ),
-      watchFiles: run.watch ? false : [
-          paths.include + '*.css',
-          '_src/mod_starlink_services/styles/!*.pcss',
-          '_build/css/{bootstrap,base}.css'
-        ],
-      browserSync: browserSync
-    },
-    'mod_services/clean': {
-      src: [ '_build/css/starlink_services.*' ]
-    },*/
-
-
-
-
-
-
     'all/markup-dist': {
       src: '_build/**/*.{html,php}',
       dest: '_dist'
@@ -296,25 +207,6 @@ module.exports = {
       dest: '_dist',
       watchFiles: false
     },
-
-    'all::markup':  /* @todo experimental, do not use */
-      function( target = 'dev' ) {
-        const options = {
-          'dev' : () => ({
-              src:  '_src/**/*.{html,php}',
-              dest: '_build',
-              watchFiles: false,
-              browserSync,
-              target: 'dev'
-            }),
-          'dist': () => ({
-              src:  '_build/**/*.{html,php}',
-              dest: '_dist',
-              target: 'dist'
-            })
-        };
-        return (options[target])();
-      },
 
     'all/styles-dist': {
       src: '_build/css/styles.css',
