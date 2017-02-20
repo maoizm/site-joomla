@@ -66,55 +66,17 @@ function getTask(name) {
 
 /* Main Workflow tasks */
 {
-  {
 
-    // gulp.task('basscss:clean', () => getTask('basscss:clean'));
-    // gulp.task('mod_starlink:clean', () => getTask('mod_starlink:clean'));
+  gulp.task('bootstrap/styles', () => getTask('bootstrap/styles'));
+  gulp.task('basscss/styles', () => getTask('basscss/styles'));
+  gulp.task('template/styles', () => getTask('template/styles'));
 
-    // gulp.task('bootstrap/clean', () => getTask('bootstrap/clean'));
-    gulp.task('bootstrap/styles', () => getTask('bootstrap/styles'));
-    // gulp.task('basscss/clean', () => getTask('basscss/clean'));
-    gulp.task('basscss/styles', () => getTask('basscss/styles'));
-    // gulp.task('mod_starlink/styles', () => getTask('mod_starlink/styles'));
-    // gulp.task('mod_starlink/clean', () => getTask('mod_starlink/clean'));
-    // gulp.task('mod_calc/styles', () => getTask('mod_calc/styles'));
-    // gulp.task('mod_calc/clean', () => getTask('mod_calc/clean'));
-    // gulp.task('mod_services/styles', () => getTask('mod_services/styles'));
-    // gulp.task('mod_services/clean', () => getTask('mod_services/clean'));
-    gulp.task('template/styles', () => getTask('template/styles'));
-    gulp.task('template/clean', () => getTask('template/clean'));
-
-    gulp.task('all/markup', () => getTask('all/markup'));
-
-    gulp.task('all/images', () =>
-      gulp.src(taskCfg['all/images'].src)
-        .pipe(run.imagemin ? imagemin() : $.noop())
-        .pipe(gulp.dest(taskCfg['all/images'].dest))
-    );
-
-
-    gulp.task('all/dist', () => getTask('all/dist'));
-    gulp.task('all/markup-dist', () => getTask('all/markup-dist'));
-    gulp.task('all/styles-dist', () => getTask('all/styles-dist'));
-
-  }
-
-
-  gulp.task('all/styles',
-    gulp.series(
-      gulp.parallel(
-        'bootstrap/styles',
-        'basscss/styles'
-      ),
-      gulp.series('template/styles')
-    )
-  );
 
   gulp.task('all/styles-clean', () => del([ taskCfg['all/styles-clean'].src ]));
 
   gulp.task('template/scripts',
     () => gulp.src(taskCfg['template/scripts'].src)
-          .pipe(gulp.dest(taskCfg['template/scripts'].dest))
+    .pipe(gulp.dest(taskCfg['template/scripts'].dest))
   );
 
   gulp.task('bootstrap/scripts',
@@ -122,17 +84,32 @@ function getTask(name) {
     .pipe(gulp.dest(taskCfg['bootstrap/scripts'].dest))
   );
 
-  gulp.task('all/scripts',
-    gulp.parallel(
-      'template/scripts',
-      'bootstrap/scripts'
+
+  gulp.task('all/styles',
+    gulp.series(
+      gulp.parallel( 'bootstrap/styles', 'basscss/styles' ),
+      gulp.series('template/styles')
     )
+  );
+
+  gulp.task('all/scripts',
+    gulp.parallel( 'template/scripts', 'bootstrap/scripts' )
+  );
+
+  gulp.task('all/markup', () => getTask('all/markup'));
+
+  gulp.task('all/images', () =>
+    gulp.src(taskCfg['all/images'].src)
+      .pipe(run.imagemin ? imagemin() : $.noop())
+      .pipe(gulp.dest(taskCfg['all/images'].dest))
   );
 
   gulp.task('all/other',
     () => gulp.src(taskCfg['all/other'].src)
     .pipe(gulp.dest(taskCfg['all/other'].dest))
   );
+
+  gulp.task('all/clean', cleanBuild );
 
 
 
@@ -146,9 +123,13 @@ function getTask(name) {
     )
   );
 
+  gulp.task('develop', gulp.series(cleanBuild, 'build/dev', serveDev));
+  gulp.task('default', gulp.series('develop'));
 
 
-
+  gulp.task('all/dist', () => getTask('all/dist'));
+  gulp.task('all/markup-dist', () => getTask('all/markup-dist'));
+  gulp.task('all/styles-dist', () => getTask('all/styles-dist'));
 
   gulp.task('build:dist',
     gulp.series(
@@ -157,12 +138,8 @@ function getTask(name) {
     )
   );
 
-
-  gulp.task('develop', gulp.series(cleanBuild, 'build/dev', serveDev));
-
   gulp.task('dist', gulp.series(cleanDist, 'build:dist', serveDist));
 
-  gulp.task('default', gulp.series('develop'));
 
 }
 
@@ -202,26 +179,11 @@ function getTask(name) {
     return del([cfg.paths.dist]);
   }
 
+
   function cleanBuild() {
     return del([cfg.paths.build]);
   }
 
-
-
-
-
-/* Test and debug functions */
-
-  function all_markup(target) {
-    function getTask() {
-      return require('./_tasks/all-markup')(gulp, $, taskCfg['all::markup'](target) || {});
-    }
-
-    return function() { return getTask(); }
-  };
-
-
-  gulp.task('test:functions', all_markup('dist') );
 
 
 
