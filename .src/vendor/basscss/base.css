@@ -8,7 +8,7 @@
  *
  */
 
-
+@import '_01variables';
 @import './basscss-basic';
 
 
@@ -223,7 +223,7 @@ h6, .h6 {
 
 
   --font-family: 'Roboto', sans-serif;
-  --body-font-size: 1em;
+  --body-font-size: var(--fontSize);
   --heading-font-weight: 300;
 
   --space-25: 1.5rem;

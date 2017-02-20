@@ -50,7 +50,7 @@ $font-family-sans-serif:  $textFont; //"Helvetica Neue", Helvetica, Arial, sans-
 $font-family-monospace:   Consolas, Menlo, Monaco, "Courier New", monospace; //Menlo, Monaco, Consolas, "Courier New", monospace !default;
 //$font-family-base:        $font-family-sans-serif !default;
 //
-$font-size-base:          16px; //14px !default;
+$font-size-base:          $fontSize; //14px !default;
 $font-size-large:         ceil(($font-size-base * 1.5)); // !default; // ~24px
 $font-size-small:         ceil(($font-size-base * 0.75)); // !default; // ~12px
 //
