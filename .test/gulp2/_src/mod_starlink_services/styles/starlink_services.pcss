@@ -1,0 +1,71 @@
+/*!
+ *  mod_starlink_services
+ *
+ *
+ */
+
+@import "_01variables";  /* Set path to includes via postcss-import options */
+
+/* Container for collection of Services */
+.s-ServicesBlock {
+  background: var(--softBlack);
+}
+
+/* Singular Service */
+.s-ServiceType {
+  display             : flex;
+  align-items         : center;
+  justify-content     : space-around;
+  min-height          : 7.5rem;
+  border              : 1px solid #fff;
+  margin-bottom       : 1.5rem;
+  padding             : calc(1.5rem - 2px) 10px;
+  border-radius       : 8px;
+  color               : #fff;
+  cursor              : pointer;
+  transition          : 0.3s;
+}
+.s-ServiceType__imageWrap {
+  flex-grow    : 0;
+  flex-basis   : 80px;
+  max-width    : 80px;
+  min-width    : 80px;
+  text-align   : center;
+  padding-left : 15px;
+}
+.s-ServiceType__linkHeader {
+  font-weight    : 700;
+  margin-bottom  : 0;
+  text-transform : uppercase;
+}
+.s-ServiceType__linkText {
+/*  font-size   : 14px;
+  line-height : 15px;*/
+  margin      : 0;
+}
+.s-ServiceType__details {
+  padding: 0 15px;
+  flex-basis: 90%;
+}
+.s-ServiceType:hover,
+.s-ServiceType:focus {
+  background : #fff;
+  color      : #1B1B1B;
+  box-shadow : 0 10px 20px rgba(0, 0, 0, 0.5);
+  transition : 0.3s;
+}
+.s-ServiceType:hover .s-ServiceType__linkHeader {
+  color: #D0021B;
+}
+
+/* Change image on hover */
+.s-ServiceType__icon {
+  max-height : 3.5rem;
+/*  max-width  : 65px;*/
+  width      : auto;
+  filter     : grayscale(100%) brightness(500%) contrast(120%);
+}
+.s-ServiceType:hover .s-ServiceType__icon,
+.s-ServiceType:focus .s-ServiceType__icon {
+  filter: none;
+}
