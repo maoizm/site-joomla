@@ -13,7 +13,8 @@
   },
   "repository": {},
   "keywords": [
-    "gulp", "gulp4"
+    "gulp",
+    "gulp4"
   ],
   "author": "Mao",
   "license": "MIT",
@@ -32,6 +33,7 @@
     "gulp-if": "^2.0.2",
     "gulp-load-plugins": "^1.4.0",
     "gulp-newy": "^2.0.4",
+    "gulp-noop": "^1.0.0",
     "gulp-postcss": "^6.3.0",
     "gulp-rename": "^1.2.2",
     "gulp-sass": "^3.1.0",
@@ -39,6 +41,7 @@
     "gulp-using": "^0.1.1",
     "lazypipe": "^1.0.1",
     "minimist": "^1.2.0",
+    "path": "^0.12.7",
     "postcss-calc": "^5.3.1",
     "postcss-color-function": "^3.0.0",
     "postcss-custom-media": "^5.0.1",

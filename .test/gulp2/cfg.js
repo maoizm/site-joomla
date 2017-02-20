@@ -4,12 +4,62 @@
 
 const browserSync = require('browser-sync').create();
 
+
 const knownOptions = {
   string: 'env',
-  default: { env: process.env.NODE_ENV || 'development' }
+  boolean: true,
+  default: {
+    env: process.env.NODE_ENV || 'development',
+    debug: false
+  }
 };
 const options = require('minimist')(process.argv.slice(2), knownOptions);
-const production = (options.env === 'production');
+
+const runConfig = {
+  default: {      /* default = development */
+    sourcemaps: {
+      css: true,
+      js: true
+    },
+    cssnano: false,
+    autoprefixer: false,
+    prettify: true,
+    uglify: false,
+    imagemin: false,
+    watch: true,
+    browserSync: false
+  },
+
+  development: {
+    sourcemaps: {
+      css: true,
+      js: true
+    },
+    cssnano: false,
+    autoprefixer: false,
+    prettify: true,
+    uglify: false,
+    imagemin: false,
+    watch: true,
+    browserSync: false
+  },
+
+  production: {
+    sourcemaps: {
+      css: false,
+      js: false
+    },
+    cssnano: true,
+    autoprefixer: true,
+    prettify: false,
+    uglify: true,
+    imagemin: true,
+    watch: false,
+    browserSync: false
+  }
+};
+
+const run = runConfig[options.env] || runConfig.default;
 
 const paths = {
   src:     '_src',
@@ -23,38 +73,14 @@ const paths = {
 const pluginPrepare = item => require(item[0])(item[1]);
 
 module.exports = {
-  options,
-  production: (options.env === 'production'),
-  paths,
-  browserSync,
-
-/*  postcss: [
-    [ 'postcss-mixins', {} ],
-    [ 'postcss-simple-vars', {} ],
-    [ 'postcss-custom-properties', {} ],
-    [ 'postcss-apply', {} ],
-    [ 'postcss-calc', {precision: 10} ],
-    [ 'postcss-nesting', {} ],
-    [ 'postcss-custom-media', {} ],
-    [ 'postcss-extend', {} ],
-    [ 'postcss-media-minmax', {} ],
-    [ 'postcss-custom-selectors', {} ],
-    [ 'postcss-color-hwb', {} ],
-    [ 'postcss-color-gray', {} ],
-    [ 'postcss-color-hex-alpha', {} ],
-    [ 'postcss-color-function', {} ],
-    [ 'postcss-for', {} ],
-    [ 'postcss-discard-comments', {} ],
-    [ 'cssnano', {} ],
-    [ 'autoprefixer', {'browsers': '> 1%'} ],
-    [ 'postcss-prettify', {} ],
-    [ 'css-mqpacker', {sort: true} ]
-  ].map( pluginPrepare ),*/
-
+  options: options,
+  paths: paths,
+  browserSync: browserSync,
+  run: run,
 
   task_config: {
 
-    'bootstrap:styles': {
+    'bootstrap/styles': {
       src:  '_src/vendor/bootstrap-sass/styles/bootstrap.scss',
       dest: '_build/css',
       sassOptions: {
@@ -63,14 +89,17 @@ module.exports = {
           'node_modules/bootstrap-sass/assets/stylesheets'
         ]
       },
-      watchFiles: exports.production ? false : [
+      watchFiles:  [
           paths.include + '*.css',
           '_src/vendor/bootstrap-sass/styles/*.scss'
         ],
-      browserSync
+      browserSync: browserSync
     },
+/*    'bootstrap/clean': {
+      src: [ '_build/css/bootstrap*.{css,map}' ]
+    },*/
 
-    'basscss:styles': {
+    'basscss/styles': {
       src:  '_src/vendor/basscss/base.css',
       dest: '_build/css',
       postcss: [
@@ -80,62 +109,195 @@ module.exports = {
               [ 'postcss-simple-vars', {} ],
               [ 'postcss-color-function', {} ],
               [ 'postcss-calc', {precision: 10} ],
- //             [ 'postcss-discard-comments', {} ],
               [ 'css-mqpacker', {sort: true} ],
               [ 'postcss-prettify', {} ]
             ].map( pluginPrepare ),
-      watchFiles: exports.production ? false : [
-          paths.include + '*.css',
-          '_src/vendor/basscss/**/*.css'
-        ],
-      browserSync
+      watchFiles:  [
+        paths.include + '*.css',
+        '_src/vendor/basscss/**/*.css'
+      ],
+      browserSync: browserSync
     },
 
-    'mod_starlink:styles': {
-      src:  '_src/mod_starlink/styles/{styles,print,offline}.pcss',
+    'template/styles': {
+      src:         '_src/templates/starlink/styles/template.pcss',
+      dest:        '_build/css',
+      postcss:     [
+                     ['postcss-import', {
+                       path: [
+                         paths.include,
+                         '_build/css',
+                         '_src/mod_starlink/styles',
+                         '_src/mod_starlink_calculator_outsourcing/styles',
+                         '_src/mod_starlink_services/styles'
+                       ]
+                     }],
+                     ['postcss-simple-vars', {}],
+                     ['postcss-custom-properties', {preserve: false}],
+                     ['postcss-apply', {}],
+                     ['postcss-calc', {precision: 10}],
+                     ['postcss-nesting', {}],
+                     ['postcss-custom-media', {}],
+                     ['postcss-media-minmax', {}],
+                     ['postcss-custom-selectors', {}],
+                     ['postcss-color-gray', {}],
+                     ['postcss-color-hex-alpha', {}],
+                     ['postcss-color-function', {}],
+                     ['css-mqpacker', {sort: true}],
+                     ['postcss-prettify', {}]
+                   ].map(pluginPrepare),
+      watchFiles:  [
+        paths.include + '*.css',
+        '_src/templates/starlink/styles/*.pcss',
+        '_src/mod_starlink/styles/*.pcss',
+        '_src/mod_starlink_services/styles/*.pcss',
+        '_src/mod_starlink_calculator_outsourcing/styles/*.pcss',
+        '_build/css/{bootstrap,base}.css'
+      ],
+      browserSync: browserSync
+    },
+    'template/clean': {
+      src: '_build/css/template.*'
+    },
+
+    'all/styles-clean': {
+      src: '_build/css/*.*'
+    },
+
+
+    'bootstrap/scripts': {
+      src:  'node_modules/bootstrap-sass/assets/javascripts/{bootstrap,bootstrap.min}.js',
+      dest: '_build/js'
+    },
+    'template/scripts': {
+      src:   '_src/{mod_starlink,mod_starlink_calculator_outsourcing,templates/starlink}/scripts/*.js',
+      dest:  '_build/js'
+    },
+
+    'all/scripts-clean': {
+      src: '_build/js/*.*'
+    },
+
+    'all/markup': {
+      src:  '_src/**/*.{html,php,xml}',
+      dest: '_build',
+      watchFiles: '_src/**/*.{html,php}',
+      browserSync: browserSync
+    },
+
+    'all/images': {
+      src: [
+        '_src/{mod_starlink,mod_starlink_calculator_outsourcing,mod_starlink_services,templates/starlink}/images/**/*',
+        '_src/{templates/starlink}/*.{jpg,png,gif,ico,svg}'
+        ],
+      dest: '_build'
+    },
+
+    'all/other': {
+      src: [
+        '_src/**/fonts/*.*',
+        '_src/**/*.{ini,md,txt}',
+        '!_src/vendor/**/*'
+      ],
+      dest: '_build'
+    },
+
+
+/*    'basscss/clean': {
+      src: [ '_build/css/base*.{css,map}' ]
+    },*/
+
+/*    'mod_starlink/styles': {
+      src:  '_src/mod_starlink/styles/starlink.pcss',
       dest: '_build/css',
       postcss: [
         [ 'postcss-import', { path: [ paths.include, '_build/css' ] } ],
-        [ 'postcss-mixins', {} ],
         [ 'postcss-simple-vars', {} ],
-        [ 'postcss-custom-properties', {} ],
+        [ 'postcss-custom-properties', {preserve: false} ],
         [ 'postcss-apply', {} ],
         [ 'postcss-calc', {precision: 10} ],
         [ 'postcss-nesting', {} ],
         [ 'postcss-custom-media', {} ],
-        [ 'postcss-extend', {} ],
         [ 'postcss-media-minmax', {} ],
         [ 'postcss-custom-selectors', {} ],
-        [ 'postcss-color-hwb', {} ],
         [ 'postcss-color-gray', {} ],
         [ 'postcss-color-hex-alpha', {} ],
         [ 'postcss-color-function', {} ],
-        [ 'postcss-for', {} ],
- //       [ 'postcss-discard-comments', {} ],
- //       [ 'autoprefixer', {'browsers': '> 1%'} ],
-        [ 'css-mqpacker', {sort: true} ]
+        [ 'css-mqpacker', {sort: true} ],
+        [ 'postcss-prettify', {} ]
       ].map( pluginPrepare ),
-      watchFiles: exports.production ? false : [
+      watchFiles: run.watch ? false : [
           paths.include + '*.css',
-          '_src/mod_starlink/styles/*.{,p}css',
+          '_src/mod_starlink/styles/!*.pcss',
           '_build/css/{bootstrap,base}.css'
         ],
-      browserSync
+      browserSync: browserSync
+    },
+    'mod_starlink/clean': {
+      src: [ '_build/css/starlink.*' ]
     },
 
-    'all:markup': {
-      src:  '_src/**/*.{html,php}',
-      dest: '_build',
-      watchFiles: false,
-      browserSync
+    'mod_calc/styles': {
+      src:  '_src/mod_starlink_calculator_outsourcing/styles/!*.pcss',
+      dest: '_build/css',
+      postcss: [
+         [ 'postcss-custom-properties', {preserve: false} ],
+         [ 'postcss-calc', {precision: 10} ],
+         [ 'postcss-nesting', {} ],
+         [ 'postcss-color-function', {} ],
+         [ 'css-mqpacker', {sort: true} ],
+         [ 'postcss-prettify', {} ]
+       ].map( pluginPrepare ),
+      watchFiles: run.watch ? false : [
+          '_src/starlink_calculator_outsourcing/styles/!*.pcss',
+          '_build/css/{bootstrap,base}.css'
+        ],
+      browserSync: browserSync
+    },
+    'mod_calc/clean': {
+      src: [ '_build/css/starlink_calculator_outsourcing.*' ]
     },
 
-    'all:markup:dist': {
+    'mod_services/styles': {
+      src:  '_src/mod_starlink_services/styles/!*.pcss',
+      dest: '_build/css',
+      postcss: [
+              [ 'postcss-import', { path: [ paths.include, '_build/css' ] } ],
+              [ 'postcss-custom-properties', {preserve: false} ],
+              [ 'postcss-calc', {precision: 10} ],
+              [ 'postcss-nesting', {} ],
+              [ 'postcss-color-function', {} ],
+              [ 'css-mqpacker', {sort: true} ],
+              [ 'postcss-prettify', {} ]
+            ].map( pluginPrepare ),
+      watchFiles: run.watch ? false : [
+          paths.include + '*.css',
+          '_src/mod_starlink_services/styles/!*.pcss',
+          '_build/css/{bootstrap,base}.css'
+        ],
+      browserSync: browserSync
+    },
+    'mod_services/clean': {
+      src: [ '_build/css/starlink_services.*' ]
+    },*/
+
+
+
+
+
+
+    'all/markup-dist': {
       src: '_build/**/*.{html,php}',
       dest: '_dist'
     },
 
-    'all::markup':
+    'all/dist': {
+      src: [ '_build/css/styles.css', '_build/**/*.{html,php}' ],
+      dest: '_dist',
+      watchFiles: false
+    },
+
+    'all::markup':  /* @todo experimental, do not use */
       function( target = 'dev' ) {
         const options = {
           'dev' : () => ({
@@ -154,7 +316,7 @@ module.exports = {
         return (options[target])();
       },
 
-    'all:styles:dist': {
+    'all/styles-dist': {
       src: '_build/css/styles.css',
       dest: '_dist/css',
       postcss: [
