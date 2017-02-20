@@ -84,8 +84,8 @@ $fontSize:  16px;
 
 
   --font-family: 'Roboto', sans-serif;
-  --body-font-size: 1em;
-  --heading-font-weight: 300;
+  --body-font-size: var(--fontSize);
+  --heading-font-weight: 100;
 
   --space-25: 1.5rem;
   --space-35: 3rem;
