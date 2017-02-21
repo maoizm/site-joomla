@@ -1,5 +1,33 @@
 /**
  * Created by mao on 02.02.2017.
+ *
+ * @TODO * default
+ * @TODO     +develop
+ *
+ * @TODO * +develop
+ * @TODO     +clean,
+ * @TODO     +build,
+ * @TODO     +serve
+ *
+ * @TODO * +clean
+ * @TODO     +basscss/clean, +bootstrap/clean, +modules/clean, +template/clean
+ *
+ * @TODO * +build
+ * @TODO     +styles, markup, scripts, images, other
+ *
+ * @TODO * +styles
+ * @TODO     bootstrap/styles, basscss/styles
+ * @TODO     +template/styles
+ *
+ * @TODO * scripts
+ * @TODO     template/scripts, bootstrap/scripts
+ *
+ * @TODO * +build:dist
+ * @TODO     +build
+ * @TODO     styles:dist, scripts:dist, markup:dist
+ * @TODO     images:dist, other:dist
+ *
+ *
  */
 
 
@@ -55,21 +83,69 @@ const browserSync = cfg.browserSync;
  *
  */
 
-/*function getTask(name) {
- return require(`./_tasks/${name.split(':').join('-')}`)(gulp, $, taskCfg[name] || {});
-}*/
 
 function getTask(name) {
   return require(`./_tasks/${name}`)(gulp, $, taskCfg[name] || {});
 }
 
 
+/* Main Workflow tasks 2 */
+
+/*function Tasks() {
+  this.basscss = function (task = 'default') {
+    let config = cfg.task_config['basscss'];
+    return {
+
+      'clean':  function() {
+        return del(config.src);
+      },
+
+      'styles': function () {
+        return gulp.src(config.src)
+          .pipe(run.sourcemaps.css ? $.sourcemaps.init() : $.noop())
+          .pipe($.postcss(config.postcss))
+          .pipe($.rename({extname: '.css'}))
+          .pipe(run.sourcemaps.css ? $.sourcemaps.write('./') : $.noop())    // produce map for non-minified css
+          .pipe(gulp.dest(config.dest))
+          .pipe(run.browserSync ? config.browserSync.reload({stream: true}): $.noop());
+      }
+    }[task];
+  };
+
+}
+
+gulp.task(()=>Tasks.basscss('clean'));*/
+
+/*let Tasks={};
+Tasks.basscss = {};
+Tasks.basscss.clean = function(){
+  return del(taskCfg['basscss::clean'].src);
+};
+Tasks.basscss.clean.displayName = 'basscss::clean';
+gulp.task(Tasks.basscss.clean);*/
+
+
+function template__styles() {
+  return getTask('template/styles');
+}
+function bootstrap__styles() {
+  return getTask('bootstrap/styles');
+}
+function basscss__styles() {
+  return getTask('basscss/styles');
+}
+function basscss__clean() {
+  return getTask('basscss/clean');
+}
+
+
+
 /* Main Workflow tasks */
 {
 
-  gulp.task('bootstrap/styles', () => getTask('bootstrap/styles'));
-  gulp.task('basscss/styles', () => getTask('basscss/styles'));
-  gulp.task('template/styles', () => getTask('template/styles'));
+  //gulp.task('bootstrap/styles', () => getTask('bootstrap/styles'));
+  //gulp.task('basscss/styles', () => getTask('basscss/styles'));
+  //gulp.task('template/styles', () => getTask('template/styles'));
 
 
   gulp.task('all/styles-clean', () => del([ taskCfg['all/styles-clean'].src ]));
@@ -87,8 +163,8 @@ function getTask(name) {
 
   gulp.task('all/styles',
     gulp.series(
-      gulp.parallel( 'bootstrap/styles', 'basscss/styles' ),
-      gulp.series('template/styles')
+      gulp.parallel( bootstrap__styles, basscss__styles ),
+      template__styles
     )
   );
 
@@ -140,8 +216,8 @@ function getTask(name) {
 
   gulp.task('dist', gulp.series(cleanDist, 'build:dist', serveDist));
 
-
 }
+
 
 
 
@@ -185,6 +261,18 @@ function getTask(name) {
   }
 
 
+
+/* Test functions */
+
+const basscss = require('./_tasks/basscss')(gulp, $, taskCfg);
+
+gulp.task('test',
+  gulp.series(
+    //gulp.series(basscss.clean, basscss.styles),
+    gulp.series(basscss.clean2,basscss.stylesnew)
+  )
+  //done => { basscss.cleannew(); /*console.dir(basscss);*/ done()}
+);
 
 
 
