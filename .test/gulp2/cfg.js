@@ -16,19 +16,7 @@ const knownOptions = {
 const options = require('minimist')(process.argv.slice(2), knownOptions);
 
 const runConfig = {
-  default: {      /* default = development */
-    sourcemaps: {
-      css: true,
-      js: true
-    },
-    cssnano: false,
-    autoprefixer: false,
-    prettify: true,
-    uglify: false,
-    imagemin: false,
-    watch: true,
-    browserSync: false
-  },
+  default: 'development',
 
   development: {
     sourcemaps: {
@@ -59,7 +47,7 @@ const runConfig = {
   }
 };
 
-const run = runConfig[options.env] || runConfig.default;
+const run = runConfig[options.env] || Object.assign(runConfig[runConfig.default], {'this is default configuration': true});
 
 const paths = {
   src:     '_src',
@@ -114,6 +102,10 @@ module.exports = {
         '_src/vendor/basscss/**/*.css'
       ],
       browserSync: browserSync
+    },
+
+    'basscss/clean': {
+      src: '_build/css/base.*'
     },
 
     'template/styles': {

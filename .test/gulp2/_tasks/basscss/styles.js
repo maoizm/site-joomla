@@ -11,9 +11,9 @@ const run=require('../../cfg').run;
 module.exports = (gulp, plugins, options={}) => {
   let $ = plugins;
 
-  if (run.watch && options.watchFiles && !gulp.lastRun(taskName)) {
+/*  if (run.watch && options.watchFiles && !gulp.lastRun(taskName)) {
     gulp.watch(options.watchFiles, gulp.series(taskName));
-  }
+  }*/
 
   return gulp.src(options.src)
     .pipe(run.sourcemaps.css ? $.sourcemaps.init() : $.noop())
