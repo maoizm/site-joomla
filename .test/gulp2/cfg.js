@@ -149,6 +149,12 @@ module.exports = {
       ],
       browserSync: browserSync
     },
+    'template/clean': {
+      src: [
+        '_build/css/template.*',
+        '_build/js/*.js'
+      ]
+    },
 
     'all/styles-clean': {
       src: '_build/css/*.*'

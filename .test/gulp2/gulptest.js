@@ -118,8 +118,21 @@ const BootstrapTests  = {
     )
 };
 
+const template = require('./_tasks/template')(gulp, $, taskCfg);
+const TemplateTests  = {
+  build:
+    gulp.series(
+      template.build,
+      () => printfiles('_build/css/template*')
+    ),
+  clean_styles:
+    gulp.series(
+      template.clean,
+      template.styles,
+      () => printfiles('_build/css/template*')
+    )
+};
 
+gulp.task('default', TemplateTests.clean_styles);
 
-gulp.task('default', BootstrapTests.build);
-
-exports.test = BootstrapTests.build;
+exports.test = TemplateTests.clean_styles;
