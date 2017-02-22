@@ -108,6 +108,10 @@ module.exports = {
       src: '_build/css/base.*'
     },
 
+    'bootstrap/clean': {
+      src: '_build/css/bootstrap.*'
+    },
+
     'template/styles': {
       src:         '_src/templates/starlink/styles/template.pcss',
       dest:        '_build/css',

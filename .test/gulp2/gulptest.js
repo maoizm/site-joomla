@@ -86,18 +86,18 @@ const basscss = require('./_tasks/basscss')(gulp, $, taskCfg);
 
 
 const test00 = gulp.series(basscss.clean, basscss.styles,
-    () => printfiles('_build/css/base*')
+  () => printfiles('_build/css/base*')
 );
 
 const test01 = gulp.series(
-    gulp.series(basscss.clean),
-    gulp.series(basscss.styles),
-    () => printfiles('_build/css/base*')
+  gulp.series(basscss.clean),
+  gulp.series(basscss.styles),
+  () => printfiles('_build/css/base*')
 );
 
 const test03 = gulp.series(
-    gulp.series(basscss.clean, basscss.styles),
-    () => printfiles('_build/css/base*')
+  gulp.series(basscss.clean, basscss.styles),
+  () => printfiles('_build/css/base*')
 );
 
 const test_build = gulp.series(
@@ -107,6 +107,19 @@ const test_build = gulp.series(
 
 const test = gulp.series(test00, d1000, test01, d1000, test03, d1000, test_build);
 
-gulp.task('default', test);
 
-exports.test = test;
+
+const bootstrap = require('./_tasks/bootstrap')(gulp, $, taskCfg);
+const BootstrapTests  = {
+  build:
+    gulp.series(
+      bootstrap.build,
+      () => printfiles('_build/css/bootstrap*')
+    )
+};
+
+
+
+gulp.task('default', BootstrapTests.build);
+
+exports.test = BootstrapTests.build;
