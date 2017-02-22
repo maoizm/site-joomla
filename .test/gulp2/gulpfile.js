@@ -27,7 +27,14 @@
  * @TODO     styles:dist, scripts:dist, markup:dist
  * @TODO     images:dist, other:dist
  *
+ * @TO+DO   basscss,
+ * @TO+DO                +basscss/clean, basscss/styles
  *
+ * @TO+DO   bootstrap,
+ * @TO+DO                +bootstrap/clean, bootstrap/styles, bootstrap/scripts
+ *
+ * @TODO   template,
+ * @TODO                +template/styles, template/scripts
  */
 
 
@@ -91,38 +98,6 @@ function getTask(name) {
 
 /* Main Workflow tasks 2 */
 
-/*function Tasks() {
-  this.basscss = function (task = 'default') {
-    let config = cfg.task_config['basscss'];
-    return {
-
-      'clean':  function() {
-        return del(config.src);
-      },
-
-      'styles': function () {
-        return gulp.src(config.src)
-          .pipe(run.sourcemaps.css ? $.sourcemaps.init() : $.noop())
-          .pipe($.postcss(config.postcss))
-          .pipe($.rename({extname: '.css'}))
-          .pipe(run.sourcemaps.css ? $.sourcemaps.write('./') : $.noop())    // produce map for non-minified css
-          .pipe(gulp.dest(config.dest))
-          .pipe(run.browserSync ? config.browserSync.reload({stream: true}): $.noop());
-      }
-    }[task];
-  };
-
-}
-
-gulp.task(()=>Tasks.basscss('clean'));*/
-
-/*let Tasks={};
-Tasks.basscss = {};
-Tasks.basscss.clean = function(){
-  return del(taskCfg['basscss::clean'].src);
-};
-Tasks.basscss.clean.displayName = 'basscss::clean';
-gulp.task(Tasks.basscss.clean);*/
 
 
 function template__styles() {
@@ -216,6 +191,15 @@ function basscss__clean() {
 
   gulp.task('dist', gulp.series(cleanDist, 'build:dist', serveDist));
 
+
+  const basscss = require('./_tasks/basscss')(gulp, $, taskCfg);
+  gulp.task('basscss::build', basscss.build);
+  gulp.task('basscss::clean', basscss.clean);
+
+  const bootstrap = require('./_tasks/bootstrap')(gulp, $, taskCfg);
+  gulp.task('bootstrap::build', basscss.build);
+  gulp.task('bootstrap::clean', basscss.clean);
+
 }
 
 
@@ -259,20 +243,6 @@ function basscss__clean() {
   function cleanBuild() {
     return del([cfg.paths.build]);
   }
-
-
-
-/* Test functions */
-
-const basscss = require('./_tasks/basscss')(gulp, $, taskCfg);
-
-gulp.task('test',
-  gulp.series(
-    //gulp.series(basscss.clean, basscss.styles),
-    gulp.series(basscss.clean2,basscss.stylesnew)
-  )
-  //done => { basscss.cleannew(); /*console.dir(basscss);*/ done()}
-);
 
 
 

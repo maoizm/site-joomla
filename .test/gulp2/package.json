@@ -8,7 +8,7 @@
     "develop": "gulp develop",
     "dist": "gulp dist",
     "tasks": "gulp --tasks",
-    "test": "gulp test:functions",
+    "test": "gulp --gulpfile gulptest.js",
     "serve": "browser-sync start --server \"_build\" --browser \"chrome\" --files \"_build/**/*.{html,css}\" "
   },
   "repository": {},
