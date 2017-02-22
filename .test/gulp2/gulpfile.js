@@ -19,8 +19,8 @@
  * @TODO     bootstrap/styles, basscss/styles
  * @TODO     +template/styles
  *
- * @TODO * scripts
- * @TODO     template/scripts, bootstrap/scripts
+ * @TO+DO * scripts
+ * @TO+DO     template/scripts, bootstrap/scripts
  *
  * @TODO * +build:dist
  * @TODO     +build
@@ -33,8 +33,8 @@
  * @TO+DO   bootstrap,
  * @TO+DO                +bootstrap/clean, bootstrap/styles, bootstrap/scripts
  *
- * @TODO   template,
- * @TODO                +template/styles, template/scripts
+ * @TO+DO   template,
+ * @TO+DO                +template/styles, template/scripts
  */
 
 
@@ -161,7 +161,7 @@ function basscss__clean() {
   );
 
   gulp.task('all/clean', cleanBuild );
-
+  gulp.task('clean', cleanBuild );
 
 
   gulp.task('build/dev',
@@ -197,8 +197,16 @@ function basscss__clean() {
   gulp.task('basscss::clean', basscss.clean);
 
   const bootstrap = require('./_tasks/bootstrap')(gulp, $, taskCfg);
-  gulp.task('bootstrap::build', basscss.build);
-  gulp.task('bootstrap::clean', basscss.clean);
+  gulp.task('bootstrap::build', bootstrap.build);
+  gulp.task('bootstrap::clean', bootstrap.clean);
+
+  const template = require('./_tasks/template')(gulp, $, taskCfg);
+  gulp.task('template::styles', template.styles);
+
+  gulp.task('scripts', gulp.series(
+    template.scripts, bootstrap.scripts
+  ));
+
 
 }
 
