@@ -57,8 +57,13 @@ const paths = {
 };
 
 
-
+/**
+ * Requires all postCSS plugins from array of names and options
+ *
+ * @param item  item of Plugins' array: [ pluginName, { pluginOptions } ]
+ */
 const pluginPrepare = item => require(item[0])(item[1]);
+
 
 module.exports = {
   options: options,
@@ -68,20 +73,8 @@ module.exports = {
 
   task_config: {
 
-    'bootstrap/styles': {
-      src:  '_src/vendor/bootstrap-sass/styles/bootstrap.scss',
-      dest: '_build/css',
-      sassOptions: {
-        includePaths: [
-          '_src/_includes',
-          'node_modules/bootstrap-sass/assets/stylesheets'
-        ]
-      },
-      watchFiles:  [
-          paths.include + '*.css',
-          '_src/vendor/bootstrap-sass/styles/*.scss'
-        ],
-      browserSync: browserSync
+    'basscss/clean': {
+      src: '_build/css/base.*'
     },
 
     'basscss/styles': {
@@ -104,12 +97,78 @@ module.exports = {
       browserSync: browserSync
     },
 
-    'basscss/clean': {
-      src: '_build/css/base.*'
-    },
-
     'bootstrap/clean': {
       src: '_build/css/bootstrap.*'
+    },
+
+    'bootstrap/scripts': {
+      src:  'node_modules/bootstrap-sass/assets/javascripts/{bootstrap,bootstrap.min}.js',
+      dest: '_build/js'
+    },
+
+    'bootstrap/styles': {
+      src:  '_src/vendor/bootstrap-sass/styles/bootstrap.scss',
+      dest: '_build/css',
+      sassOptions: {
+        includePaths: [
+          '_src/_includes',
+          'node_modules/bootstrap-sass/assets/stylesheets'
+        ]
+      },
+      watchFiles:  [
+          paths.include + '*.css',
+          '_src/vendor/bootstrap-sass/styles/*.scss'
+        ],
+      browserSync: browserSync
+    },
+
+    'images': {
+      src: [
+        '_src/{mod_starlink,mod_starlink_calculator_outsourcing,mod_starlink_services,templates/starlink}/images/**/*',
+        '_src/{templates/starlink}/*.{jpg,png,gif,ico,svg}'
+      ],
+      dest: '_build'
+    },
+
+    'markup': {
+      src:  '_src/**/*.{html,php,xml}',
+      dest: '_build',
+      watchFiles: '_src/**/*.{html,php}',
+      browserSync: browserSync
+    },
+
+    'markup::dist': {
+      src: '_build/!**!/!*.{html,php}',
+      dest: '_dist'
+    },
+
+    'other': {
+      src: [
+        '_src/**/fonts/*.*',
+        '_src/**/*.{ini,md,txt}',
+        '!_src/vendor/**/*'
+      ],
+      dest: '_build'
+    },
+
+    'scripts::clean': {
+      src: '_build/js/*.*'
+    },
+
+    'styles::clean': {
+      src: '_build/css/*.*'
+    },
+
+    'template/clean': {
+      src: [
+        '_build/css/template.*',
+        '_build/js/*.js'
+      ]
+    },
+
+    'template/scripts': {
+      src:   '_src/{mod_starlink,mod_starlink_calculator_outsourcing,templates/starlink}/scripts/*.js',
+      dest:  '_build/js'
     },
 
     'template/styles': {
@@ -149,79 +208,31 @@ module.exports = {
       ],
       browserSync: browserSync
     },
-    'template/clean': {
-      src: [
-        '_build/css/template.*',
-        '_build/js/*.js'
-      ]
-    },
-
-    'all/styles-clean': {
-      src: '_build/css/*.*'
-    },
 
 
-    'bootstrap/scripts': {
-      src:  'node_modules/bootstrap-sass/assets/javascripts/{bootstrap,bootstrap.min}.js',
-      dest: '_build/js'
-    },
-    'template/scripts': {
-      src:   '_src/{mod_starlink,mod_starlink_calculator_outsourcing,templates/starlink}/scripts/*.js',
-      dest:  '_build/js'
-    },
 
-    'all/scripts-clean': {
-      src: '_build/js/*.*'
-    },
-
-    'all/markup': {
-      src:  '_src/**/*.{html,php,xml}',
-      dest: '_build',
-      watchFiles: '_src/**/*.{html,php}',
-      browserSync: browserSync
-    },
-
-    'all/images': {
-      src: [
-        '_src/{mod_starlink,mod_starlink_calculator_outsourcing,mod_starlink_services,templates/starlink}/images/**/*',
-        '_src/{templates/starlink}/*.{jpg,png,gif,ico,svg}'
-        ],
-      dest: '_build'
-    },
-
-    'all/other': {
-      src: [
-        '_src/**/fonts/*.*',
-        '_src/**/*.{ini,md,txt}',
-        '!_src/vendor/**/*'
-      ],
-      dest: '_build'
-    },
+    /*
 
 
-    'all/markup-dist': {
-      src: '_build/**/*.{html,php}',
-      dest: '_dist'
-    },
+        'dist': {
+          src: [ '_build/css/styles.css', '_build/!**!/!*.{html,php}' ],
+          dest: '_dist',
+          watchFiles: false
+        },
 
-    'all/dist': {
-      src: [ '_build/css/styles.css', '_build/**/*.{html,php}' ],
-      dest: '_dist',
-      watchFiles: false
-    },
-
-    'all/styles-dist': {
-      src: '_build/css/styles.css',
-      dest: '_dist/css',
-      postcss: [
-        [ 'cssnano',
-          {
-            discardComments: { removeAll: true },
-            autoprefixer: { 'browsers': '> 0.5%' }
-          }
-        ]
-      ].map( pluginPrepare )
-    }
+        'styles::dist': {
+          src: '_build/css/styles.css',
+          dest: '_dist/css',
+          postcss: [
+            [ 'cssnano',
+              {
+                discardComments: { removeAll: true },
+                autoprefixer: { 'browsers': '> 0.5%' }
+              }
+            ]
+          ].map( pluginPrepare )
+        }
+    */
 
   }
 
