@@ -27,7 +27,14 @@
  * @TODO     styles:dist, scripts:dist, markup:dist
  * @TODO     images:dist, other:dist
  *
+ * @TO+DO   basscss,
+ * @TO+DO                +basscss/clean, basscss/styles
  *
+ * @TODO   bootstrap,
+ * @TODO                +bootstrap/clean, bootstrap/styles, bootstrap/scripts
+ *
+ * @TODO   template,
+ * @TODO                +template/styles, template/scripts
  */
 
 
@@ -216,6 +223,11 @@ function basscss__clean() {
 
   gulp.task('dist', gulp.series(cleanDist, 'build:dist', serveDist));
 
+
+  const basscss = require('./_tasks/basscss')(gulp, $, taskCfg);
+  gulp.task('basscss::build', basscss.build);
+  gulp.task('basscss::clean', basscss.clean);
+
 }
 
 
@@ -259,20 +271,6 @@ function basscss__clean() {
   function cleanBuild() {
     return del([cfg.paths.build]);
   }
-
-
-
-/* Test functions */
-
-const basscss = require('./_tasks/basscss')(gulp, $, taskCfg);
-
-gulp.task('test',
-  gulp.series(
-    //gulp.series(basscss.clean, basscss.styles),
-    gulp.series(basscss.clean2,basscss.stylesnew)
-  )
-  //done => { basscss.cleannew(); /*console.dir(basscss);*/ done()}
-);
 
 
 
