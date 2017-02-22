@@ -13,31 +13,40 @@ module.exports = (gulp, plugins, options={}) => {
       clean:
 
         function() {
-          return del( options[`bootstrap/clean`].src )
+          return del( options[`mod_calc/clean`].src )
         },
 
       styles:
 
         function() {
           let $ = plugins;
-          let localOptions = options['bootstrap/styles'];
+          let localOptions = options['mod_calc/styles'];
 
           return gulp.src(localOptions.src)
             .pipe(run.sourcemaps.css ? $.sourcemaps.init() : $.noop())
-            .pipe($.sass(localOptions.sassOptions).on('error', $.sass.logError))
+            .pipe($.postcss(options.postcss))
+            .pipe($.rename({extname: '.css'}))
             .pipe(run.sourcemaps.css ? $.sourcemaps.write('./') : $.noop())    // produce map for non-minified css
             .pipe(gulp.dest(localOptions.dest))
             .pipe(run.browserSync ? localOptions.browserSync.reload({stream: true}) : $.noop());
-        },
+        }
 
-      scripts:
+/*
+
+ ,scripts:
 
         function() {
-          let localOptions = options['bootstrap/scripts'];
+          let localOptions = options['mod_calc/scripts'];
 
           return gulp.src(localOptions.src)
             .pipe(gulp.dest(localOptions.dest));
-        }
+        },
+
+      markup: false,
+      images: false,
+      other:  false
+
+        */
 
   };
 

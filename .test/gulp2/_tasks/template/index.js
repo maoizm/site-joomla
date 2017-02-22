@@ -1,7 +1,6 @@
 /**
  * Wraps tasks from current directory and allows using them in external module
  */
-const path = require('path');
 const del = require('del');
 const cfg = require('../../cfg');
 const run = cfg.run;

@@ -1,31 +1,31 @@
 /**
  * Created by mao on 02.02.2017.
  *
- * @TODO * default
- * @TODO     +develop
+ * @TO+DO * default
+ * @TO+DO     +develop
  *
- * @TODO * +develop
- * @TODO     +clean,
- * @TODO     +build,
- * @TODO     +serve
+ * @TO+DO * +develop
+ * @TO+DO     +clean,
+ * @TO+DO     +build,
+ * @TO+DO     +serve
  *
- * @TODO * +clean
- * @TODO     +basscss/clean, +bootstrap/clean, +modules/clean, +template/clean
+ * @TO+DO * +clean
+ * @TO+DO     +basscss/clean, +bootstrap/clean, +modules/clean, +template/clean
  *
- * @TODO * +build
- * @TODO     +styles, markup, scripts, images, other
+ * @TO+DO * +build
+ * @TO+DO     +styles, markup, scripts, images, other
  *
- * @TODO * +styles
- * @TODO     bootstrap/styles, basscss/styles
- * @TODO     +template/styles
+ * @TO+DO * +styles
+ * @TO+DO     bootstrap/styles, basscss/styles
+ * @TO+DO     +template/styles
  *
  * @TO+DO * scripts
  * @TO+DO     template/scripts, bootstrap/scripts
  *
- * @TODO * +build:dist
- * @TODO     +build
- * @TODO     styles:dist, scripts:dist, markup:dist
- * @TODO     images:dist, other:dist
+ * @TO+DO * +build:dist
+ * @TO+DO     +build
+ * @TO+DO     styles:dist, scripts:dist, markup:dist
+ * @TO+DO     images:dist, other:dist
  *
  * @TO+DO   basscss,
  * @TO+DO                +basscss/clean, basscss/styles
@@ -45,8 +45,7 @@ const $ = require('gulp-load-plugins')();
 
 /*  Debugging things
  *  @TODO delete debug code      */
-const loggy = require('../../.gulp/helpers').loggy;
-const stringly = require('../../.gulp/helpers').stringly;
+const { loggy, stringly } = require('../../.gulp/helpers');
 
 
 /* Workflow things */
@@ -56,141 +55,13 @@ const del = require('del');
 /* Fetch and prepare configuration */
 const cfg = require('./cfg');
 const run = cfg.run;
-
 const taskCfg = cfg.task_config;
 const browserSync = cfg.browserSync;
 
 
 
-/* Task execution engine */
-
-/**
- * Get a task. This function just gets a task from the tasks directory.
- *
- * @param {string} name The name of the task.
- * @returns {function} The task!
- *
- * Task example:
- *
- *   sometask.js:
- *   ------------
- *
- *        module.exports = (gulp, plugins, options) =>
- *          gulp.src(options.src)
- *          .pipe(plugins.if(options.minify, plugins.cssnano()))
- *          .gulp.dest(options.dest)
- *
- *   options = {
- *     src: [ '/some/path', 'some/path2' ],
- *     dest:  '/path3',
- *     ...
- *     other options
- *     ...
- *   };
- *
- */
-
-
-function getTask(name) {
-  return require(`./_tasks/${name}`)(gulp, $, taskCfg[name] || {});
-}
-
-
-/* Main Workflow tasks 2 */
-
-
-
-function template__styles() {
-  return getTask('template/styles');
-}
-function bootstrap__styles() {
-  return getTask('bootstrap/styles');
-}
-function basscss__styles() {
-  return getTask('basscss/styles');
-}
-function basscss__clean() {
-  return getTask('basscss/clean');
-}
-
-
 
 /* Main Workflow tasks */
-{
-
-  //gulp.task('bootstrap/styles', () => getTask('bootstrap/styles'));
-  //gulp.task('basscss/styles', () => getTask('basscss/styles'));
-  //gulp.task('template/styles', () => getTask('template/styles'));
-
-
-  gulp.task('all/styles-clean', () => del([ taskCfg['all/styles-clean'].src ]));
-
-  gulp.task('template/scripts',
-    () => gulp.src(taskCfg['template/scripts'].src)
-    .pipe(gulp.dest(taskCfg['template/scripts'].dest))
-  );
-
-  gulp.task('bootstrap/scripts',
-    () => gulp.src(taskCfg['bootstrap/scripts'].src)
-    .pipe(gulp.dest(taskCfg['bootstrap/scripts'].dest))
-  );
-
-
-  gulp.task('all/styles',
-    gulp.series(
-      gulp.parallel( bootstrap__styles, basscss__styles ),
-      template__styles
-    )
-  );
-
-  gulp.task('all/scripts',
-    gulp.parallel( 'template/scripts', 'bootstrap/scripts' )
-  );
-
-  gulp.task('all/markup', () => getTask('all/markup'));
-
-  gulp.task('all/images', () =>
-    gulp.src(taskCfg['all/images'].src)
-      .pipe(run.imagemin ? imagemin() : $.noop())
-      .pipe(gulp.dest(taskCfg['all/images'].dest))
-  );
-
-  gulp.task('all/other',
-    () => gulp.src(taskCfg['all/other'].src)
-    .pipe(gulp.dest(taskCfg['all/other'].dest))
-  );
-
-  gulp.task('all/clean', cleanBuild );
-  gulp.task('clean', cleanBuild );
-
-
-  gulp.task('build/dev',
-    gulp.parallel(
-      'all/styles',
-      'all/markup',
-      'all/scripts',
-      'all/images',
-      'all/other'
-    )
-  );
-
-  gulp.task('develop', gulp.series(cleanBuild, 'build/dev', serveDev));
-  gulp.task('default', gulp.series('develop'));
-
-
-  gulp.task('all/dist', () => getTask('all/dist'));
-  gulp.task('all/markup-dist', () => getTask('all/markup-dist'));
-  gulp.task('all/styles-dist', () => getTask('all/styles-dist'));
-
-  gulp.task('build:dist',
-    gulp.series(
-      'build/dev',
-      gulp.parallel( 'all/styles-dist', 'all/markup-dist' )
-    )
-  );
-
-  gulp.task('dist', gulp.series(cleanDist, 'build:dist', serveDist));
-
 
   const basscss = require('./_tasks/basscss')(gulp, $, taskCfg);
   gulp.task('basscss::build', basscss.build);
@@ -203,54 +74,171 @@ function basscss__clean() {
   const template = require('./_tasks/template')(gulp, $, taskCfg);
   gulp.task('template::styles', template.styles);
 
-  gulp.task('scripts', gulp.series(
+  let scripts = gulp.parallel(
     template.scripts, bootstrap.scripts
-  ));
+  );
 
 
-}
+
+  gulp.task('styles::clean', () => del([ taskCfg['styles::clean'].src ]));
+
+
+  let styles = gulp.series(
+      gulp.parallel(
+        bootstrap.styles, basscss.styles
+      ),
+      template.styles
+  );
+
+  let markup = () => {
+    return gulp.src(taskCfg['markup'].src)
+      .pipe(gulp.dest(taskCfg['markup'].dest))
+      .pipe($.using());
+  };
+
+  let images = () => {
+    return gulp.src(taskCfg['images'].src)
+    .pipe(run.imagemin ? imagemin() : $.noop())
+    .pipe(gulp.dest(taskCfg['images'].dest))
+    .pipe($.using());
+  };
+
+  let other = () => {
+    return gulp.src(taskCfg['other'].src)
+    .pipe(gulp.dest(taskCfg['other'].dest))
+    .pipe($.using());
+  };
+
+
+  let build = gulp.parallel(
+      styles,
+      markup,
+      scripts,
+      images,
+      other
+  );
+
+
+  let develop = gulp.series(clean, build, serve);
+  gulp.task('default', develop);
+
+
+
+  /* Production (distribution) build */
+
+  let buildDist = gulp.series(
+      build,
+      gulp.parallel( stylesDist, scriptsDist, markupDist, imagesDist, otherDist )
+  );
+
+  let dist = gulp.series(cleanDist, buildDist, serveDist);
+
+
+  function stylesDist() {
+    return gulp.src(taskCfg['styles::dist'].src)
+    .pipe($.rename('styles.css'))
+    .pipe($.postcss(taskCfg['styles::dist'].postcss))
+    .pipe($.rename({extname: '.min.css'}))
+    .pipe(gulp.dest(taskCfg['styles::dist'].dest))
+  }
+
+
+  function scriptsDist() {
+    return gulp.src(taskCfg['scripts::dist'].src)
+    .pipe($.concat('scripts.js'))
+    .pipe($.uglify(taskCfg['scripts::dist'].postcss))
+    .pipe($.rename({extname: '.min.js'}))
+    .pipe(gulp.dest(taskCfg['scripts::dist'].dest))
+  }
+
+
+  function imagesDist() {
+    return gulp.src(taskCfg['images::dist'].src)
+    .pipe(gulp.dest(taskCfg['images::dist'].dest))
+  }
+
+
+  function markupDist() {
+    return gulp.src(taskCfg['markup::dist'].src)
+    .pipe($.htmlReplace({
+      'css': 'css/styles.min.css',
+      'js':  'js/scripts.min.js'
+    }))
+    .pipe(gulp.dest(taskCfg['markup::dist'].dest));
+  }
 
 
 
 
 /* Supplementary functions */
 
+function serve() {
 
-  function serveDev() {
+  browserSync.init({
+    server:  {
+      baseDir: '_build',
+      directory: true,
+    },
+    browser: 'chrome',
+    logLevel: 'debug',
+    notify:  false
+  });
+  cfg.run.browserSync = true;
 
-    browserSync.init({
-      server:  {baseDir: '_build'},
-      browser: 'chrome',
-      notify:  false
-    });
-    cfg.run.browserSync = true;
-
-    gulp.watch(taskCfg['all/markup'].src)
+  gulp.watch(taskCfg['markup'].watchFiles)
     .on('change',
-      gulp.series('all/markup', browserSync.reload)
+      gulp.series(markup, browserSync.reload)
     );
 
-  }
+  gulp.watch([taskCfg['basscss/styles'].watchFiles])
+    .on('change',
+      gulp.series(basscss.styles, browserSync.reload)
+    );
+
+  gulp.watch([taskCfg['bootstrap/styles'].watchFiles])
+    .on('change',
+      gulp.series(bootstrap.styles, browserSync.reload)
+    );
+
+  gulp.watch([taskCfg['template/styles'].watchFiles])
+    .on('change',
+      gulp.series(template.styles, browserSync.reload)
+    );
+
+}
 
 
-  function serveDist() {
-
-    browserSync.init({
-      server:  {baseDir: '_dist'},
-      browser: 'chrome'
-    });
-
-  }
-
-
-  function cleanDist() {
-    return del([cfg.paths.dist]);
-  }
+function serveDist() {
+  browserSync.init({
+    server:  {
+      baseDir: '_dist',
+      directory: true,
+    },
+    browser: 'chrome'
+  });
+}
 
 
-  function cleanBuild() {
-    return del([cfg.paths.build]);
-  }
+function otherDist() {
+  return gulp.src(taskCfg['other::dist'].src)
+  .pipe(gulp.dest(taskCfg['other::dist'].dest))
+};
 
 
+function cleanDist() {
+  return del([cfg.paths.dist]);
+}
 
+
+function clean() {
+  return del([cfg.paths.build]);
+}
+
+
+exports.clean = clean;
+exports.serve = serve;
+exports.styles = styles;
+exports.scripts = scripts;
+exports.develop = develop;
+exports.build = build;
+exports.dist = dist;

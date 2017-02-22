@@ -12,8 +12,7 @@
 const gulp=require('gulp');
 const $ = require('gulp-load-plugins')();
 
-const loggy = require('../../.gulp/helpers').loggy;
-const stringly = require('../../.gulp/helpers').stringly;
+const { loggy, stringly } = require('../../.gulp/helpers');
 
 const del = require('del');
 const globby = require('globby');
