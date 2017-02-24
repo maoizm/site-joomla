@@ -130,6 +130,14 @@ module.exports = {
       dest: '_build'
     },
 
+    'images::dist': {
+      src: [
+        '_build/{mod_starlink,mod_starlink_calculator_outsourcing,mod_starlink_services,templates/starlink}/images/**/*',
+        '_build/{templates/starlink}/*.{jpg,png,gif,ico,svg}'
+      ],
+      dest: '_dist'
+    },
+
     'markup': {
       src:  '_src/**/*.{html,php,xml}',
       dest: '_build',
@@ -138,7 +146,7 @@ module.exports = {
     },
 
     'markup::dist': {
-      src: '_build/!**!/!*.{html,php}',
+      src: '_build/**/*.{html,php}',
       dest: '_dist'
     },
 
@@ -151,12 +159,40 @@ module.exports = {
       dest: '_build'
     },
 
+    'other::dist': {
+      src: [
+        '_build/**/fonts/*.*',
+        '_build/**/*.{ini,md,txt}'
+      ],
+      dest: '_dist'
+    },
+
+
     'scripts::clean': {
       src: '_build/js/*.*'
     },
 
     'styles::clean': {
       src: '_build/css/*.*'
+    },
+
+    'styles::dist': {
+      src:     '_build/css/template.css',
+      dest:    '_dist/css',
+      postcss: [
+                 ['cssnano',
+                   {
+                     discardComments: {removeAll: true},
+                     autoprefixer:    {'browsers': '> 0.5%'}
+                   }
+                 ]
+               ].map(pluginPrepare)
+    },
+
+    'scripts::dist': {
+      src:     '_build/js/**/*.js',
+      dest:    '_dist/js',
+      uglify:  {}
     },
 
     'template/clean': {
@@ -220,18 +256,7 @@ module.exports = {
           watchFiles: false
         },
 
-        'styles::dist': {
-          src: '_build/css/styles.css',
-          dest: '_dist/css',
-          postcss: [
-            [ 'cssnano',
-              {
-                discardComments: { removeAll: true },
-                autoprefixer: { 'browsers': '> 0.5%' }
-              }
-            ]
-          ].map( pluginPrepare )
-        }
+
     */
 
   }

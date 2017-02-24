@@ -22,10 +22,10 @@
  * @TO+DO * scripts
  * @TO+DO     template/scripts, bootstrap/scripts
  *
- * @TODO * +build:dist
- * @TODO     +build
- * @TODO     styles:dist, scripts:dist, markup:dist
- * @TODO     images:dist, other:dist
+ * @TO+DO * +build:dist
+ * @TO+DO     +build
+ * @TO+DO     styles:dist, scripts:dist, markup:dist
+ * @TO+DO     images:dist, other:dist
  *
  * @TO+DO   basscss,
  * @TO+DO                +basscss/clean, basscss/styles
@@ -119,39 +119,58 @@ const browserSync = cfg.browserSync;
   );
 
 
-
-
   let develop = gulp.series(clean, build, serve);
   gulp.task('default', develop);
 
 
-  gulp.task('markup::dist', () => {
+
+  /* Production (distribution) build */
+
+  let buildDist = gulp.series(
+      build,
+      gulp.parallel( stylesDist, scriptsDist, markupDist, imagesDist, otherDist )
+  );
+
+  let dist = gulp.series(cleanDist, buildDist, serveDist);
+
+
+  function stylesDist() {
+    return gulp.src(taskCfg['styles::dist'].src)
+    .pipe($.rename('styles.css'))
+    .pipe($.postcss(taskCfg['styles::dist'].postcss))
+    .pipe($.rename({extname: '.min.css'}))
+    .pipe(gulp.dest(taskCfg['styles::dist'].dest))
+  }
+
+
+  function scriptsDist() {
+    return gulp.src(taskCfg['scripts::dist'].src)
+    .pipe($.concat('scripts.js'))
+    .pipe($.uglify(taskCfg['scripts::dist'].postcss))
+    .pipe($.rename({extname: '.min.js'}))
+    .pipe(gulp.dest(taskCfg['scripts::dist'].dest))
+  }
+
+
+  function imagesDist() {
+    return gulp.src(taskCfg['images::dist'].src)
+    .pipe(gulp.dest(taskCfg['images::dist'].dest))
+  }
+
+
+  function markupDist() {
     return gulp.src(taskCfg['markup::dist'].src)
-      .pipe($.plugins.htmlReplace({
-        'css': 'css/styles.min.css'
-      }))
-      .pipe(gulp.dest(taskCfg['markup::dist'].dest));
-  });
-
-
-
-/*gulp.task('all/dist', () => getTask('all/dist'));
-
-
-gulp.task('build:dist',
-  gulp.series(
-    build,
-    gulp.parallel( 'all/styles-dist', 'all/markup-dist' )
-  )
-);
-gulp.task('dist', gulp.series(cleanDist, 'build:dist', serveDist));*/
-
+    .pipe($.htmlReplace({
+      'css': 'css/styles.min.css',
+      'js':  'js/scripts.min.js'
+    }))
+    .pipe(gulp.dest(taskCfg['markup::dist'].dest));
+  }
 
 
 
 
 /* Supplementary functions */
-
 
 function serve() {
 
@@ -190,13 +209,20 @@ function serve() {
 
 
 function serveDist() {
-
   browserSync.init({
-    server:  {baseDir: '_dist'},
+    server:  {
+      baseDir: '_dist',
+      directory: true,
+    },
     browser: 'chrome'
   });
-
 }
+
+
+function otherDist() {
+  return gulp.src(taskCfg['other::dist'].src)
+  .pipe(gulp.dest(taskCfg['other::dist'].dest))
+};
 
 
 function cleanDist() {
@@ -215,3 +241,4 @@ exports.styles = styles;
 exports.scripts = scripts;
 exports.develop = develop;
 exports.build = build;
+exports.dist = dist;
