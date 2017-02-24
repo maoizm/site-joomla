@@ -1,40 +1,7 @@
 /**
  * Created by mao on 02.02.2017.
  *
- * @TO+DO * default
- * @TO+DO     +develop
- *
- * @TO+DO * +develop
- * @TO+DO     +clean,
- * @TO+DO     +build,
- * @TO+DO     +serve
- *
- * @TO+DO * +clean
- * @TO+DO     +basscss/clean, +bootstrap/clean, +modules/clean, +template/clean
- *
- * @TO+DO * +build
- * @TO+DO     +styles, markup, scripts, images, other
- *
- * @TO+DO * +styles
- * @TO+DO     bootstrap/styles, basscss/styles
- * @TO+DO     +template/styles
- *
- * @TO+DO * scripts
- * @TO+DO     template/scripts, bootstrap/scripts
- *
- * @TO+DO * +build:dist
- * @TO+DO     +build
- * @TO+DO     styles:dist, scripts:dist, markup:dist
- * @TO+DO     images:dist, other:dist
- *
- * @TO+DO   basscss,
- * @TO+DO                +basscss/clean, basscss/styles
- *
- * @TO+DO   bootstrap,
- * @TO+DO                +bootstrap/clean, bootstrap/styles, bootstrap/scripts
- *
- * @TO+DO   template,
- * @TO+DO                +template/styles, template/scripts
+ * @TODO env.debug -> pipe everything through gulp-using();
  */
 
 
