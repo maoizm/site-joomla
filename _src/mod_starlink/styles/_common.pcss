@@ -1,5 +1,5 @@
 /** Styles common to all Starlink modules and templates
-    Post-CSS plugins:  mixins, for, nesting, custom-properties */
+    Post-CSS plugins:  nesting, custom-properties */
 
 /*
 
@@ -56,7 +56,32 @@ a:hover, a:focus {
 }
 
 .btnStarlink {
-  @mixin hoverButton;
+  display       : block;
+  margin        : 0 auto;
+  color         : #fff !important;
+  background    : var(--linkColor) !important;
+  border        : 1px solid #fff !important;
+  border-radius : 30px !important;
+  outline       : none;
+  text-align    : center;
+  text-shadow   : none !important;
+  font-weight   : 400 !important;
+  font-size     : 18px !important;
+  transition    : background 300ms ease-in-out;
+  &:hover,
+  &:focus {
+    border-color : var(--linkColor) !important;
+    color        : var(--linkColor) !important;
+    background   : #fff !important;
+  }
+  &:hover span,
+  &:focus span {
+    color : var(--linkColor) !important;
+  }
+  @nest & span {
+    color       : #fff !important;
+    font-weight : 400 !important;
+  }
   padding : 1.5rem;
   width   : 80%;
 }
