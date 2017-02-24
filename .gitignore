@@ -749,3 +749,7 @@ jspm_packages
 
 /.test/gulp2/_build/
 /.test/gulp2/_dist/
+/_build/
+/_dist/
+/_zip/
+
