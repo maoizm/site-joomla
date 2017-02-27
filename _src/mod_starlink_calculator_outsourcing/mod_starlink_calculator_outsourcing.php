@@ -11,5 +11,5 @@ else
 
 $doc = JFactory::getDocument();
 // base path for all assets (css, js, images, fonts)
-$assetsPath = JURI::base( true ).$params->get('assetsBasePath', '/media/mod_starlink_calculator_outsourcing');
-$doc->addScript(JURI::root(true). $assetsPath . '/js/starlink_calculator_outsourcing.js');
+//$assetsPath = JURI::base( true ).$params->get('assetsBasePath', '/media/mod_starlink_calculator_outsourcing');
+//$doc->addScript(JURI::root(true). $assetsPath . '/js/starlink_calculator_outsourcing.js');
