@@ -103,7 +103,10 @@ module.exports = {
     },
 
     'bootstrap.scripts': {
-      src:  'node_modules/bootstrap-sass/assets/javascripts/{bootstrap,bootstrap.min}.js',
+      src:  [
+        'node_modules/bootstrap-sass/assets/javascripts/{bootstrap,bootstrap.min}.js',
+        '_src/vendor/jquery/**/*.js'
+        ],
       dest: '_build/js'
     },
 
