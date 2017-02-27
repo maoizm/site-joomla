@@ -25,7 +25,7 @@ $assetsPath = $this->baseurl .$this->params->get('assetsBasePath', 'media/mod_st
 //$doc->addStyleSheet($assetsPath . '/css/font-default.css');
 //$doc->addStyleSheet($assetsPath . '/css/base.css');
 //$doc->addStyleSheet($assetsPath . '/css/styles.css');
-$doc->addStyleSheet($tpath . '/css/template.css');
+$doc->addStyleSheet($tpath . '/css/styles.css');
 //$doc->addStyleSheet('http://basehold.it/24');
 //$doc->addStyleSheet($assetsPath . '/css/styles-all.css');
 
@@ -49,7 +49,7 @@ if ($this->params->get('googleFont')) {
 }
 
 // template js
-$doc->addScript($tpath . '/js/jui/bootstrap.min.js');
-$doc->addScript($assetsPath . '/js/jquery-ui.js');
-$doc->addScript($assetsPath . '/js/starlink_common.js');
-//$doc->addScript($tpath . '/js/scripts.js');
+//$doc->addScript($tpath . '/js/jui/bootstrap.min.js');
+//$doc->addScript($assetsPath . '/js/jquery-ui.js');
+//$doc->addScript($assetsPath . '/js/starlink_common.js');
+$doc->addScript($tpath . '/js/scripts.js');

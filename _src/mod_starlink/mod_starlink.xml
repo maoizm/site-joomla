@@ -7,14 +7,13 @@
   <version>1.0.1</version>
   <description>Starlink common files</description>
   <files>
+    <folder>html</folder>
     <filename module="mod_starlink">mod_starlink.php</filename>
     <filename>mod_starlink.xml</filename>
   </files>
   <media folder="media" destination="mod_starlink">
-<!--    <folder>css</folder>-->
     <folder>fonts</folder>
     <folder>images</folder>
-    <folder>js</folder>
   </media>
   <config>
   </config>

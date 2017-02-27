@@ -30,9 +30,8 @@ const browserSync = cfg.browserSync;
 
 /* Main Workflow tasks */
 
-const modules = [ 'basscss', 'bootstrap', 'mod_calc', 'mod_map',
-                  'mod_services', 'mod_starlink', 'template'
-                ].map( e => require(`./_tasks/${e}`)(gulp, $, taskCfg) );
+const modules = [ 'basscss', 'bootstrap', 'mod_calc', 'mod_map', 'mod_services', 'mod_starlink', 'template']
+                .map( e => require(`./_tasks/${e}`)(gulp, $, taskCfg) );
 
 const [ basscss, bootstrap, mod_calc, mod_map, mod_services, mod_starlink, template ] = modules;
 
@@ -51,9 +50,7 @@ const [ basscss, bootstrap, mod_calc, mod_map, mod_services, mod_starlink, templ
     template.scripts, bootstrap.scripts
   );
 
-
-
-  gulp.task('styles.clean', () => del([ taskCfg['styles.clean'].src ]));
+  //gulp.task('styles.clean', () => del([ taskCfg['styles.clean'].src ]));
 
 
   let styles = gulp.series(
@@ -83,6 +80,9 @@ const [ basscss, bootstrap, mod_calc, mod_map, mod_services, mod_starlink, templ
   };
 
 
+
+
+
   let build = gulp.parallel(
       styles,
       markup,
@@ -97,12 +97,9 @@ const [ basscss, bootstrap, mod_calc, mod_map, mod_services, mod_starlink, templ
 
 
 
-  /* Production (distribution) build */
 
-/*  let buildDist = gulp.series(
-      build,
-      gulp.parallel( stylesDist, scriptsDist, markupDist, imagesDist, otherDist )
-  );*/
+
+  /* Production (distribution) build */
 
   let buildDist = gulp.series(
       build,
@@ -136,12 +133,10 @@ const [ basscss, bootstrap, mod_calc, mod_map, mod_services, mod_starlink, templ
     .pipe(gulp.dest(options.dest))
   }
 
-
   function imagesDist() {
     return gulp.src(taskCfg['images.dist'].src)
     .pipe(gulp.dest(taskCfg['images.dist'].dest))
   }
-
 
   function markupDist() {
     return gulp.src(taskCfg['markup.dist'].src)
@@ -152,9 +147,24 @@ const [ basscss, bootstrap, mod_calc, mod_map, mod_services, mod_starlink, templ
     .pipe(gulp.dest(taskCfg['markup.dist'].dest));
   }
 
+  function package() {
+    return gulp.src( taskCfg['starlink_package.zip'].src )
+    .pipe($.zip( taskCfg['starlink_package.zip'].name ))
+    .pipe(gulp.dest( taskCfg['starlink_package.zip'].dest ))
+  }
 
-let zip = gulp.series(buildDist, gulp.parallel( modules.map(m => m.zip)));
-exports.zip = zip;
+
+
+
+  /* Zip all packages for offline installation */
+
+  let zip = gulp.series(buildDist, gulp.parallel( modules.map(m => m.zip)), package);
+  exports.zip = zip;
+
+
+
+
+
 
 /* Supplementary functions */
 

@@ -19,7 +19,6 @@
 	</files>
 	<media folder="media" destination="mod_starlink_calculator_outsourcing">
 		<folder>images</folder>
-    <folder>js</folder>
     </media>
 	<languages>
 		<language tag="en-GB">language/en-GB.mod_starlink_calculator_outsourcing.ini</language>

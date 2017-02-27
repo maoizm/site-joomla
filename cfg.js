@@ -135,7 +135,7 @@ module.exports = {
     'images.dist': {
       src: [
         '_build/{mod_starlink,mod_starlink_calculator_outsourcing,mod_starlink_services,templates/starlink}/images/**/*',
-        '_build/{templates/starlink}/*.{jpg,png,gif,ico,svg}'
+        '_build/templates*/starlink/*.{jpg,png,gif,ico,svg}'
       ],
       dest: '_dist'
     },
@@ -159,9 +159,9 @@ module.exports = {
     'mod_calc.markup': {},
     'mod_calc.other': {},
     'mod_calc.zip': {
-      src: '_build/mod_starlink_calculator_outsourcing/**/*',
+      src: '_dist/mod_starlink_calculator_outsourcing/**/*',
       name: 'mod_starlink_calculator_outsourcing.zip',
-      dest: '_zip'
+      dest: '_zip/packages'
     },
 
     'mod_starlink.clean': {},
@@ -171,9 +171,9 @@ module.exports = {
     'mod_starlink.markup': {},
     'mod_starlink.other': {},
     'mod_starlink.zip': {
-      src: '_build/mod_starlink/**/*',
+      src: '_dist/mod_starlink/**/*',
       name: 'mod_starlink.zip',
-      dest: '_zip'
+      dest: '_zip/packages'
     },
 
     'mod_map.clean': {},
@@ -183,9 +183,9 @@ module.exports = {
     'mod_map.markup': {},
     'mod_map.other': {},
     'mod_map.zip': {
-      src: '_build/mod_starlink_map/**/*',
+      src: '_dist/mod_starlink_map/**/*',
       name: 'mod_starlink_map.zip',
-      dest: '_zip'
+      dest: '_zip/packages'
     },
 
     'mod_services.clean': {},
@@ -195,9 +195,9 @@ module.exports = {
     'mod_services.markup': {},
     'mod_services.other': {},
     'mod_services.zip': {
-      src: '_build/mod_starlink_services/**/*',
+      src: '_dist/mod_starlink_services/**/*',
       name: 'mod_starlink_services.zip',
-      dest: '_zip'
+      dest: '_zip/packages'
     },
 
     'other': {
@@ -229,7 +229,7 @@ module.exports = {
 
     'styles.dist': {
       src:     '_build/css/template.css',
-      dest:    '_dist/css',
+      dest:    '_dist/templates/starlink/css',
       postcss: [
                  ['cssnano',
                    {
@@ -242,8 +242,11 @@ module.exports = {
     },
 
     'scripts.dist': {
-      src:     '_build/js/**/*.js',
-      dest:    '_dist/js',
+      src:     [
+        '_build/js/**/*.js',
+        '!_build/js/**/bootstrap.min.js'
+      ],
+      dest:    '_dist/templates/starlink/js',
       sourcemaps: {loadMaps: true},
       uglify:  {}
     },
@@ -296,8 +299,17 @@ module.exports = {
       browserSync: browserSync
     },
     'template.zip': {
-      src: '_build/templates/starlink/**/*',
+      src: '_dist/templates/starlink/**/*',
       name: 'tpl_starlink.zip',
+      dest: '_zip/packages'
+    },
+
+    'starlink_package.zip': {
+      src: [
+        '_zip/packages*/*.zip',
+        '_dist/pkg*.xml'
+      ],
+      name: 'pkg_starlink.zip',
       dest: '_zip'
     }
 
