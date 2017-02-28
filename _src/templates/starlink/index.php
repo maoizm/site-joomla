@@ -30,7 +30,7 @@
   <header class="container-fluid">
     <div class="b-topRow row">
       <div class="col-xs-12 col-sm-8 col-md-3 col-lg-4">
-        <a title="StarLink" href="<?php echo JURI::base(); ?>">
+        <a title="StarLink" href="<?php JURI::base() ?>">
           <div class="b-logo">
             <img class="b-logo__image" src="<?=$assetsPath?>/images/logo-vector.svg">
             <!--<svg class="b-logo__image">
@@ -79,7 +79,7 @@
   <?php
   foreach (array('s03-HeroPosition', 's04-SubMenu', 's05-Offer') as $position) {
     if ($this->countModules($position)) : ?>
-      <!-- begin jdoc:include type="modules" name="<?=$position?>" -->
+      <!-- begin jdoc:include type="modules" name="< ?= $position ? >" -->
         <jdoc:include type="modules" name="<?=$position?>" />
     <?php endif;
   } ?>
@@ -94,7 +94,7 @@
   <?php
   foreach (array('s06-Details', 's07-AllServices', 's08-CalltoAction', 's09-InfoBlock', 's10-BottomBlock') as $position) {
     if ($this->countModules($position)) : ?>
-      <!-- begin jdoc:include type="modules" name="<?=$position?>" -->
+      <!-- begin jdoc:include type="modules" name="< ?=$position? >" -->
         <jdoc:include type="modules" name="<?=$position?>" />
     <?php endif;
   } ?>
@@ -104,7 +104,7 @@
     <div class="container">
       <div class="row">
         <div class="col-md-3 col-xs-12 copyright h5 footer__row">
-          &copy; 2016 &nbsp; <a class="footer__link" href="<?php echo JURI::base(); ?>">Старлинк</a>
+          &copy; 2016 &nbsp; <a class="footer__link" href="<?= JURI::base() ?>">Старлинк</a>
         </div>
         <div class="col-md-6 col-xs-12 h5 footer__row">
           <jdoc:include type="modules" name="s80-FooterMenu" />
