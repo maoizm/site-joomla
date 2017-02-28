@@ -2558,6 +2558,18 @@ jpegtran-bin@^3.0.0:
     bin-wrapper "^3.0.0"
     logalot "^2.0.0"
 
+jquery-migrate@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/jquery-migrate/-/jquery-migrate-3.0.0.tgz#03f320596fe1a1db09cdcfb74b14571994aad7bb"
+
+jquery-ui@^1.12.1:
+  version "1.12.1"
+  resolved "https://registry.yarnpkg.com/jquery-ui/-/jquery-ui-1.12.1.tgz#bcb4045c8dd0539c134bc1488cdd3e768a7a9e51"
+
+jquery@^3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.1.1.tgz#347c1c21c7e004115e0a4da32cece041fad3c8a3"
+
 js-base64@^2.1.9:
   version "2.1.9"
   resolved "https://registry.yarnpkg.com/js-base64/-/js-base64-2.1.9.tgz#f0e80ae039a4bd654b5f281fc93f04a914a7fcce"
@@ -3710,6 +3722,12 @@ postcss-reduce-transforms@^1.0.3:
     has "^1.0.1"
     postcss "^5.0.8"
     postcss-value-parser "^3.0.1"
+
+postcss-remove-root@^0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/postcss-remove-root/-/postcss-remove-root-0.0.2.tgz#19d4f385d106442b03c2b78d64aa3a6d6757646d"
+  dependencies:
+    postcss "^5.0.13"
 
 postcss-selector-parser@^2.0.0, postcss-selector-parser@^2.2.2:
   version "2.2.3"
