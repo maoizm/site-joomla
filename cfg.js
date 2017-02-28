@@ -129,10 +129,11 @@ module.exports = {
     },
 
     'images': {
-      src: [
-        '_src/{mod_starlink,mod_starlink_calculator_outsourcing,mod_starlink_services,templates/starlink}/images/**/*',
-        '_src/templates*/starlink/*.{jpg,png,gif,ico,svg}'
-      ],
+      src: [ '_src/*mod_starlink/images/**/*.{jp*g,png,svg,ico}',
+             '_src/*mod_starlink_calculator_outsourcing/images/**/*.*',
+             '_src/*mod_starlink_services/images/*.*',
+             '_src/*templates/starlink/images/**/*'
+           ],
       dest: '_build'
     },
 
@@ -145,7 +146,7 @@ module.exports = {
     },
 
     'markup': {
-      src:  '_src/**/*.{html,php,xml}',
+      src:  [ '_src/**/*.{html,php,xml}', '!_src/0_database/**/*' ],
       dest: '_build',
       watchFiles: '_src/**/*.{html,php}',
       browserSync: browserSync
@@ -158,7 +159,10 @@ module.exports = {
 
     'mod_calc.clean': {},
     'mod_calc.styles': {},
-    'mod_calc.scripts': {},
+    'mod_calc.scripts': {
+      src: ['_src/mod_starlink_calculator_outsourcing/scripts/*.js'],
+      dest: '_build/js'
+    },
     'mod_calc.images': {},
     'mod_calc.markup': {},
     'mod_calc.other': {},
@@ -247,8 +251,8 @@ module.exports = {
 
     'scripts.dist': {
       src:     [
-        '_build/js/**/*.js',
-        '!_build/js/**/bootstrap.min.js'
+        '_build/js/*.js',
+        '!_build/js/bootstrap.min.js'
       ],
       dest:    '_dist/templates/starlink/js',
       sourcemaps: {loadMaps: true},
@@ -267,6 +271,7 @@ module.exports = {
         '_src/mod_starlink_calculator_outsourcing/scripts/*.js',
         '_src/templates/starlink/scripts/*.js'
       ],
+
       dest:  '_build/js'
     },
 

@@ -26,7 +26,6 @@ module.exports = (gulp, plugins, options={}) => {
       images: done => done(),
       markup: done => done(),
       other:  done => done(),
-      scripts: done => done(),
 
       zip: () => gulp.src(options['template.zip'].src)
                   .pipe(plugins.zip(options['template.zip'].name))

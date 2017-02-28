@@ -46,8 +46,12 @@ const [ basscss, bootstrap, mod_calc, mod_map, mod_services, mod_starlink, templ
   //const template = require('./_tasks/template')(gulp, $, taskCfg);
   gulp.task('template.styles', template.styles);
 
-  let scripts = gulp.parallel(
-    template.scripts, bootstrap.scripts
+  let scripts = gulp.series(
+    gulp.parallel(
+      bootstrap.scripts,
+      mod_calc.scripts
+    ),
+    template.scripts
   );
 
   //gulp.task('styles.clean', () => del([ taskCfg['styles.clean'].src ]));
