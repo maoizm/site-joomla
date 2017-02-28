@@ -106,11 +106,12 @@ const [ basscss, bootstrap, mod_calc, mod_map, mod_services, mod_starlink, templ
   /* Production (distribution) build */
 
   let buildDist = gulp.series(
+      clean,
       build,
       gulp.parallel( stylesDist, scriptsDist, markupDist, imagesDist, otherDist )
   );
 
-  let dist = gulp.series(cleanDist, buildDist, serveDist);
+  let dist = gulp.series(buildDist, serveDist);
 
 
   function stylesDist() {
@@ -151,22 +152,29 @@ const [ basscss, bootstrap, mod_calc, mod_map, mod_services, mod_starlink, templ
     .pipe(gulp.dest(taskCfg['markup.dist'].dest));
   }
 
-  function package() {
-    return gulp.src( taskCfg['starlink_package.zip'].src )
-    .pipe($.zip( taskCfg['starlink_package.zip'].name ))
-    .pipe(gulp.dest( taskCfg['starlink_package.zip'].dest ))
-  }
-
-
-
 
   /* Zip all packages for offline installation */
 
-  let zip = gulp.series(buildDist, gulp.parallel( modules.map(m => m.zip)), package);
-  exports.zip = zip;
+  let zip = gulp.series(
+    buildDist,
+    gulp.parallel( modules.map(m => m.zip)),
+    package,
+    gulp.series( () => del( taskCfg['starlink_package.zip'].del ) ),
+    libraryHack
+  );
 
 
+  function package(done) {
+    return gulp.src( taskCfg['starlink_package.zip'].src )
+        .pipe($.zip( taskCfg['starlink_package.zip'].name ))
+        .pipe(gulp.dest( taskCfg['starlink_package.zip'].dest ))
+  }
 
+
+  function libraryHack() {
+    return gulp.src( '_dist/libraries*/**/*' )
+    .pipe(gulp.dest( '_zip' ))
+  }
 
 
 
@@ -222,16 +230,11 @@ function serveDist() {
 function otherDist() {
   return gulp.src(taskCfg['other.dist'].src)
   .pipe(gulp.dest(taskCfg['other.dist'].dest))
-};
-
-
-function cleanDist() {
-  return del([cfg.paths.dist]);
 }
 
 
 function clean() {
-  return del([cfg.paths.build]);
+  return del([cfg.paths.build, cfg.paths.dist]);
 }
 
 
@@ -242,3 +245,4 @@ exports.scripts = scripts;
 exports.develop = develop;
 exports.build = build;
 exports.dist = dist;
+exports.zip = zip;

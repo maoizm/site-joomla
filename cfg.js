@@ -322,6 +322,7 @@ module.exports = {
         '_zip/packages*/*.zip',
         '_dist/pkg*.xml'
       ],
+      del: ['_zip/packages/**'],
       name: 'pkg_starlink.zip',
       dest: '_zip'
     }
