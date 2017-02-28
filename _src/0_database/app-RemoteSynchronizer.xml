@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Config>
+  <option name="generalOptions">
+    <GeneralOptions>
+      <option name="allowConcurrentRuns" value="true" />
+    </GeneralOptions>
+  </option>
+  <option name="logOptions">
+    <LogOptions>
+      <option name="clearBeforeSynchro" value="true" />
+      <option name="logFontFamily" value="Consolas" />
+      <option name="logFontSize" value="11" />
+    </LogOptions>
+  </option>
+  <option name="targetMappings">
+    <list>
+      <TargetMappings>
+        <option name="excludedCopyPaths">
+          <array>
+            <option value="**/.git/**" />
+            <option value="**/.?*/**" />
+            <option value="**/node_modules/**" />
+            <option value="**/0-joomla-virgin/**" />
+            <option value="**/configuration*.php" />
+            <option value="*gulp*.*" />
+          </array>
+        </option>
+        <option name="name" value="joomla-scheme" />
+        <option name="synchroMappings">
+          <array>
+            <SynchroMapping>
+              <option name="deleteObsoleteFiles" value="true" />
+              <option name="destPath" value="E:/0projects/joomla-scheme/site/administrator" />
+              <option name="srcPath" value="E:/0projects/j1/app/administrator" />
+            </SynchroMapping>
+            <SynchroMapping>
+              <option name="deleteObsoleteFiles" value="true" />
+              <option name="destPath" value="E:/0projects/joomla-scheme/site/bin" />
+              <option name="srcPath" value="E:/0projects/j1/app/bin" />
+            </SynchroMapping>
+            <SynchroMapping>
+              <option name="deleteObsoleteFiles" value="true" />
+              <option name="destPath" value="E:/0projects/joomla-scheme/site/cli" />
+              <option name="srcPath" value="E:/0projects/j1/app/cli" />
+            </SynchroMapping>
+            <SynchroMapping>
+              <option name="deleteObsoleteFiles" value="true" />
+              <option name="destPath" value="E:/0projects/joomla-scheme/site/components" />
+              <option name="srcPath" value="E:/0projects/j1/app/components" />
+            </SynchroMapping>
+            <SynchroMapping>
+              <option name="deleteObsoleteFiles" value="true" />
+              <option name="destPath" value="E:/0projects/joomla-scheme/site/images" />
+              <option name="srcPath" value="E:/0projects/j1/app/images" />
+            </SynchroMapping>
+            <SynchroMapping>
+              <option name="deleteObsoleteFiles" value="true" />
+              <option name="destPath" value="E:/0projects/joomla-scheme/site/includes" />
+              <option name="srcPath" value="E:/0projects/j1/app/includes" />
+            </SynchroMapping>
+            <SynchroMapping>
+              <option name="deleteObsoleteFiles" value="true" />
+              <option name="destPath" value="E:/0projects/joomla-scheme/site/language" />
+              <option name="srcPath" value="E:/0projects/j1/app/language" />
+            </SynchroMapping>
+            <SynchroMapping>
+              <option name="deleteObsoleteFiles" value="true" />
+              <option name="destPath" value="E:/0projects/joomla-scheme/site/layouts" />
+              <option name="srcPath" value="E:/0projects/j1/app/layouts" />
+            </SynchroMapping>
+            <SynchroMapping>
+              <option name="deleteObsoleteFiles" value="true" />
+              <option name="destPath" value="E:/0projects/joomla-scheme/site/libraries" />
+              <option name="srcPath" value="E:/0projects/j1/app/libraries" />
+            </SynchroMapping>
+            <SynchroMapping>
+              <option name="deleteObsoleteFiles" value="true" />
+              <option name="destPath" value="E:/0projects/joomla-scheme/site/media" />
+              <option name="srcPath" value="E:/0projects/j1/app/media" />
+            </SynchroMapping>
+            <SynchroMapping>
+              <option name="deleteObsoleteFiles" value="true" />
+              <option name="destPath" value="E:/0projects/joomla-scheme/site/modules" />
+              <option name="srcPath" value="E:/0projects/j1/app/modules" />
+            </SynchroMapping>
+            <SynchroMapping>
+              <option name="deleteObsoleteFiles" value="true" />
+              <option name="destPath" value="E:/0projects/joomla-scheme/site/plugins" />
+              <option name="srcPath" value="E:/0projects/j1/app/plugins" />
+            </SynchroMapping>
+            <SynchroMapping>
+              <option name="deleteObsoleteFiles" value="true" />
+              <option name="destPath" value="E:/0projects/joomla-scheme/site/templates" />
+              <option name="srcPath" value="E:/0projects/j1/app/templates" />
+            </SynchroMapping>
+          </array>
+        </option>
+      </TargetMappings>
+    </list>
+  </option>
+</Config>
