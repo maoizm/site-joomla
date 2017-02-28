@@ -12,14 +12,7 @@ module.exports = (gulp, plugins, options={}) => {
 
       clean: () => del( options['mod_starlink.clean'].src ),
 
-      styles: () => gulp.src(options['mod_starlink.styles'].src)
-            .pipe(run.sourcemaps.css ? plugins.sourcemaps.init() : plugins.noop())
-            .pipe(plugins.postcss(options.postcss))
-            .pipe(plugins.rename({extname: '.css'}))
-            .pipe(run.sourcemaps.css ? plugins.sourcemaps.write('./') : plugins.noop())
-            .pipe(gulp.dest(options['mod_starlink.styles'].dest))
-            .pipe(run.browserSync ? options['mod_starlink.styles'].browserSync.reload({stream: true}) : plugins.noop()),
-
+      styles: done => done(),
       images: done => done(),
       markup: done => done(),
       other:  done => done(),

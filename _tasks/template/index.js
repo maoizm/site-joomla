@@ -15,7 +15,7 @@ module.exports = (gulp, plugins, options={}) => {
           .pipe(run.sourcemaps.css ? plugins.sourcemaps.init() : plugins.noop())
           .pipe(plugins.postcss(options['template.styles'].postcss))
           .pipe(plugins.rename({extname: '.css'}))
-          .pipe(run.sourcemaps.css ? plugins.sourcemaps.write('./') : plugins.noop())    // produce map for non-minified css
+          .pipe(run.sourcemaps.css ? plugins.sourcemaps.write('./') : plugins.noop())
           .pipe(gulp.dest(options['template.styles'].dest))
           .pipe(run.browserSync ? options['template.styles'].browserSync.reload({stream: true}): plugins.noop()),
 

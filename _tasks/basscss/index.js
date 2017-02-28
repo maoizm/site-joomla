@@ -31,7 +31,7 @@ module.exports = (gulp, plugins, options={}) => {
           .pipe(run.browserSync ? options['basscss.styles'].browserSync.reload({stream: true}) : plugins.noop());
       },
 
-      zip: (done) => {console.log('basscss.zip');done();}
+      zip: done => done()
 
   };
 

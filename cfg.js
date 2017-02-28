@@ -88,6 +88,7 @@ module.exports = {
               [ 'postcss-color-function', {} ],
               [ 'postcss-calc', {precision: 10} ],
               [ 'css-mqpacker', {sort: true} ],
+              [ 'postcss-discard-comments', { } ],
               [ 'postcss-prettify', {} ]
             ].map( pluginPrepare ),
       sourcemaps: {},
@@ -105,7 +106,7 @@ module.exports = {
     'bootstrap.scripts': {
       src:  [
         'node_modules/bootstrap-sass/assets/javascripts/{bootstrap,bootstrap.min}.js',
-        '_src/vendor/jquery/**/*.js'
+        '_src/vendor/other/jquery*.js'
         ],
       dest: '_build/js'
     },
@@ -262,7 +263,10 @@ module.exports = {
     },
 
     'template.scripts': {
-      src:   '_src/{mod_starlink,mod_starlink_calculator_outsourcing,templates/starlink}/scripts/*.js',
+      src:   [
+        '_src/mod_starlink_calculator_outsourcing/scripts/*.js',
+        '_src/templates/starlink/scripts/*.js'
+      ],
       dest:  '_build/js'
     },
 
@@ -270,31 +274,32 @@ module.exports = {
       src:         '_src/templates/starlink/styles/template.pcss',
       dest:        '_build/css',
       postcss:     [
-                     ['postcss-import', {
-                       path: [
-                         paths.include,
-                         '_build/css',
-                         '_src/mod_starlink/styles',
-                         '_src/mod_starlink_calculator_outsourcing/styles',
-                         '_src/mod_starlink_services/styles'
-                       ]
-                     }],
-                     ['postcss-simple-vars', {}],
-                     ['postcss-custom-properties', {preserve: false}],
-                     ['postcss-apply', {}],
-                     ['postcss-calc', {precision: 10}],
-                     ['postcss-nesting', {}],
-                     ['postcss-custom-media', {}],
-                     ['postcss-media-minmax', {}],
-                     ['postcss-color-function', {}],
-                     ['css-mqpacker', {sort: true}],
-                     ['postcss-prettify', {}]
+                     [ 'postcss-import', {
+                         path: [
+                           paths.include,
+                           '_build/css',
+                           '_src/mod_starlink_calculator_outsourcing/styles',
+                           '_src/mod_starlink_services/styles'
+                         ]
+                       }
+                     ],
+                     [ 'postcss-simple-vars', {} ],
+                     [ 'postcss-custom-properties', {preserve: false} ],
+                     [ 'postcss-apply', {} ],
+                     [ 'postcss-remove-root', {} ],
+                     [ 'postcss-calc', {precision: 10} ],
+                     [ 'postcss-nesting', {} ],
+                     [ 'postcss-custom-media', {} ],
+                     [ 'postcss-media-minmax', {} ],
+                     [ 'postcss-color-function', {} ],
+                     [ 'css-mqpacker', {sort: true} ],
+                     [ 'postcss-discard-comments', {} ],
+                     [ 'postcss-prettify', {} ]
                    ].map(pluginPrepare),
       sourcemaps: {},
       watchFiles:  [
         paths.include + '*.css',
         '_src/templates/starlink/styles/*.pcss',
-        '_src/mod_starlink/styles/*.pcss',
         '_src/mod_starlink_services/styles/*.pcss',
         '_src/mod_starlink_calculator_outsourcing/styles/*.pcss',
         '_build/css/{bootstrap,base}.css'
