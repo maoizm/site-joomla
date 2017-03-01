@@ -247,7 +247,7 @@ div#fox-container-m95 li.qq-upload-success span.qq-upload-success-text
 /* Spinner while uploading */
 div#fox-container-m95 span.qq-upload-spinner
 {
-	background: url("/media/com_foxcontact/images/spinner.gif");
+	background: url("../../../media/com_foxcontact/images/spinner.gif");
 	width: 15px;
 	height: 15px;
 	vertical-align: text-bottom;
@@ -342,7 +342,7 @@ div#fox-container-m95 .chzn-container-single .chzn-search input[type="email"],
 div#fox-container-m95 .chzn-container-single .chzn-single abbr,
 div#fox-container-m95 .chzn-container-multi .chzn-choices li.search-choice .search-choice-close
 {
-	background-image: url("/media/com_foxcontact/images/ui.png");
+	background-image: url("../../../media/com_foxcontact/images/ui.png");
 }
 
 div#fox-container-m95 .chzn-container-single .chzn-single div
@@ -498,7 +498,7 @@ div#fox-container-m95 .chzn-container .chzn-results li.highlighted
 	div#fox-container-m95 .chzn-container .chzn-results-scroll-down span,
 	div#fox-container-m95 .chzn-container .chzn-results-scroll-up span
 	{
-		background-image: url("/media/com_foxcontact/images/ui@2x.png") !important;
+		background-image: url("../../../media/com_foxcontact/images/ui@2x.png") !important;
 		background-size: 70px 46px !important;
 	}
 }
@@ -1211,7 +1211,7 @@ div#fox-container-m115 li.qq-upload-success span.qq-upload-success-text
 /* Spinner while uploading */
 div#fox-container-m115 span.qq-upload-spinner
 {
-	background: url("/media/com_foxcontact/images/spinner.gif");
+	background: url("../../../media/com_foxcontact/images/spinner.gif");
 	width: 15px;
 	height: 15px;
 	vertical-align: text-bottom;
@@ -1306,7 +1306,7 @@ div#fox-container-m115 .chzn-container-single .chzn-search input[type="email"],
 div#fox-container-m115 .chzn-container-single .chzn-single abbr,
 div#fox-container-m115 .chzn-container-multi .chzn-choices li.search-choice .search-choice-close
 {
-	background-image: url("/media/com_foxcontact/images/ui.png");
+	background-image: url("../../../media/com_foxcontact/images/ui.png");
 }
 
 div#fox-container-m115 .chzn-container-single .chzn-single div
@@ -1462,7 +1462,7 @@ div#fox-container-m115 .chzn-container .chzn-results li.highlighted
 	div#fox-container-m115 .chzn-container .chzn-results-scroll-down span,
 	div#fox-container-m115 .chzn-container .chzn-results-scroll-up span
 	{
-		background-image: url("/media/com_foxcontact/images/ui@2x.png") !important;
+		background-image: url("../../../media/com_foxcontact/images/ui@2x.png") !important;
 		background-size: 70px 46px !important;
 	}
 }

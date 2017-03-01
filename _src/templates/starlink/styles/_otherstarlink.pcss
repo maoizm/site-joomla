@@ -76,7 +76,14 @@
   line-height: 50px;
   color: #1b1b1b;
   font-weight: 300;
+
+  @media screen and (max-width : 767px) {
+    /*! for hi-density screens? */
+    font-size   : 32px;
+    line-height : 40px;
+  }
 }
+
 .itOutsourcingWeProposeYou h4{
   font-size: 22px;
   text-align: center;
@@ -95,7 +102,12 @@
   color: #373A3C;
   font-size: 22px;
   line-height: 25px;
+
+  @media (min-width: 992px) {
+      margin: 0 100px;
+  }
 }
+
 .itOutsourcingWeProposeYouIconBlocks{
   margin-bottom: 55px;
 }
@@ -139,21 +151,6 @@
   padding-bottom: 20px;
 }
 .bottomScroll--outsourcing { }
-
-@media (min-width: 992px) {
-  .itOutsourcingWeProposeYouCenterText h4{
-    margin: 0 100px;
-  }
-}
-@media screen and (-webkit-min-device-pixel-ratio : 1.5) , screen and (min--moz-device-pixel-ratio : 1.5), (max-width : 767px) {
-  .itOutsourcingWeProposeYou h3 {
-    font-size   : 32px;
-    line-height : 40px;
-  }
-}
-
-
-
 
 
 /******* CUSTOMER REVIEW ELEMENTS *******/
@@ -663,12 +660,27 @@ p.aboutCompany__text:last-child{
   margin: 0 20px 0 0;
   padding: 5px 0 5px;
   border-bottom: 5px solid transparent;
+
+  @media screen and (max-width : 767px) {
+    display       : block;
+    margin        : 0 20px 0 0;
+    padding       : 12px 0 7px;
+    border-bottom : 2px solid transparent;
+  }
 }
-.secondaryConsultingMenu a.active, .secondaryConsultingMenu a:hover {
+
+.secondaryConsultingMenu a.active,
+.secondaryConsultingMenu a:hover {
   color: #1B1B1B;
   font-weight: bold;
   border-bottom: 5px solid #ED1C24;
+
+  @media screen and (max-width : 767px) {
+    font-weight   : normal;
+    border-bottom : 2px solid #ED1C24;
+  }
 }
+
 .secondaryConsultingMenu a:hover {
   font-weight: normal;
 }
@@ -709,6 +721,10 @@ p.aboutCompany__text:last-child{
   font-size: 32px;
   line-height: 32px;
   text-align: center;
+
+  @media screen and (max-width : 767px) {
+    display : none;
+  }
 }
 .scrollTopBtn .scrollTopArrowSpan{
   display: inline-block;
@@ -736,23 +752,6 @@ p.aboutCompany__text:last-child{
   padding-left: 0;
   padding-right: 0;
   transition: all 0.25s ease-in-out;
-}
-
-@media screen and (-webkit-min-device-pixel-ratio : 1.5) , screen and (min--moz-device-pixel-ratio : 1.5), (max-width : 767px) {
-  .scrollTopBtn {
-    display : none;
-  }
-  .secondaryConsultingMenu a {
-    display       : block;
-    margin        : 0 20px 0 0;
-    padding       : 12px 0 7px;
-    border-bottom : 2px solid transparent;
-  }
-  .secondaryConsultingMenu a.active,
-  .secondaryConsultingMenu a:hover {
-    font-weight   : normal;
-    border-bottom : 2px solid #ED1C24;
-  }
 }
 
 
