@@ -20,14 +20,10 @@ $this->setGenerator(null);
 $assetsPathFile = JPATH_ROOT.$this->params->get('assetsBasePath', 'media/mod_starlink');
 $assetsPath = $this->baseurl .$this->params->get('assetsBasePath', 'media/mod_starlink');
 
-// bootstrap and common styles css
-//$doc->addStyleSheet($assetsPath . '/css/bootstrap.css');
-//$doc->addStyleSheet($assetsPath . '/css/font-default.css');
-//$doc->addStyleSheet($assetsPath . '/css/base.css');
-//$doc->addStyleSheet($assetsPath . '/css/styles.css');
+
+
 $doc->addStyleSheet($tpath . '/css/styles.css');
-//$doc->addStyleSheet('http://basehold.it/24');
-//$doc->addStyleSheet($assetsPath . '/css/styles-all.css');
+
 
 // Override template font using Google Font or local Roboto font by default
 if ($this->params->get('googleFont')) {
@@ -42,14 +38,24 @@ if ($this->params->get('googleFont')) {
        ! ($this->params->get('googleFontNameBody') === "Roboto") ) {
     $doc->addStyleSheet('//fonts.googleapis.com/css?family=' . $this->params->get('googleFontNameBody'));
     $doc->addStyleDeclaration("
-	  html, body, p, ul, ol, li, .article__text {
-		  font-family: '" . str_replace('+', ' ', $this->params->get('googleFontNameBody')) . "', sans-serif;
-	  }");
+    html, body, p, ul, ol, li, .article__text {
+      font-family: '" . str_replace('+', ' ', $this->params->get('googleFontNameBody')) . "', sans-serif;
+    }");
   }
 }
 
 // template js
-//$doc->addScript($tpath . '/js/jui/bootstrap.min.js');
-//$doc->addScript($assetsPath . '/js/jquery-ui.js');
-//$doc->addScript($assetsPath . '/js/starlink_common.js');
+$this->_scripts = array();
+unset($this->_script['text/javascript']);
+$templateurl = $this->baseurl.'/templates/'.$this->template;
+$doc->addScript($tpath . '/js/jui/jquery.min.js');
+//$doc->addScript('https://code.jquery.com/jquery-migrate-3.0.0.js');
+/*$doc->addScript($tpath . '/js/jui/jquery-ui.js');*/
+
+
+
+
+
+
 $doc->addScript($tpath . '/js/scripts.js');
+

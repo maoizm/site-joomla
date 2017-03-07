@@ -97,6 +97,8 @@ jQuery(document).ready(function ($) {
       jQuery('#mod-search-searchword').focus();
     }, 250);
   });
+
+
   jQuery('#mod-search-searchword').focusout(function () {
     jQuery('.searchLineDiv').fadeOut(100);
     setTimeout(function () {
