@@ -29,7 +29,7 @@ function gradient(direction, colorDark, color1, color2, percent) {
   * @returns {string}
   */
 
- function getProperty(id, property) {
+function getProperty(id, property) {
   var tempElement = document.getElementById(id);
   var tempStyle = window.getComputedStyle(tempElement);
   return tempStyle.getPropertyValue(property);
@@ -37,15 +37,18 @@ function gradient(direction, colorDark, color1, color2, percent) {
 
 
 
-
-
 jQuery.noConflict();
-jQuery(document).ready(function() {
+jQuery(document).ready(function($) {
   // check if calculator element exists on the page
   const CALC_ID = "#connect_form";
   if ( ! jQuery(CALC_ID).length ) {
     return;
   }
+
+  jQuery(CALC_ID).attr('data-starlink-jqueryFull-version', jQuery.fn.jquery );
+  jQuery(CALC_ID).attr('data-starlink-jqueryDollar-version', $.fn.jquery );
+
+
 
   var pcColor = getProperty('slider-pc-count', 'background-color');
   var pcDark = getProperty('slider-pc-count', 'border-left-color');
@@ -58,96 +61,81 @@ jQuery(document).ready(function() {
   // input Masks
 
   // Add or reduce count of "planed leaves"
-  jQuery('.sign--minus').click(function () {
-    var Sinput = jQuery(this).parent().find('input');
+  $('.sign--minus').click(function () {
+    var Sinput = $(this).parent().find('input');
     var count = parseInt(Sinput.val()) - 1;
     count = count < 0 ? 0 : count;
     Sinput.val(count);
     Sinput.change();
     return false;
   });
-  jQuery('.sign--plus').click(function () {
-    var Sinput = jQuery(this).parent().find('input');
+
+  $('.sign--plus').click(function () {
+    var Sinput = $(this).parent().find('input');
     Sinput.val(parseInt(Sinput.val()) + 1);
     Sinput.change();
     return false;
   });
 
-  // Add slider for PC
-  jQuery("#slider-pc-count").slider({
-    orientation: "horizontal",
-    min: 0,
-    max: 29,
-    value: 25,
-    slideme: function( event, ui ) {
-      jQuery("#pcCount").val(ui.value);
 
-      // Change range color
-      var val = (ui.value) / (30 - 1) * 100;
+  var changeActiveDigit = function (id, value) {
+    $(id + ' .digit--active').removeClass('digit--active');
+    $(id).children().eq(Math.floor(value)).addClass('digit--active');
+  };
 
-      jQuery(this).css('background-image', '-webkit-' + gradient('left', pcDark, pcColor, sliderColor, val));
-      jQuery(this).css('background-image', gradient('to right', pcDark, pcColor, sliderColor, val));
-
-      jQuery("#slider-pc-count-digits").find('.digit--active').removeClass('digit--active');
-      jQuery("#slider-pc-count-digits").find("[data-pcdigit='" + ui.value + "']").addClass('digit--active');
+  var sliderConfig = {
+    '#slider-pc-count': {
+      min: 0, max:29, value: 25, link: '#pcCount',
+      colors: [ pcDark, pcColor ]
+    },
+    '#slider-server-count': {
+      min: 0, max:15, value: 10, link: '#serverCount',
+      colors: [ serverDark, serverColor ]
+    },
+    '#slider-virtual-count': {
+      min: 0, max:7, value: 5, link: '#virtualCount',
+      colors: [ virtualDark, virtualColor ]
     }
-  });
-  jQuery("#slider-pc-count-digits").find("[data-pcdigit='" + 25 + "']").addClass('digit--active');
-  jQuery("#pcCount").val(jQuery("#slider-pc-count").slider("value"));
+  };
 
-  // Add slider for SERVER
-  jQuery("#slider-server-count").slider({
-    orientation: "horizontal",
-    min: 0,
-    max: 15,
-    value: 10,
-    slideme: function( event, ui ) {
-      jQuery("#serverCount").val(ui.value);
 
-      // Change range color
-      var val = (ui.value) / (16 - 1) * 100;
+  function slideFunction(id) {
+    return function(event, ui) {
+      $(sliderConfig[id].config.link).val(ui.value);
 
-      jQuery(this).css('background-image', '-webkit-' + gradient('left', serverDark, serverColor, sliderColor, val));
-      jQuery(this).css('background-image', gradient('to right', serverDark, serverColor, sliderColor, val));
-
-      jQuery("#slider-server-count-digits").find('.digit--active').removeClass('digit--active');
-      jQuery("#slider-server-count-digits").find("[data-serverdigit='" + ui.value + "']").addClass('digit--active');
+      var val = ui.value / sliderConfig[id].max * 100;
+      $(id).css( 'background-image', '-webkit-' +
+          gradient('left', sliderConfig[id].config.colors[0], sliderConfig[id].config.colors[1],
+                    sliderColor, val)
+      ).css(
+        'background-image',
+        gradient('to right', sliderConfig[id].config.colors[0], sliderConfig[id].config.colors[1],
+                    sliderColor, val)
+      );
+      changeActiveDigit( id + "-digits", ui.value);
     }
-  });
-  jQuery("#slider-server-count-digits").find("[data-serverdigit='" + 10 + "']").addClass('digit--active');
-  jQuery("#serverCount").val(jQuery("#slider-server-count").slider("value"));
+  }
 
-  // Add slider for VIRTUAL SERVER
-  jQuery("#slider-virtual-count").slider({
-    orientation: "horizontal",
-    min: 0,
-    max: 7,
-    value: 5,
-    slideme: function( event, ui ) {
-      jQuery("#virtualCount").val(ui.value);
-
-      // Change range color
-      var val = (ui.value) / (8 - 1) * 100;
-
-      jQuery(this).css('background-image', '-webkit-' + gradient('left', virtualDark, virtualColor, sliderColor, val));
-      jQuery(this).css('background-image', gradient('to right', virtualDark, virtualColor, sliderColor, val));
-
-      jQuery("#slider-virtual-count-digits").find('.digit--active').removeClass('digit--active');
-      jQuery("#slider-virtual-count-digits").find("[data-virtualdigit='" + ui.value + "']").addClass('digit--active');
-    }
-  });
-  jQuery("#slider-virtual-count-digits").find("[data-virtualdigit='" + 5 + "']").addClass('digit--active');
-  jQuery("#virtualCount").val(jQuery("#slider-virtual-count").slider("value"));
-
+  for (var k in Object.keys(sliderConfig)) {
+    var s = Object.keys(sliderConfig)[k];
+    $(s).slider({
+      orientation: "horizontal",
+      min: sliderConfig[s].min, max: sliderConfig[s].max,
+      value: sliderConfig[s].value
+    });
+    $(s).on("slide", slideFunction(s));
+    changeActiveDigit(s + '-digits', sliderConfig[s].value);
+    $(sliderConfig[s].config.link).val(sliderConfig[s].value);
+  }
 
   // Parse admin data
-  var pcPrice = jQuery("#pc_price").val();
-  var serverPrice = jQuery("#server_price").val();
-  var virtualPrice = jQuery("#virtual_server_price").val();
-  var personalDevicePrice = jQuery("#personal_device_price").val();
-  var additionalLeavePrice = jQuery("#additional_leave").val();
-  var kursEuro = parseFloat(jQuery("#kurs_euro").val());
-  var inflationPercent = jQuery("#inflation_percent").val();
+  var pcPrice = $("#pc_price").val();
+  var serverPrice = $("#server_price").val();
+  var virtualPrice = $("#virtual_server_price").val();
+  var personalDevicePrice = $("#personal_device_price").val();
+  var additionalLeavePrice = $("#additional_leave").val();
+  var kursEuro = parseFloat($("#kurs_euro").val());
+  var inflationPercent = $("#inflation_percent").val();
 
   var pcPriceArr = pcPrice.split("; ").map(Number);
   var serverPriceArr = serverPrice.split("; ").map(Number);
@@ -189,110 +177,110 @@ jQuery(document).ready(function() {
   }
 
   // If CHANGE "#slider-pc-count"
-  jQuery("#slider-pc-count").slider({
+  $("#slider-pc-count").slider({
     change: function(event, ui) {
       calculateResult();
     }
   });
 
   // If CHANGE "input-pc-count"
-  jQuery("#pcCount").change(function() {
-    var pcCount = parseInt(jQuery(this).val());
+  $("#pcCount").change(function() {
+    var pcCount = parseInt($(this).val());
 
     if(!pcCount || pcCount < 0) {
       pcCount = 0;
-      jQuery(this).val(0);
+      $(this).val(0);
     }
 
     if(pcCount > 60) {
       pcCount = 60;
       swal('Значение более "60" нужно просчитывать с менеджером компании');
       //alert('Значение более "60" нужно просчитывать с менеджером компании');
-      jQuery(this).val(60);
+      $(this).val(60);
     }
 
-    jQuery("#slider-pc-count").slider({
+    $("#slider-pc-count").slider({
       value: pcCount
     });
 
-    jQuery(this).val(pcCount);
+    $(this).val(pcCount);
 
     calculateResult();
   });
 
   // If CHANGE "#slider-server-count"
-  jQuery("#slider-server-count").slider({
+  $("#slider-server-count").slider({
     change: function(event, ui) {
       calculateResult();
     }
   });
 
   // If CHANGE "input-server-count"
-  jQuery("#serverCount").change(function() {
-    var serverCount = parseInt(jQuery(this).val());
+  $("#serverCount").change(function() {
+    var serverCount = parseInt($(this).val());
 
     if(!serverCount || serverCount < 0) {
       serverCount = 0;
-      jQuery(this).val(0);
+      $(this).val(0);
     }
 
     if(serverCount > 15) {
       swal('Значение более "15" нужно просчитывать с менеджером компании');
       //alert('Значение более "15" нужно просчитывать с менеджером компании');
-      jQuery(this).val(15);
+      $(this).val(15);
       serverCount = 15;
     }
 
-    jQuery("#slider-server-count").slider({
+    $("#slider-server-count").slider({
       value: serverCount
     });
 
-    jQuery(this).val(serverCount);
+    $(this).val(serverCount);
 
     calculateResult();
   });
 
   // If CHANGE "#slider-virtual-count"
-  jQuery("#slider-virtual-count").slider({
+  $("#slider-virtual-count").slider({
     change: function(event, ui) {
       calculateResult();
     }
   });
 
   // If CHANGE "input-server-count"
-  jQuery("#virtualCount").change(function() {
-    var virtualCount = parseInt(jQuery(this).val());
+  $("#virtualCount").change(function() {
+    var virtualCount = parseInt($(this).val());
 
     if(!virtualCount || virtualCount < 0) {
       virtualCount = 0;
-      jQuery(this).val(0);
+      $(this).val(0);
     }
 
     if(virtualCount > 15) {
       swal('Значение более "15" нужно просчитывать с менеджером компании');
       //alert('Значение более "15" нужно просчитывать с менеджером компании');
-      jQuery(this).val(15);
+      $(this).val(15);
       virtualCount = 15;
     }
 
-    jQuery("#slider-virtual-count").slider({
+    $("#slider-virtual-count").slider({
       value: virtualCount
     });
 
-    jQuery(this).val(virtualCount);
+    $(this).val(virtualCount);
 
     calculateResult();
   });
 
 
-  jQuery(".sign").click(function() {
+  $(".sign").click(function() {
     calculateResult();
   });
 
-  jQuery("input[name='level']").change(function() {
-    jQuery('.SLAtable .SLAtable__row').removeClass('SLAtable__row--active');
-    if (jQuery(this).is(':checked')) {
-      jQuery(this).parent().parent().addClass('SLAtable__row--active');
+  $("input[name='level']").change(function() {
+    $('.SLAtable .SLAtable__row').removeClass('SLAtable__row--active');
+    if ($(this).is(':checked')) {
+      $(this).parent().parent().addClass('SLAtable__row--active');
     }
     calculateResult();
   });
