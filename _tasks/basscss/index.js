@@ -7,19 +7,26 @@ const cfg = require('../../cfg');
 const run = cfg.run;
 
 
-module.exports = (gulp, plugins, options={}) => ({
-  styles:
+module.exports = (gulp, plugins, options={}) => {
+
+  let basscss = {
+
+    styles:
       () => gulp.src(options.basscss.src)
       .pipe( run.sourcemaps.css
-            ? plugins.sourcemaps.init()
-            : plugins.noop()
+        ? plugins.sourcemaps.init()
+        : plugins.noop()
       )
       .pipe( plugins.postcss(options.basscss.postcss) )
       .pipe( run.sourcemaps.css
-            ? plugins.sourcemaps.write('./')
-            : plugins.noop()
+        ? plugins.sourcemaps.write('./')
+        : plugins.noop()
       )
       .pipe( gulp.dest(options.basscss.dest) )
-});
 
+  };
 
+  basscss.styles.displayName = 'basscss.styles';
+
+  return basscss;
+};

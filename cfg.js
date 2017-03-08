@@ -135,10 +135,12 @@ module.exports = {
     scripts: {
       src: [
         'node_modules/bootstrap-sass/assets/javascripts/bootstrap.js',
-        '_src/mod_starlink_calculator_outsourcing/scripts/*.js'
+        '_src/mod_starlink_calculator_outsourcing/scripts/*.js',
+        '_src/templates/starlink/scripts/scripts.js'
       ],
       srcNoConcat: [
-        '_src/templates/starlink/scripts/**/*.js'
+        '_src/templates/starlink/scripts/jui/*.js',
+        'node_modules/jquery/dist/jquery.min.js'
       ],
       sourcemaps: {loadMaps: true},
       dest: `${paths.dist}/templates/starlink/js`,
@@ -184,6 +186,7 @@ module.exports = {
 
 
     styles: {},
+
     template: {
       styles: {
         src:         '_src/templates/starlink/styles/template.pcss',
@@ -223,11 +226,12 @@ module.exports = {
          ].map(pluginPrepare),
         sourcemaps: {},
         watchFiles:  [
-          paths.include + '*.css',
-          paths.tmp + '/css/*.css',
-          '_src/templates/starlink/styles/*.pcss',
-          '_src/mod_starlink_services/styles/*.pcss',
-          '_src/mod_starlink_calculator_outsourcing/styles/*.pcss'
+          `${paths.include}*.css`,
+          `${paths.src}/vendor/basscss/**/*.css`,
+          `${paths.src}/vendor/bootstrap-sass/styles/**/*.scss`,
+          `${paths.src}/mod_starlink_services/styles/*.pcss`,
+          `${paths.src}/mod_starlink_calculator_outsourcing/styles/*.pcss`,
+          `${paths.src}/templates/starlink/styles/*.pcss`
         ]
       }
     }
