@@ -1,50 +1,86 @@
 /**
  * Wraps tasks from current directory and allows using them in external module
  */
-const path = require('path');
+
 const del = require('del');
 const cfg = require('../../cfg');
-const run = cfg.run;
 
 
 module.exports = (gulp, plugins, options={}) => {
 
-  let result = {
+  let modcalc = {
 
-      clean: () => del( options[`mod_calc/clean`].src ),
+      clean: () => del( options.modcalc.clean.src ),
 
-      styles: () => gulp.src(options['mod_calc.styles'].src)
-            .pipe(run.sourcemaps.css ? plugins.sourcemaps.init() : plugins.noop())
-            .pipe(plugins.postcss(options.postcss))
-            .pipe(plugins.rename({extname: '.css'}))
-            .pipe(run.sourcemaps.css ? plugins.sourcemaps.write('./') : plugins.noop())    // produce map for non-minified css
-            .pipe(gulp.dest(options['mod_calc.styles'].dest))
-            .pipe(run.browserSync ? options['mod_calc.styles'].browserSync.reload({stream: true}) : plugins.noop()),
+      styles: () => gulp.src(options.modcalc.styles.src)
+          .pipe( plugins.sourcemaps.css.init() )
+          .pipe( plugins.postcss(options.modcalc.styles.postcss) )
+          .pipe( plugins.rename({extname: '.css'}) )
+          .pipe( plugins.sourcemaps.css.write('./') )    // produce map for non-minified css
+          .pipe( gulp.dest(options.modcalc.styles.dest)),
 
-      images: done => done(),
-      markup: done => done(),
-      other:  done => done(),
-      scripts: () => gulp.src(options['mod_calc.scripts'].src)
-                     .pipe(gulp.dest(options['mod_calc.scripts'].dest)),
+      images: () => gulp.src( options.modcalc.images.src )
+                    .pipe( plugins.imagemin(cfg.tasks.images.imagemin) )
+                    .pipe( gulp.dest(options.modcalc.images.dest) ),
 
-      zip: () => gulp.src(options['mod_calc.zip'].src)
-            .pipe(plugins.zip(options['mod_calc.zip'].name))
-            .pipe(gulp.dest(options['mod_calc.zip'].dest))
+      markup: () => gulp.src( options.modcalc.markup.src )
+                    .pipe( gulp.dest(options.modcalc.markup.dest) ),
 
+      other:  () => gulp.src( options.modcalc.other.src )
+                    .pipe( gulp.dest(options.modcalc.other.dest) ),
+
+      scripts: () => gulp.src( options.modcalc.scripts.src )
+                     .pipe( gulp.dest(options.modcalc.scripts.dest) ),
+
+      zip: () => gulp.src( options.modcalc.zip.src )
+            .pipe( plugins.zip(options.modcalc.zip.name) )
+            .pipe( gulp.dest(options.modcalc.zip.dest) ),
+
+      deploy: () => {
+
+        const deployClean = () =>
+          del([ `${cfg.paths.deploy}/modules/mod_starlink_calculator_outsourcing/**` ],
+            {force: true}
+          );
+
+        const deployModules = () => {
+          const mods = {
+            ModuleAll:
+              gulp.src([
+                `${cfg.paths.dist}/mod_starlink_calculator_outsourcing/**`,
+                `!${cfg.paths.dist}/mod_starlink_calculator_outsourcing/{fonts,images}*/**`
+              ])
+              .pipe( gulp.dest(`${cfg.paths.deploy}/modules/mod_starlink_calculator_outsourcing`) ),
+
+            ModuleAssets:
+              gulp.src( `${cfg.paths.dist}/mod_starlink_calculator_outsourcing/{fonts,images}*/**` )
+              .pipe( gulp.dest(`${cfg.paths.deploy}/media/mod_starlink_calculator_outsourcing`) )
+          };
+
+          return merge(
+            mods.ModuleAll,
+            mods.ModuleAssets
+          );
+        };
+
+        gulp.series(
+          deployClean,
+          deployModules
+        )(done);
+
+      }
   };
 
-  result.build = gulp.series(
-    result.clean,
-    gulp.parallel(
-      result.styles,
-      result.scripts,
-      result.markup,
-      result.images,
-      result.other
-    ),
-    result.zip
-  );
-  return result;
+  [ 'clean',
+    'styles',
+    'images',
+    'markup',
+    'other',
+    'scripts',
+    'zip'
+  ].forEach(x => { modcalc[x].displayName = `modcalc.${x}` });
+
+  return modcalc;
 
 };
 

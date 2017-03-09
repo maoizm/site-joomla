@@ -55,7 +55,7 @@ const paths = {
   dist:    '_dist',
   zip:     '_zip',
   deploy:  'c:/laragon/www/joomla',
-  include: '_src/_includes/',
+  include: '_src/_includes',
   tmp:     '_build/_tmp'
 };
 
@@ -80,9 +80,11 @@ module.exports = {
     clean: {
       dist: {  // non-greedy
         src: [
+          `${paths.dist}/libraries/**`,
           `${paths.dist}/mod_starlink/**`,
           `${paths.dist}/mod_starlink_calculator_outsourcing/**`,
           `${paths.dist}/mod_starlink_map/**`,
+          `${paths.dist}/mod_starlink_services/**`,
           `${paths.dist}/templates/starlink/**`
         ]
       }
@@ -90,7 +92,7 @@ module.exports = {
 
 
     basscss: {
-        src:         '_src/vendor/basscss/base.css',
+        src:         `${paths.src}/vendor/basscss/base.css`,
         dest:        paths.tmp + '/css',
         postcss:     [
                        ['postcss-import', {path: [paths.include]}],
@@ -105,8 +107,8 @@ module.exports = {
                      ].map(pluginPrepare),
         sourcemaps:  {},
         watchFiles:  [
-          paths.include + '*.css',
-          '_src/vendor/basscss/**/*.css'
+          paths.include + '/*.css',
+          `${paths.src}/vendor/basscss/**/*.css`
         ]
     },
 
@@ -114,50 +116,30 @@ module.exports = {
 
     bootstrap: {
         styles: {
-          src:  '_src/vendor/bootstrap-sass/styles/bootstrap.scss',
+          src:  `${paths.src}/vendor/bootstrap-sass/styles/bootstrap.scss`,
           dest: paths.tmp + '/css',
           sassOptions: {
             includePaths: [
-              '_src/_includes',
+              paths.include,
               'node_modules/bootstrap-sass/assets/stylesheets'
             ]
           },
           sourcemaps: {},
           watchFiles: [
-            paths.include + '*.css',
-            '_src/vendor/bootstrap-sass/styles/*.scss'
+            paths.include + '/*.css',
+            `${paths.src}/vendor/bootstrap-sass/styles/*.scss`
           ]
         }
     },
 
 
 
-    scripts: {
-      src: [
-        'node_modules/bootstrap-sass/assets/javascripts/bootstrap.js',
-        '_src/mod_starlink_calculator_outsourcing/scripts/*.js',
-        '_src/templates/starlink/scripts/scripts.js'
-      ],
-      srcNoConcat: [
-        '_src/templates/starlink/scripts/jui/*.js',
-        'node_modules/jquery/dist/jquery.min.js'
-      ],
-      sourcemaps: {loadMaps: true},
-      dest: `${paths.dist}/templates/starlink/js`,
-      watchFiles:  [
-        '_src/templates/starlink/scripts/*.js',
-        '_src/mod_starlink_calculator_outsourcing/scripts/*.js'
-      ]
-    },
-
-
-
     images: {
-      src: [ '_src/*mod_starlink/images/**/*.{jp*g,png,svg,ico}',
-             '_src/*mod_starlink_calculator_outsourcing/images/**/*.*',
-             '_src/*mod_starlink_services/images/*.*',
-             '_src/*templates/starlink/images/**/*'
-           ],
+      src: [ `${paths.src}/*mod_starlink/images/**/*.{jp*g,png,svg,ico}`,
+        `${paths.src}/*mod_starlink_calculator_outsourcing/images/**/*.*`,
+        `${paths.src}/*mod_starlink_services/images/*.*`,
+        `${paths.src}/*templates/starlink/images/**/*`
+      ],
       imagemin: [ 'gifsicle', 'jpegtran', 'optipng' ].map(
         item => require('gulp-imagemin')[item]()
       ),
@@ -167,38 +149,58 @@ module.exports = {
 
 
     markup: {
-      src:  [ '_src/**/*.{html,php,xml}', '!_src/0_database/**/*' ],
+      src:  [ `${paths.src}/**/*.{html,php,xml}`, `!${paths.src}/0_database/**/*` ],
       dest: paths.dist,
-      watchFiles: '_src/**/*.{html,php}'
+      watchFiles: `${paths.src}/**/*.{html,php}`
     },
 
 
 
     other: {
       src: [
-        '_src/**/fonts/*.*',
-        '_src/**/*.{ini,md,txt}',
-        '!_src/vendor/**/*',
-        '!_src/0_*/**/*'
+        `${paths.src}/**/fonts/*.*`,
+        `${paths.src}/**/*.{ini,md,txt}`,
+        `!${paths.src}/vendor/**/*`,
+        `!${paths.src}/0_*/**/*`
       ],
       dest: paths.dist
     },
 
 
-    styles: {},
 
+    scripts: {
+      src: [
+        'node_modules/bootstrap-sass/assets/javascripts/bootstrap.js',
+        `${paths.src}/mod_starlink_calculator_outsourcing/scripts/*.js`,
+        `${paths.src}/templates/starlink/scripts/scripts.js`
+      ],
+      srcNoConcat: [
+        `${paths.src}/templates/starlink/scripts/jui/*.js`,
+        'node_modules/jquery/dist/jquery.min.js'
+      ],
+      sourcemaps: {loadMaps: true},
+      dest: `${paths.dist}/templates/starlink/js`,
+      watchFiles:  [
+        `${paths.src}/templates/starlink/scripts/*.js`,
+        `${paths.src}/mod_starlink_calculator_outsourcing/scripts/*.js`
+      ]
+    },
+
+
+
+    styles: {},
     template: {
       styles: {
-        src:         '_src/templates/starlink/styles/template.pcss',
+        src:         `${paths.src}/templates/starlink/styles/template.pcss`,
         dest:        `${paths.dist}/templates/starlink/css`,
         postcss:     [
            [
              'postcss-import', {
                  path: [
                    paths.include,
-                   paths.tmp + '/css',
-                   '_src/mod_starlink_calculator_outsourcing/styles',
-                   '_src/mod_starlink_services/styles'
+                   `${paths.tmp}/css`,
+                   `${paths.src}/mod_starlink_calculator_outsourcing/styles`,
+                   `${paths.src}/mod_starlink_services/styles`
                  ]
               }
            ],
@@ -233,6 +235,114 @@ module.exports = {
           `${paths.src}/mod_starlink_calculator_outsourcing/styles/*.pcss`,
           `${paths.src}/templates/starlink/styles/*.pcss`
         ]
+      }
+    },
+
+
+
+    modcalc: {
+      clean: `${paths.dist}/mod_starlink_calculator_outsourcing/**`,
+      styles: {
+        src: `${paths.src}/mod_starlink_calculator_outsourcing/styles/*.pcss`,
+        dest: `${paths.dist}/mod_starlink_calculator_outsourcing/css`,
+        postcss:     [
+                       ['postcss-custom-properties', {}],
+                       ['postcss-color-function', {}],
+                       ['postcss-calc', {precision: 10}],
+                       ['css-mqpacker', {sort: true}],
+                       ['postcss-discard-comments', {}],
+                       ['postcss-prettify', {}]
+                     ].map(pluginPrepare)
+      },
+      scripts: {
+        src: `${paths.src}/mod_starlink_calculator_outsourcing/scripts/*.js`,
+        dest: `${paths.dist}/mod_starlink_calculator_outsourcing/js`
+      },
+      images: {
+        src: `${paths.src}/mod_starlink_calculator_outsourcing/images/*.{png,svg,jpg}`,
+        dest: `${paths.dist}/mod_starlink_calculator_outsourcing/images`
+      },
+      markup: {
+        src: `${paths.src}/mod_starlink_calculator_outsourcing/*.{html,php,xml}`,
+        dest: `${paths.dist}/mod_starlink_calculator_outsourcing/`
+      },
+      other: {
+        src: `${paths.src}/mod_starlink_calculator_outsourcing/*.{ini,md.txt}`,
+        dest: `${paths.dist}/mod_starlink_calculator_outsourcing/`
+      },
+      zip: {
+        src: `${paths.dist}/mod_starlink_calculator_outsourcing/**/*.*`,
+        dest:`${paths.dist}/mod_starlink_calculator_outsourcing/`,
+        name:`mod_starlink_calculator_outsourcing`
+      }
+    },
+
+
+
+    modstarlink: {
+      clean: {
+
+      },
+      styles: {
+
+      },
+      scripts: {
+
+      },
+      images: {
+
+      },
+      markup: {
+
+      },
+      other: {
+
+      }
+    },
+
+
+
+    modservices: {
+      clean: {
+
+      },
+      styles: {
+
+      },
+      scripts: {
+
+      },
+      images: {
+
+      },
+      markup: {
+
+      },
+      other: {
+
+      }
+    },
+
+
+
+    modmap: {
+      clean: {
+
+      },
+      styles: {
+
+      },
+      scripts: {
+
+      },
+      images: {
+
+      },
+      markup: {
+
+      },
+      other: {
+
       }
     }
 

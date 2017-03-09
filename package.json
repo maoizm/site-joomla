@@ -35,14 +35,8 @@
     "gulp": "github:gulpjs/gulp#4.0",
     "gulp-autoprefixer": "^3.1.1",
     "gulp-concat": "^2.6.0",
-    "gulp-cssnano": "^2.1.2",
     "gulp-debug": "^3.0.0",
-    "gulp-filenames": "^4.0.1",
-    "gulp-filter": "^4.0.0",
-    "gulp-html-replace": "^1.6.2",
-    "gulp-hub": "github:frankwallis/gulp-hub#4.1.0",
     "gulp-if": "^2.0.2",
-    "gulp-ignore": "^2.0.2",
     "gulp-imagemin": "^3.1.1",
     "gulp-load-plugins": "^1.4.0",
     "gulp-newy": "^2.0.4",
@@ -72,7 +66,6 @@
     "postcss-prettify": "^0.3.4",
     "postcss-remove-root": "^0.0.2",
     "postcss-simple-vars": "^3.0.0",
-    "require-dir": "^0.3.1",
     "upath": "^1.0.0"
   },
   "dependencies": {

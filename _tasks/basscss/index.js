@@ -13,15 +13,9 @@ module.exports = (gulp, plugins, options={}) => {
 
     styles:
       () => gulp.src(options.basscss.src)
-      .pipe( run.sourcemaps.css
-        ? plugins.sourcemaps.init()
-        : plugins.noop()
-      )
+      .pipe( plugins.sourcemaps.css.init() )
       .pipe( plugins.postcss(options.basscss.postcss) )
-      .pipe( run.sourcemaps.css
-        ? plugins.sourcemaps.write('./')
-        : plugins.noop()
-      )
+      .pipe( plugins.sourcemaps.css.write('./') )
       .pipe( gulp.dest(options.basscss.dest) )
 
   };
