@@ -50,7 +50,7 @@ unset($this->_script['text/javascript']);
 $templateurl = $this->baseurl.'/templates/'.$this->template;
 $doc->addScript($tpath . '/js/jui/jquery.min.js');
 //$doc->addScript('https://code.jquery.com/jquery-migrate-3.0.0.js');
-/*$doc->addScript($tpath . '/js/jui/jquery-ui.js');*/
+$doc->addScript($tpath . '/js/jui/jquery-ui.js');
 
 
 

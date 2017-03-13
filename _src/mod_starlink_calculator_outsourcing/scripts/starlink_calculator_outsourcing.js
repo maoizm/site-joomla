@@ -101,17 +101,17 @@ jQuery(document).ready(function($) {
 
   function slideFunction(id) {
     return function(event, ui) {
-      $(sliderConfig[id].config.link).val(ui.value);
+      $(sliderConfig[id].link).val(ui.value); console.log('event:'+id);
 
       var val = ui.value / sliderConfig[id].max * 100;
       $(id).css( 'background-image', '-webkit-' +
-          gradient('left', sliderConfig[id].config.colors[0], sliderConfig[id].config.colors[1],
+          gradient('left', sliderConfig[id].colors[0], sliderConfig[id].colors[1],
                     sliderColor, val)
       ).css(
         'background-image',
-        gradient('to right', sliderConfig[id].config.colors[0], sliderConfig[id].config.colors[1],
+        gradient('to right', sliderConfig[id].colors[0], sliderConfig[id].colors[1],
                     sliderColor, val)
-      );
+      );  console.log($(id).css);
       changeActiveDigit( id + "-digits", ui.value);
     }
   }
@@ -123,9 +123,27 @@ jQuery(document).ready(function($) {
       min: sliderConfig[s].min, max: sliderConfig[s].max,
       value: sliderConfig[s].value
     });
-    $(s).on("slide", slideFunction(s));
+    //$(s).on("slide", slideFunction(s));
+    $(s).on("slide", function(event, ui){
+      $(this).link.val(ui.value); console.log('event:'+id);
+
+      var val = ui.value / $(this).max * 100;
+      $(this).css( 'background-image', '-webkit-' +
+        gradient('left', sliderConfig[this].colors[0], sliderConfig[id].colors[1],
+          sliderColor, val)
+      ).css(
+        'background-image',
+        gradient('to right', sliderConfig[id].colors[0], sliderConfig[id].colors[1],
+          sliderColor, val)
+      );  console.log($(id).css);
+      changeActiveDigit( id + "-digits", ui.value);
+
+
+
+
+    });
     changeActiveDigit(s + '-digits', sliderConfig[s].value);
-    $(sliderConfig[s].config.link).val(sliderConfig[s].value);
+    $(sliderConfig[s].link).val(sliderConfig[s].value);
   }
 
   // Parse admin data

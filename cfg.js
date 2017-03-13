@@ -176,6 +176,7 @@ module.exports = {
       ],
       srcNoConcat: [
         `${paths.src}/templates/starlink/scripts/jui/*.js`,
+        `${paths.src}/vendor/jquery-ui/jquery-ui-1.12.1.full/jquery-ui*.js`,
         'node_modules/jquery/dist/jquery.min.js'
       ],
       sourcemaps: {loadMaps: true},
