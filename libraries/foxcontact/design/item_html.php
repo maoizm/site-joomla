@@ -9,7 +9,7 @@
 class FoxDesignItemHtml extends FoxDesignItem
 {
 	
-	public function update($post_data)
+	public function update(array $post_data)
 	{
 	}
 	

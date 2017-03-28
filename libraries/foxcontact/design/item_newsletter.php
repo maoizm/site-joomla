@@ -9,7 +9,6 @@ jimport('foxcontact.form.newsletter');
 
 class FoxDesignItemNewsletter extends FoxDesignItem
 {
-	private $loaded_newsletters = null;
 	
 	protected function hasSingleValue()
 	{
@@ -64,16 +63,16 @@ class FoxDesignItemNewsletter extends FoxDesignItem
 	}
 	
 	
-	public function update($post_data)
+	public function update(array $post_data)
 	{
+		$unique_id = $this->get('unique_id');
 		if ($this->hasSingleValue())
 		{
-			$this->setValue(isset($post_data[$this->get('unique_id')]) ? JText::_('JYES') : JText::_('JNO'));
+			$this->setValue(isset($post_data[$unique_id]) ? JText::_('JYES') : JText::_('JNO'));
 		}
 		else
 		{
-			$post_data[$this->get('unique_id')] = $this->sanitize($post_data[$this->get('unique_id')]);
-			parent::update($post_data);
+			$this->setValue($this->sanitize(isset($post_data[$unique_id]) ? $post_data[$unique_id] : array()));
 		}
 	
 	}
@@ -82,12 +81,12 @@ class FoxDesignItemNewsletter extends FoxDesignItem
 	private function sanitize($ids)
 	{
 		$result = array();
+		$valid_ids = $this->getNewslettersIds();
 		foreach (is_array($ids) ? $ids : array() as $id)
 		{
-			$int_id = (int) $id;
-			if ($int_id > 0 && !in_array($int_id, $result))
+			if (in_array($id, $valid_ids) && !in_array($id, $result))
 			{
-				$result[] = $int_id;
+				$result[] = $id;
 			}
 		
 		}
@@ -168,37 +167,8 @@ class FoxDesignItemNewsletter extends FoxDesignItem
 	
 	public function getNewsletters()
 	{
-		if (is_null($this->loaded_newsletters))
-		{
-			switch ($this->getNewsletterType())
-			{
-				case 'acymailing':
-					$newsletter = FoxFormNewsletter::load('acymailing', (array) $this->get('newsletter.list'));
-					break;
-				case 'jnews':
-					$newsletter = FoxFormNewsletter::load('jnews', (array) $this->get('newsletter.list'));
-					break;
-				default:
-					$newsletter = null;
-					break;
-			}
-			
-			$this->loaded_newsletters = !is_null($newsletter) ? $newsletter['options'] : null;
-		}
-		
-		return $this->loaded_newsletters;
-	}
-	
-	
-	public function getNewslettersNames($newsletters)
-	{
-		$names = array();
-		foreach ($newsletters as $newsletter)
-		{
-			$names[] = $newsletter['label'];
-		}
-		
-		return implode(', ', $names);
+		$newsletter = FoxFormNewsletter::load($this->getNewsletterType(), (array) $this->get('newsletter.list'));
+		return !is_null($newsletter) ? $newsletter['options'] : null;
 	}
 
 }

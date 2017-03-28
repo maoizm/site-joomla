@@ -26,7 +26,7 @@ class FoxDesignRoot extends FoxDesignBase
 	}
 	
 	
-	public function setFormInfo($uid, &$data)
+	public function setFormInfo($uid, array &$data)
 	{
 		$this->uid = $uid;
 		$this->data =& $data;

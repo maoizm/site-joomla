@@ -14,7 +14,7 @@ class FoxFormBoard
 	const error = 'error';
 	private $data;
 	
-	public function __construct($data = array())
+	public function __construct(array $data = array())
 	{
 		$this->data = empty($data) ? self::getDefaultData() : $data;
 	}
@@ -22,7 +22,7 @@ class FoxFormBoard
 	
 	private static function getDefaultData()
 	{
-		return array('validated' => false, 'messages' => array(), 'messages_by_level' => array(FoxFormBoard::success => array(), FoxFormBoard::info => array(), FoxFormBoard::warning => array(), FoxFormBoard::error => array()), 'invalid_fileds' => array(), 'show_form_fileds' => true, 'delete_form_state_after_render' => false);
+		return array('validated' => false, 'messages' => array(), 'messages_by_level' => array(FoxFormBoard::success => array(), FoxFormBoard::info => array(), FoxFormBoard::warning => array(), FoxFormBoard::error => array()), 'invalid_fields' => array(), 'show_form_fields' => true, 'delete_form_state_after_render' => false);
 	}
 	
 	
@@ -78,13 +78,13 @@ class FoxFormBoard
 	
 	public function isFieldInvalid($unique_id)
 	{
-		return isset($this->data['invalid_fileds'][$unique_id]);
+		return isset($this->data['invalid_fields'][$unique_id]);
 	}
 	
 	
 	public function addInvalidField($unique_id)
 	{
-		$this->data['invalid_fileds'][$unique_id] = true;
+		$this->data['invalid_fields'][$unique_id] = true;
 	}
 	
 	
@@ -101,13 +101,13 @@ class FoxFormBoard
 	
 	public function getShowFormFields()
 	{
-		return (bool) $this->data['show_form_fileds'];
+		return (bool) $this->data['show_form_fields'];
 	}
 	
 	
-	public function setShowFormFields($show_form_fileds)
+	public function setShowFormFields($show_form_fields)
 	{
-		$this->data['show_form_fileds'] = (bool) $show_form_fileds;
+		$this->data['show_form_fields'] = (bool) $show_form_fields;
 	}
 	
 	

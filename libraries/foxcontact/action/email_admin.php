@@ -22,24 +22,23 @@ class FoxActionEmailAdmin extends FoxActionEmail
 	protected function prepare($mail)
 	{
 		$render = $this->form->getMessageRender(false);
-		$this->setFrom($mail, '', $this->form->getName(), $this->form->getEmail(), $this->form->getName());
-		$this->setTo($mail, 'to', 'to_address', 'addRecipient');
-		$this->setTo($mail, 'cc', 'cc_address', 'addCC');
-		$this->setTo($mail, 'bcc', 'bcc_address', 'addBCC');
+		$mail->setFrom('', $this->form->getName());
+		$mail->setReplyTo($this->form->getEmail(), $this->form->getName());
+		$this->addRecipients($mail, 'to', 'to_address', 'addRecipient');
+		$this->addRecipients($mail, 'cc', 'cc_address', 'addCC');
+		$this->addRecipients($mail, 'bcc', 'bcc_address', 'addBCC');
 		$mail->setSubject($render->renderSubject('email_subject'));
-		$mail->Encoding = 'quoted-printable';
-		$mail->setBody($render->renderBody('email_body'));
-		$this->prepareAlternateBody($mail);
+		$mail->setHtml($render->renderBody('email_body'));
 		$this->addAttachments($mail);
 	}
 	
 	
-	private function setTo($mail, $key, $param_name, $method)
+	private function addRecipients($mail, $key, $param_name, $method)
 	{
 		$recipients = $this->getRecipients($key, $param_name);
 		foreach ($recipients as $recipient)
 		{
-			$mail->{$method}(JMailHelper::cleanAddress($recipient));
+			$mail->{$method}($recipient);
 		}
 	
 	}
@@ -79,7 +78,7 @@ class FoxActionEmailAdmin extends FoxActionEmail
 	}
 	
 	
-	private function addRecipientToList(&$recipients, $recipient)
+	private function addRecipientToList(array &$recipients, $recipient)
 	{
 		$recipient = trim($recipient);
 		if (!empty($recipient) && !in_array($recipient, $recipients))

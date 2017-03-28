@@ -9,17 +9,22 @@ jimport('foxcontact.joomla.recaptcha');
 
 class FoxDesignItemRecaptcha extends FoxDesignItem
 {
-	protected $captcha = null;
+	private $captcha = null;
 	
-	protected function init()
+	public function getRecaptcha()
 	{
-		$this->captcha = FoxJoomlaRecaptcha::getInstance($this->getItemId());
+		if (is_null($this->captcha))
+		{
+			$this->captcha = FoxJoomlaRecaptcha::getInstance($this->getItemId());
+		}
+		
+		return $this->captcha;
 	}
 	
 	
 	public function getState()
 	{
-		if (!$this->captcha->isEnable())
+		if (!$this->getRecaptcha()->isEnable())
 		{
 			return 'disabled';
 		}
@@ -29,41 +34,16 @@ class FoxDesignItemRecaptcha extends FoxDesignItem
 	}
 	
 	
-	public function getJCaptcha()
-	{
-		return $this->captcha;
-	}
-	
-	
 	public function getLabelForId()
 	{
 		return '';
 	}
 	
 	
-	public function getValue()
-	{
-		return isset($this->data[$this->get('unique_id')]) ? $this->data[$this->get('unique_id')] : $this->getDefaultValue();
-	}
-	
-	
-	public function getValueAsText()
-	{
-		return (string) $this->getValue();
-	}
-	
-	
-	public function hasValue()
-	{
-		$value = $this->getValue();
-		return !empty($value);
-	}
-	
-	
-	protected function check($value, &$messages)
+	protected function check($value, array &$messages)
 	{
 		$secure_form_id = $this->getSecureFormId();
-		if ($value !== $secure_form_id && !$this->captcha->checkAnswer($value))
+		if ($value !== $secure_form_id && !$this->getRecaptcha()->checkAnswer($value))
 		{
 			$messages[] = $this->getMessage(JText::sprintf('COM_FOXCONTACT_ERR_INVALID_VALUE', JText::_('COM_FOXCONTACT_RECAPTCHA_SOLUTION')));
 		}

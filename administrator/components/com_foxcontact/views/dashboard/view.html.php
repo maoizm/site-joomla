@@ -26,10 +26,10 @@ class FoxContactViewDashboard extends FoxView
 	
 	protected function addToolBar()
 	{
-		JToolBarHelper::title(JText::_('COM_FOXCONTACT_SUBMENU_DASHBOARD'), 'mail');
+		JToolbarHelper::title(JText::_('COM_FOXCONTACT_SUBMENU_DASHBOARD'), 'mail');
 		if (JFactory::getUser()->authorise('core.admin', 'com_foxcontact'))
 		{
-			JToolBarHelper::preferences('com_foxcontact');
+			JToolbarHelper::preferences('com_foxcontact');
 		}
 	
 	}

@@ -42,7 +42,7 @@ class FoxDesignBase
 	}
 	
 	
-	private function getStruct($value, $owner, $deep, $root, $parent)
+	private function getStruct(array $value, $owner, $deep, FoxDesignRoot $root, $parent)
 	{
 		if ($parent === 'items')
 		{
@@ -63,7 +63,7 @@ class FoxDesignBase
 		$current = $this;
 		foreach (explode('.', $name) as $key)
 		{
-			if (!isset($current->{$key}))
+			if (is_null($current) || !isset($current->{$key}))
 			{
 				return $default;
 			}

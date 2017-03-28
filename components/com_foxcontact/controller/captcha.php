@@ -8,7 +8,6 @@
 jimport('foxcontact.form.model');
 jimport('foxcontact.html.header');
 jimport('foxcontact.html.captcha');
-jimport('foxcontact.joomla.comp');
 
 class FoxContactControllerCaptcha extends JControllerLegacy
 {
@@ -18,9 +17,9 @@ class FoxContactControllerCaptcha extends JControllerLegacy
 		$input = JFactory::getApplication()->input;
 		$uid = $input->get('uid', '-');
 		$item = $uid !== '-' ? FoxFormModel::getFormByUid($uid)->getDesign()->getFoxDesignItemByType('captcha') : null;
-		$params = !is_null($item) ? $item : FoxJoomlaComp::newJRegistry($_GET);
+		$params = !is_null($item) ? $item : new JRegistry($input->getArray());
 		$drawer = FoxHtmlCaptchaDrawer::create($params->get('enigma.type', 'alphanumeric'));
-		$drawer->setLength($params->get('enigma.length', 5));
+		$drawer->setLength((int) $params->get('enigma.length', 5));
 		$drawer->setFontProperty($params->get('font.min', 14), $params->get('font.max', 20), $params->get('font.angle', 20), $params->get('font.family', 'random'));
 		$drawer->setImageProperty($params->get('img.width', 270), $params->get('img.height', 100), $params->get('img.background_color', '#ffffff'), $params->get('img.text_color', '#191919'), $params->get('img.disturb_color', '#c8c8c8'));
 		$answer = $drawer->shuffle();

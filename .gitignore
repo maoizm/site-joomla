@@ -233,6 +233,8 @@
 /administrator/language/en-GB/en-GB.plg_system_debug.sys.ini
 /administrator/language/en-GB/en-GB.plg_system_highlight.ini
 /administrator/language/en-GB/en-GB.plg_system_highlight.sys.ini
+/administrator/language/en-GB/en-GB.plg_system_jscsscontrol.ini
+/administrator/language/en-GB/en-GB.plg_system_jscsscontrol.sys.ini
 /administrator/language/en-GB/en-GB.plg_system_languagefilter.ini
 /administrator/language/en-GB/en-GB.plg_system_languagefilter.sys.ini
 /administrator/language/en-GB/en-GB.plg_system_log.ini
@@ -746,3 +748,8 @@ jspm_packages
 .[0-9][0-9]*_[0-9][0-9]*.sql.gz
 
 /.test/gulp2/_build/
+/.test/gulp2/_dist/
+/_build/
+/_dist/
+/_zip/
+

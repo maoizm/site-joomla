@@ -13,7 +13,7 @@ jimport('foxcontact.document.loader');
 
 class FoxFormForm
 {
-	private static $action_names = array('jmessenger', 'database', 'newsletter_plugin', 'newsletter_acymailing', 'newsletter_jnews', 'email_admin', 'email_user', 'onscreen');
+	private static $action_names = array('jmessenger', 'database', 'newsletter', 'email_admin', 'email_user', 'onscreen');
 	private static $resources = array();
 	private $scope, $id, $uid, $params, $version, $design;
 	private $iid;
@@ -111,7 +111,7 @@ class FoxFormForm
 	}
 	
 	
-	public function update($post_data)
+	public function update(array $post_data)
 	{
 		foreach ($this->getDesign()->getItems() as $item)
 		{
@@ -157,12 +157,12 @@ class FoxFormForm
 	private function addFormResources()
 	{
 		$fox_document_loader = FoxDocumentLoader::getInstance($this->getUid());
-		// $fox_document_loader->addResource(array('root' => 'media', 'name' => 'foxcontact', 'type' => 'css'));
+		$fox_document_loader->addResource(array('root' => 'media', 'name' => 'foxcontact', 'type' => 'css'));
 		$stylesheet = $this->getDesign()->get('option.form.style', 'bootstrap.css');
 		$stylesheet = preg_replace('/\\.[^.\\s]{3,4}$/', '', $stylesheet);
 		if (!empty($stylesheet))
 		{
-			// $fox_document_loader->addResource(array('root' => 'components', 'name' => $stylesheet, 'type' => 'css'));
+			$fox_document_loader->addResource(array('root' => 'components', 'name' => $stylesheet, 'type' => 'css'));
 		}
 	
 	}
@@ -193,7 +193,7 @@ class FoxFormForm
 		}
 		else
 		{
-			if ($this->board->isValidated())
+			if ($this->board->isValidated() || !empty($this->data))
 			{
 				$this->save();
 			}
@@ -217,11 +217,29 @@ class FoxFormForm
 	
 	public function process($target)
 	{
+		foreach ($this->getDesign()->getItems() as $item)
+		{
+			if (method_exists($item, 'onBeforeProcess'))
+			{
+				$item->onBeforeProcess($target);
+			}
+		
+		}
+		
 		foreach ($this->getActions() as $action)
 		{
 			if (!$action->process($target))
 			{
 				return false;
+			}
+		
+		}
+		
+		foreach ($this->getDesign()->getItems() as $item)
+		{
+			if (method_exists($item, 'onAfterProcess'))
+			{
+				$item->onAfterProcess($target);
 			}
 		
 		}

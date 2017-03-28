@@ -17,13 +17,6 @@ class JFormFieldVisualDesigner extends JFormField
 {
 	protected $type = 'VisualDesigner';
 	
-	public function __construct($form = null)
-	{
-		parent::__construct($form);
-		JLog::addLogger(array('text_file' => 'foxcontact.lng_js.txt', 'text_entry_format' => "{DATE}\t{TIME}\t{PRIORITY}\t{CATEGORY}\t{MESSAGE}"), JLog::ALL, array('lng_js'));
-	}
-	
-	
 	protected function getLabel()
 	{
 		return '';
@@ -34,7 +27,18 @@ class JFormFieldVisualDesigner extends JFormField
 	{
 		if (JFactory::getApplication()->input->get('option', '') === 'com_falang')
 		{
-			$this->warnUserEditFromFalang();
+			$msg = JText::_('COM_FOXCONTACT_ERR_COM_FALANG');
+			$url = 'http://www.fox.ra.it/forum/22-how-to/5042-setup-a-multilanguage-form.html';
+			$this->incompatibilityWarning($msg, $url);
+			return '';
+		}
+		
+		$current_template = JFactory::getApplication()->getTemplate();
+		if ($current_template !== 'isis')
+		{
+			$msg = JText::sprintf('COM_FOXCONTACT_ERR_ADMIN_TEMPLATE', $current_template);
+			$url = 'http://www.fox.ra.it/forum/15-installation/77-joomla-compatibility-list.html';
+			$this->incompatibilityWarning($msg, $url);
 			return '';
 		}
 		
@@ -51,8 +55,13 @@ class JFormFieldVisualDesigner extends JFormField
 		$media_root = JPATH_ROOT . '/media/com_foxcontact';
 		$cmp_root = JPATH_ROOT . '/components/com_foxcontact';
 		$ln = JFactory::getLanguage()->getTag();
-		$lng_file_ver = $this->verifyLngJsFile($ln);
-		JFactory::getDocument()->addScript(JUri::base(true) . "/cache/foxcontact/{$ln}.foxcontact.js?v={$lng_file_ver}")->addScriptDeclaration(";\n;fox.items.captcha.files=" . json_encode(JFolder::files("{$media_root}/fonts", '\\.ttf$')) . ";\n" . ";\n;fox.gesture_click_frm_edt.styles=" . json_encode(JFolder::files("{$cmp_root}/css", '\\.css$')) . ";\n" . ";\n;fox.items.submit.files=" . json_encode(array('submit' => array('icons' => JFolder::files("{$media_root}/images/submit", '\\.png$'), 'images' => JFolder::files("{$media_root}/images/buttons/submit", '\\.png$')), 'reset' => array('icons' => JFolder::files("{$media_root}/images/reset", '\\.png$'), 'images' => JFolder::files("{$media_root}/images/buttons/reset", '\\.png$')))) . ";\n" . ";\n;fox.items.newsletter.newsletters=" . json_encode(array_filter(array(FoxFormNewsletter::load('acymailing'), FoxFormNewsletter::load('jnews')))) . ";\n");
+		$this->verifyLngJsFile($ln);
+		$document = JFactory::getDocument();
+		$document->addScript(FoxHtmlResource::path("/administrator/cache/foxcontact/{$ln}.foxcontact", 'js', false));
+		$document->addScriptDeclaration('fox.items.submit.files=' . json_encode(array('submit' => array('icons' => JFolder::files("{$media_root}/images/submit", '\\.png$'), 'images' => JFolder::files("{$media_root}/images/buttons/submit", '\\.png$')), 'reset' => array('icons' => JFolder::files("{$media_root}/images/reset", '\\.png$'), 'images' => JFolder::files("{$media_root}/images/buttons/reset", '\\.png$')))) . ';' . PHP_EOL);
+		$document->addCustomTag('<meta name=\'fox:captcha:fonts\' content=\'' . json_encode(JFolder::files("{$media_root}/fonts", '\\.ttf$')) . '\' />');
+		$document->addCustomTag('<meta name=\'fox:form::stylesheets\' content=\'' . json_encode(JFolder::files("{$cmp_root}/css", '\\.css$')) . '\' />');
+		$document->addCustomTag('<meta name=\'fox:newsletter:entries\' content=\'' . json_encode(FoxFormNewsletter::loadAll()) . '\' />');
 		return FoxHtmlElem::create()->append(FoxHtmlElem::create('input')->attr('id', $this->id)->attr('name', $this->name)->attr('type', 'hidden')->attr('value', $this->value))->append(FoxHtmlElem::create('div')->attr('id', 'fvd-target-1')->classes('fvd-target')->attr('style', 'display: none;'))->append(FoxHtmlElem::create('div')->attr('id', 'fvd-target-2')->classes('fvd-target')->attr('style', 'display: none;'))->append(FoxHtmlElem::create('div')->attr('id', 'fvd-window-1')->classes('fvd-window')->attr('style', 'display: none;'))->append(FoxHtmlElem::create('div')->attr('id', 'fvd-designer')->classes('fvd-visual-designer')->attr('data-ref', $this->id))->conditional(JDEBUG, function ()
 		{
 			return FoxHtmlElem::create('pre')->attr('id', 'fvd-debug')->classes('fvd-debug')->attr('style', 'display: none;');
@@ -60,23 +69,22 @@ class JFormFieldVisualDesigner extends JFormField
 	}
 	
 	
-	private function warnUserEditFromFalang()
+	private function incompatibilityWarning($msg, $url)
 	{
-		JEventDispatcher::getInstance()->register('onAfterDispatch', function ()
+		JEventDispatcher::getInstance()->register('onAfterDispatch', function () use($msg, $url)
 		{
 			FoxJoomlaLang::load(true, true);
-			$ttl = JText::_('WARNING');
-			$lnk = JText::_('COM_FOXCONTACT_READ_MORE');
-			$msg = JText::_('COM_FOXCONTACT_ERR_COM_FALANG');
-			$url = 'http://www.fox.ra.it/forum/22-how-to/5042-setup-a-multilanguage-form.html';
-			JFactory::getDocument()->setBuffer("<div class='alert'><strong>{$ttl}</strong><br><span>{$msg}</span> <a href='{$url}'>{$lnk}</a></div>", 'component');
+			$title = JText::_('WARNING');
+			$read_more = JText::_('COM_FOXCONTACT_READ_MORE');
+			JFactory::getDocument()->setBuffer("\n\t\t\t\t<div class='alert'>\n\t\t\t\t\t<h2>{$title}</h2>\n\t\t\t\t\t<p>{$msg}</p>\n\t\t\t\t\t<a class='btn' href='{$url}'>{$read_more}</a>\n\t\t\t\t</div>", 'component');
 		});
 		JEventDispatcher::getInstance()->register('onRenderModule', function ($module)
 		{
 			if ($module->module === 'mod_toolbar')
 			{
 				$toolbar = JToolbar::getInstance('com_foxcontact_edit_outside_toolbar');
-				$toolbar->appendButton('Link', 'back', JText::_('JTOOLBAR_BACK'), JRoute::_('index.php?option=com_falang&task=translate.overview'));
+				$button = '<button onclick="window.history.back();" class="btn btn-small"><span class="icon-back icon-32-back"></span>' . JText::_('JTOOLBAR_BACK') . '</button>';
+				$toolbar->appendButton('Custom', $button);
 				$module->content = $toolbar->render();
 			}
 		
@@ -91,8 +99,7 @@ class JFormFieldVisualDesigner extends JFormField
 		if (!is_dir($cache_directory))
 		{
 			JFactory::getApplication()->enqueueMessage(JText::_('COM_FOXCONTACT_CACHE_WRITE_ERROR'), 'error');
-			JLog::add('Error creating the cache directory.', JLog::ERROR, 'lng_js');
-			return '';
+			return;
 		}
 		
 		if (!is_file($htaccess = $cache_directory . '/.htaccess'))
@@ -105,8 +112,7 @@ class JFormFieldVisualDesigner extends JFormField
 		{
 			$this->buildLngJsFile($cache_file);
 		}
-		
-		return @filemtime($cache_file);
+	
 	}
 	
 	
@@ -129,41 +135,17 @@ class JFormFieldVisualDesigner extends JFormField
 	
 	private function buildLngJsFile($file_name)
 	{
-		$path_info = pathinfo($file_name);
-		JLog::add("Start generating the cache file [{$path_info['basename']}].", JLog::INFO, 'lng_js');
 		$result = array();
 		FoxJoomlaLang::load(true, true);
-		$untranslated_strings = 0;
 		foreach ($this->getLngJsFileKeys() as $k)
 		{
 			$result[$k] = JText::_($k);
-			if (strtoupper($k) === strtoupper($result[$k]))
-			{
-				$untranslated_strings += 1;
-			}
-		
-		}
-		
-		if ($untranslated_strings > 0)
-		{
-			JLog::add("Error translating keys for the cache file [{$path_info['basename']}] untranslated strings: {$untranslated_strings}.", JLog::ERROR, 'lng_js');
-			JLog::add("print_r(JFactory::getLanguage())\n" . print_r(JFactory::getLanguage(), true), JLog::ERROR, 'lng_js');
 		}
 		
 		$result = json_encode($result);
-		$bytes = file_put_contents($file_name, "fox.lang.init({$result});");
-		if ($bytes === false)
+		if (@file_put_contents($file_name, "fox.lang.init({$result});") === false)
 		{
-			JLog::add("Error writing the cache file [{$path_info['basename']}].", JLog::ERROR, 'lng_js');
 			JFactory::getApplication()->enqueueMessage(JText::_('COM_FOXCONTACT_CACHE_WRITE_ERROR'), 'error');
-		}
-		else
-		{
-			if ($untranslated_strings > 0)
-			{
-			}
-			
-			JLog::add("Generated the cache file [{$path_info['basename']}].", JLog::INFO, 'lng_js');
 		}
 	
 	}
@@ -171,34 +153,27 @@ class JFormFieldVisualDesigner extends JFormField
 	
 	private function getLngJsFileKeys()
 	{
-		return array_merge($this->getLngKeysFromIniFile('/administrator/components/com_foxcontact/language/en-GB/en-GB.com_foxcontact.ini'), $this->getLngKeysFromIniFile('/components/com_foxcontact/language/en-GB/en-GB.com_foxcontact.ini'));
+		return array_merge($this->parse_ini_file('/administrator/components/com_foxcontact/language/en-GB/en-GB.com_foxcontact.ini'), $this->parse_ini_file('/components/com_foxcontact/language/en-GB/en-GB.com_foxcontact.ini'));
 	}
 	
 	
-	private function getLngKeysFromIniFile($file_name)
+	private function parse_ini_file($file_name)
 	{
-		$content = @file_get_contents(JPATH_ROOT . $file_name);
-		$array = @parse_ini_string($content);
-		$keys = is_array($array) ? array_keys($array) : array();
-		if (empty($keys))
-		{
-			JLog::add("Failed to load ini keys from [{$file_name}]", JLog::ERROR, 'lng_js');
-		}
-		
-		return $keys;
+		$records = parse_ini_string(@file_get_contents(JPATH_ROOT . $file_name)) or $records = array();
+		return array_keys($records);
 	}
 	
 	
 	private function addFolderFiles($folder, $type, $method)
 	{
-		$folder = "/components/com_foxcontact/{$folder}";
-		$root_url = JUri::base(true);
+		$folder = "/administrator/components/com_foxcontact/{$folder}";
 		$document = JFactory::getDocument();
-		$folder .= JDEBUG && file_exists(JPATH_BASE . $folder) ? '' : '.min';
-		$files = glob(JPATH_BASE . "{$folder}/*.{$type}") or $files = array();
+		$folder .= JDEBUG && file_exists(JPATH_ROOT . $folder) ? '' : '.min';
+		$files = glob(JPATH_ROOT . "{$folder}/*.{$type}") or $files = array();
 		foreach ($files as $file)
 		{
-			$document->{$method}($root_url . $folder . '/' . pathinfo($file, PATHINFO_BASENAME));
+			$info = pathinfo($file);
+			$document->{$method}(FoxHtmlResource::path($folder . '/' . $info['filename'], $info['extension'], false));
 		}
 	
 	}

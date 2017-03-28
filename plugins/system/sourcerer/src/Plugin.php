@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         7.0.2
+ * @version         7.1.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -84,6 +84,11 @@ class Plugin extends JPlugin
 
 	private function run()
 	{
+		if (!$this->passChecks())
+		{
+			return null;
+		}
+
 		if (!$this->getHelper())
 		{
 			return false;
@@ -121,11 +126,6 @@ class Plugin extends JPlugin
 		$this->_init = true;
 
 		if (!$this->passChecks())
-		{
-			return null;
-		}
-
-		if (!$this->extraChecks())
 		{
 			return null;
 		}
@@ -173,19 +173,34 @@ class Plugin extends JPlugin
 			return false;
 		}
 
+		if (!$this->extraChecks())
+		{
+			return false;
+		}
+
 		return true;
 	}
 
 	public function passPageTypes()
 	{
-		if (!in_array('*', $this->_page_types))
+		if (empty($this->_page_types))
+		{
+			return true;
+		}
+
+		if (in_array('*', $this->_page_types))
+		{
+			return true;
+		}
+
+		if (empty(JFactory::$document))
 		{
 			return true;
 		}
 
 		$page_type = JFactory::getDocument()->getType();
 
-		if (!in_array($page_type, $this->_page_types))
+		if (in_array($page_type, $this->_page_types))
 		{
 			return true;
 		}

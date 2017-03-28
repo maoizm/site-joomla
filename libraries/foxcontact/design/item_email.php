@@ -16,7 +16,13 @@ class FoxDesignItemEmail extends FoxDesignItem
 	}
 	
 	
-	protected function check($value, &$messages)
+	public function setValue($value)
+	{
+		parent::setValue(trim($value));
+	}
+	
+	
+	protected function check($value, array &$messages)
 	{
 		parent::check($value, $messages);
 		if (!$this->isValueEmpty($value))
@@ -43,7 +49,7 @@ class FoxDesignItemEmail extends FoxDesignItem
 		{
 			$tokens = explode('@', $value);
 			$domain = array_pop($tokens);
-			return checkdnsrr($domain, 'A');
+			return checkdnsrr($domain, 'MX') || checkdnsrr($domain, 'A');
 		}
 		
 		return true;

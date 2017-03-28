@@ -12,6 +12,7 @@ class PlgContentFoxcontactInstallerScript
 	public function postflight()
 	{
 		JFactory::getDbo()->setQuery(file_get_contents(__DIR__ . '/sql/install.mysql.utf8.sql'))->execute();
+		JFactory::getCache('com_plugins', '')->cache->clean();
 	}
 
 }

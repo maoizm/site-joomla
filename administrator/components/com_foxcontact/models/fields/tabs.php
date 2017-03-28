@@ -6,6 +6,7 @@
  * @see       Documentation: http://www.fox.ra.it/forum/2-documentation.html
  */
 jimport('foxcontact.joomla.lang');
+jimport('foxcontact.html.resource');
 JFormHelper::loadFieldClass('container');
 
 class JFormFieldTabs extends JFormFieldContainer
@@ -18,7 +19,7 @@ class JFormFieldTabs extends JFormFieldContainer
 		if ($resources)
 		{
 			$resources = false;
-			JFactory::getDocument()->addStyleSheet(JUri::base(true) . '/components/com_foxcontact/css/' . (string) $element['css'] . '.css');
+			JFactory::getDocument()->addStyleSheet(FoxHtmlResource::path('/administrator/components/com_foxcontact/css/' . (string) $element['css'], 'css', false));
 		}
 		
 		return parent::setup($element, $value, $group);

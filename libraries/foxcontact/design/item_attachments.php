@@ -26,24 +26,12 @@ class FoxDesignItemAttachments extends FoxDesignItem
 	}
 	
 	
-	protected function getDefaultValue()
-	{
-		return array();
-	}
-	
-	
-	public function getLabelForId()
-	{
-		return '';
-	}
-	
-	
-	public function update($post_data)
+	public function update(array $post_data)
 	{
 	}
 	
 	
-	protected function check($value, &$messages)
+	protected function check($value, array &$messages)
 	{
 		if (count($value) < $this->get('file.min', 0))
 		{
@@ -60,11 +48,11 @@ class FoxDesignItemAttachments extends FoxDesignItem
 	
 	public function onBeforeRender()
 	{
-		$this->set('required', $this->get('file.min', 0) !== 0);
+		$this->set('required', $this->get('file.min', 0) > 0);
 	}
 	
 	
-	public function addResources($document)
+	public function addResources(JDocument $document)
 	{
 		$document->addScript(FoxHtmlResource::path('/media/com_foxcontact/js/upload', 'js'));
 	}
@@ -117,8 +105,8 @@ class FoxDesignItemAttachments extends FoxDesignItem
 		{
 			if (strlen($file['realname']) > 33)
 			{
-				$substr = function_exists('mb_substr') ? 'mb_substr' : 'substr';
-				$files[$i]['realname'] = "{$substr($file['realname'], 0, 19)}...{$substr($file['realname'], -13)}";
+				$sub_str_fun = function_exists('mb_substr') ? 'mb_substr' : 'substr';
+				$files[$i]['realname'] = "{$sub_str_fun($file['realname'], 0, 19)}...{$sub_str_fun($file['realname'], -13)}";
 			}
 		
 		}
@@ -150,27 +138,21 @@ class FoxDesignItemAttachments extends FoxDesignItem
 	}
 	
 	
-	public function isValueForUserHtml()
-	{
-		return false;
-	}
-	
-	
 	public function getValueForAdmin()
 	{
-		$elems = FoxHtmlElem::create();
+		$elements = FoxHtmlElem::create();
 		$base = JUri::base();
 		foreach ($this->getValue() as $file)
 		{
-			if (!$elems->isEmpty())
+			if (!$elements->isEmpty())
 			{
-				$elems->append(', ');
+				$elements->append(', ');
 			}
 			
-			$elems->append(FoxHtmlElem::create('a')->attr('href', "{$base}components/com_foxcontact/uploads/{$file['filename']}")->classes('field-table-href')->text($file['realname']));
+			$elements->append(FoxHtmlElem::create('a')->attr('href', "{$base}components/com_foxcontact/uploads/{$file['filename']}")->classes('field-table-href')->text($file['realname']));
 		}
 		
-		return $elems->render();
+		return $elements->render();
 	}
 	
 	

@@ -13,11 +13,11 @@ class FoxDesignItemAntispam extends FoxDesignItem
 	public function __construct($value = array())
 	{
 		parent::__construct(array_merge_recursive($value, array('type' => 'antispam', 'unique_id' => 'antispam')));
-		JLog::addLogger(array('text_file' => 'foxcontact.php', 'text_entry_format' => "{DATE}\t{TIME}\t{PRIORITY}\t{CATEGORY}\t{MESSAGE}"), JLog::ALL, array('spam'));
+		FoxLog::addLogger(array('text_file' => 'foxcontact.php', 'text_entry_format' => "{DATE}\t{TIME}\t{PRIORITY}\t{CATEGORY}\t{MESSAGE}"), JLog::ALL, array('spam'));
 	}
 	
 	
-	public function update($post_data)
+	public function update(array $post_data)
 	{
 	}
 	
@@ -28,7 +28,7 @@ class FoxDesignItemAntispam extends FoxDesignItem
 	}
 	
 	
-	protected function check($value, &$messages)
+	protected function check($value, array &$messages)
 	{
 		$form = FoxFormModel::getFormByUid($this->get('uid'));
 		$spam_words = $this->getSpamWords($form);
@@ -37,7 +37,7 @@ class FoxDesignItemAntispam extends FoxDesignItem
 			$text = $this->getTextToCheck($form);
 			foreach ($spam_words as $word)
 			{
-				if (stripos($text, trim($word)) !== false)
+				if (stripos($text, $word) !== false)
 				{
 					$messages[] = $this->getMessage($form->getParams()->get('spam_detected_text'), FoxFormBoard::warning);
 					$this->log($form);
@@ -54,7 +54,7 @@ class FoxDesignItemAntispam extends FoxDesignItem
 	private function getSpamWords($form)
 	{
 		$disabled = !(bool) $form->getParams()->get('spam_check', 0);
-		$spam_words = trim($form->getParams()->get('spam_words', ''));
+		$spam_words = str_replace(array("\r", "\n"), '', $form->getParams()->get('spam_words', ''));
 		if ($disabled || empty($spam_words))
 		{
 			return array();

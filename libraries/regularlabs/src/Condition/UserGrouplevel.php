@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.2.10818
+ * @version         17.2.11804
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -36,14 +36,26 @@ class UserGrouplevel
 			$groups = $user->getAuthorisedGroups();
 		}
 
-		if ($this->params->inc_children)
+		if (!$this->params->match_all && $this->params->inc_children)
 		{
 			$this->setUserGroupChildrenIds();
 		}
 
 		$this->selection = $this->convertUsergroupNamesToIds($this->selection);
 
+		if ($this->params->match_all)
+		{
+			return $this->passMatchAll($groups);
+		}
+
 		return $this->passSimple($groups);
+	}
+
+	private function passMatchAll($groups)
+	{
+		$pass = !array_diff($this->selection, $groups) && !array_diff($groups, $this->selection);
+
+		return $this->_($pass);
 	}
 
 	private function convertUsergroupNamesToIds($selection)

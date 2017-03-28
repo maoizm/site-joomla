@@ -10,7 +10,7 @@ jimport('foxcontact.html.resource');
 class FoxDesignItemCalendar extends FoxDesignItem
 {
 	
-	public function addResources($document)
+	public function addResources(JDocument $document)
 	{
 		$document->addScript(FoxHtmlResource::path('/media/com_foxcontact/js/calendar', 'js'));
 		$document->addStyleSheet(FoxHtmlResource::path('/media/com_foxcontact/css/calendar', 'css', false));

@@ -43,14 +43,14 @@ abstract class FoxHtmlCaptchaDrawer
 		$this->font_min = (int) $min;
 		$this->font_max = (int) $max;
 		$this->font_angle = (int) $angle;
-		$fontdir = JPATH_SITE . '/media/com_foxcontact/fonts/';
-		if ($family === 'random')
+		$font_dir = JPATH_SITE . '/media/com_foxcontact/fonts/';
+		$fonts = JFolder::files($font_dir, '\\.ttf$');
+		if ($family === 'random' || !in_array($family, $fonts))
 		{
-			$fonts = JFolder::files($fontdir, '\\.ttf$');
 			$family = $fonts[rand(0, count($fonts) - 1)];
 		}
 		
-		$this->font_family = $fontdir . $family;
+		$this->font_family = $font_dir . $family;
 	}
 	
 	

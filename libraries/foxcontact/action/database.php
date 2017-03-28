@@ -24,7 +24,7 @@ class FoxActionDatabase extends FoxActionBase
 		$ip = FoxDesignItemUserInfo::getCurrentIp();
 		$url = $this->form->getDesign()->getFoxDesignItemSystem()->getFormPageUri();
 		$data_json = $this->getDataJson();
-		$result = $this->insert($oid, $date, $ip, $url, $data_json);
+		$result = $data_json !== false ? $this->insert($oid, $date, $ip, $url, $data_json) : false;
 		if (!$result)
 		{
 			FoxLog::add('Enquiry NOT saved to the database.', JLog::ERROR, 'action');
@@ -62,7 +62,7 @@ class FoxActionDatabase extends FoxActionBase
 		$data = array();
 		foreach ($this->form->getDesign()->getItems() as $item)
 		{
-			if ($item->canBeExported() && $item->hasValue())
+			if ($item->canBeExported())
 			{
 				$type = $item->getType();
 				$label = $item->get('label');

@@ -6,4 +6,4 @@
  * @see       Documentation: http://www.fox.ra.it/forum/2-documentation.html
  */
 list($uid, $board, $current, $form) = FoxFormRender::listFormVariables('uid,board');
-FoxHtmlElem::create('div')->classes('fox-item fox-item-html fox-item-html-fields control-group')->append(FoxFormRender::render('label_collapsed'))->append(FoxHtmlElem::create('div')->classes('controls')->html($current->get('html')))->show();
+FoxHtmlElem::create('div')->classes('fox-item fox-item-html fox-item-html-fields control-group')->append(FoxFormRender::render('label_collapsed'))->append(FoxHtmlElem::create('div')->classes('controls')->attr('style', "{$current->getStyleWidth()}{$current->getStyleHeight()}")->html($current->get('html')))->show();

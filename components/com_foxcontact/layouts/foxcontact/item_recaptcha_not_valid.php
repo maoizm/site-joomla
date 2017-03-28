@@ -6,7 +6,7 @@
  * @see       Documentation: http://www.fox.ra.it/forum/2-documentation.html
  */
 list($uid, $board, $current, $form) = FoxFormRender::listFormVariables('uid,board');
-FoxHtmlElem::create('div')->attr('id', $current->getBoxId())->classes('fox-item fox-item-recaptcha control-group')->classes($current->get('classes'))->classes($board->getItemDecorationClass($current->get('unique_id')))->append(FoxFormRender::render('label'))->append(FoxHtmlElem::create('div')->classes('controls')->append($current->getJCaptcha()->display($current->getInputName(), $current->getItemId(), 'fox-item-recaptcha-display'))->conditional($board->isValidated() && $board->isFieldInvalid($current->get('unique_id')), function ()
+FoxHtmlElem::create('div')->attr('id', $current->getBoxId())->classes('fox-item fox-item-recaptcha control-group')->classes($current->get('classes'))->classes($board->getItemDecorationClass($current->get('unique_id')))->append(FoxFormRender::render('label'))->append(FoxHtmlElem::create('div')->classes('controls')->append($current->getRecaptcha()->display($current->getInputName(), $current->getItemId(), 'fox-item-recaptcha-display'))->conditional($board->isValidated() && $board->isFieldInvalid($current->get('unique_id')), function ()
 {
 	return FoxHtmlElem::create('span')->classes('asterisk');
 }))->show();

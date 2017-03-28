@@ -6,7 +6,6 @@
  * @see       Documentation: http://www.fox.ra.it/forum/2-documentation.html
  */
 jimport('foxcontact.form.form');
-jimport('foxcontact.joomla.comp');
 jimport('foxcontact.struct.manager');
 
 class FoxFormModel
@@ -50,13 +49,13 @@ class FoxFormModel
 	private static function loadFormFromModule($id)
 	{
 		$module = self::loadModule($id);
-		return new FoxFormForm('module', $module->id, FoxJoomlaComp::newJRegistry($module->params), FoxStructManager::getVersion());
+		return new FoxFormForm('module', $module->id, new JRegistry($module->params), FoxStructManager::getVersion());
 	}
 	
 	
 	private static function loadModule($id)
 	{
-		$db = JFactory::getDBO();
+		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
 		$query->select($db->quoteName('id') . ',' . $db->quoteName('params'));
 		$query->from($db->quoteName('#__modules'));

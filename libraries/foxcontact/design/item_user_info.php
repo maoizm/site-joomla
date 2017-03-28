@@ -11,32 +11,31 @@ class FoxDesignItemUserInfo extends FoxDesignItem
 {
 	private static $ip_text_cache = array();
 	
-	protected function finalize()
+	protected function init()
 	{
-		parent::finalize();
 		$this->set('label', JText::_('COM_FOXCONTACT_CLIENT_INFO'));
 	}
 	
 	
-	public function update($post_data)
+	public function update(array $post_data)
 	{
 		$user_info_data = array();
 		if ($this->get('info.device', false) || $this->get('info.os', false) || $this->get('info.browser', false))
 		{
-			$uaparser = new FoxHtmlUserAgentParser($_SERVER['HTTP_USER_AGENT']);
+			$ua_parser = new FoxHtmlUserAgentParser($_SERVER['HTTP_USER_AGENT']);
 			if ($this->get('info.device', false))
 			{
-				$user_info_data['device'] = self::normalize($uaparser->getDevice());
+				$user_info_data['device'] = self::normalize($ua_parser->getDevice());
 			}
 			
 			if ($this->get('info.os', false))
 			{
-				$user_info_data['os'] = self::normalize($uaparser->getOS());
+				$user_info_data['os'] = self::normalize($ua_parser->getOS());
 			}
 			
 			if ($this->get('info.browser', false))
 			{
-				$user_info_data['browser'] = self::normalize($uaparser->getBrowser());
+				$user_info_data['browser'] = self::normalize($ua_parser->getBrowser());
 			}
 		
 		}
@@ -128,14 +127,24 @@ class FoxDesignItemUserInfo extends FoxDesignItem
 	
 	private static function renderIp($ip)
 	{
-		if (function_exists('geoip_record_by_name'))
+		if (!empty($ip) && function_exists('geoip_record_by_name'))
 		{
-			$record = @geoip_record_by_name($ip) or $record = array('country_name' => JText::_('COM_FOXCONTACT_UNKNOWN_COUNTRY'), 'city' => JText::_('COM_FOXCONTACT_UNKNOWN_LOCATION'));
-			$description = JText::sprintf('COM_FOXCONTACT_LOCATION_ORIGIN', utf8_encode("{$record['country_name']}, {$record['city']}"));
+			$record = @geoip_record_by_name($ip) or $record = array();
+			$country = self::getFromArray($record, 'country_name', JText::_('COM_FOXCONTACT_UNKNOWN_COUNTRY'));
+			$city = self::getFromArray($record, 'city', JText::_('COM_FOXCONTACT_UNKNOWN_LOCATION'));
+			$description = JText::sprintf('COM_FOXCONTACT_LOCATION_ORIGIN', "{$country}, {$city}");
 			$ip .= " - {$description}";
 		}
 		
 		return $ip;
+	}
+	
+	
+	private static function getFromArray($data, $prop, $def)
+	{
+		$value = isset($data[$prop]) ? $data[$prop] : '';
+		$value = utf8_encode(trim($value));
+		return !empty($value) ? $value : $def;
 	}
 
 }

@@ -12,7 +12,7 @@ class FoxActionTarget
 	
 	public function setUrl($url, $immediate = true)
 	{
-		$this->url = $url;
+		$this->url = trim($url);
 		$this->immediate = (bool) $immediate;
 	}
 	
@@ -31,7 +31,7 @@ class FoxActionTarget
 	
 	public function isImmediate()
 	{
-		return $this->immediate;
+		return $this->immediate && $this->hasReturnUrl();
 	}
 
 }

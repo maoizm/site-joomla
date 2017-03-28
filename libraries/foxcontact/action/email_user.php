@@ -24,12 +24,10 @@ class FoxActionEmailUser extends FoxActionEmail
 	{
 		$render = $this->form->getMessageRender();
 		$config = JComponentHelper::getParams('com_foxcontact');
-		$this->setFrom($mail, $config->get('submitter_email_from', ''), $config->get('submitter_email_name', ''));
-		$mail->addRecipient(JMailHelper::cleanAddress($this->form->getEmail()));
+		$mail->setFrom($config->get('submitter_email_from', ''), $config->get('submitter_email_name', ''));
+		$mail->addRecipient($this->form->getEmail(), $this->form->getName());
 		$mail->setSubject($render->renderSubject('email_copy_subject'));
-		$mail->Encoding = 'quoted-printable';
-		$mail->setBody($render->renderBody('email_copy_body'));
-		$this->prepareAlternateBody($mail);
+		$mail->setHtml($render->renderBody('email_copy_body'));
 	}
 
 }

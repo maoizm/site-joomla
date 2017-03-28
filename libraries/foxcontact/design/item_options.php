@@ -9,7 +9,7 @@
 abstract class FoxDesignItemOptions extends FoxDesignItem
 {
 	
-	public function update($post_data)
+	public function update(array $post_data)
 	{
 		$candidate = isset($post_data[$this->get('unique_id')]) ? $post_data[$this->get('unique_id')] : '';
 		$this->setValue(!is_null($this->getOptionByValue($candidate)) ? $candidate : null);

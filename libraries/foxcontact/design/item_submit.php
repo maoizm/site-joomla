@@ -11,13 +11,13 @@ class FoxDesignItemSubmit extends FoxDesignItem
 {
 	private $cache = array();
 	
-	public function addResources($document)
+	public function addResources(JDocument $document)
 	{
 		$document->addScript(FoxHtmlResource::path('/media/com_foxcontact/js/buttons', 'js'));
 	}
 	
 	
-	public function update($post_data)
+	public function update(array $post_data)
 	{
 	}
 	

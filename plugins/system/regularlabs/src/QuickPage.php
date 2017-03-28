@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.2.10818
+ * @version         17.2.11804
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -115,7 +115,12 @@ class QuickPage
 		$app = new Application;
 		$app->render();
 
-		$html = JFactory::getApplication()->toString(JFactory::getApplication()->getCfg('gzip'));
+		// For some reason there needs to be some html output for the JFactory::getApplication()->toString() to work on some setups
+		echo '<!-- Popup -->';
+
+		$gzip = (bool) JFactory::getApplication()->get('gzip');
+		$html = JFactory::getApplication()->toString($gzip);
+
 		$html = RL_RegEx::replace('\s*<link [^>]*href="[^"]*templates/system/[^"]*\.css[^"]*"[^>]*( /)?>', '', $html);
 		$html = RL_RegEx::replace('(<body [^>]*class=")', '\1reglab-popup ', $html);
 		$html = str_replace('<body>', '<body class="reglab-popup"', $html);

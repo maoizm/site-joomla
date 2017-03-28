@@ -28,12 +28,12 @@ class FoxContactViewFoxContact extends JViewLegacy
 		
 		if ($keywords = $menu->params->get('menu-meta_keywords'))
 		{
-			$this->document->setMetadata('keywords', $keywords);
+			$this->document->setMetaData('keywords', $keywords);
 		}
 		
 		if ($robots = $menu->params->get('robots'))
 		{
-			$this->document->setMetadata('robots', $robots);
+			$this->document->setMetaData('robots', $robots);
 		}
 		
 		return parent::display($tpl);
