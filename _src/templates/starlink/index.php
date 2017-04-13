@@ -1,14 +1,18 @@
 <?php
   defined( '_JEXEC' ) or die;
   require_once JPATH_THEMES.'/'.$this->template.'/logic.php';
+
+  $fontName = 'Roboto';
+  $fontStyles = join(',', array('100', '100i','300', '300i', '400', '400i', '500', '500i', '700' , '700i', '900', '900i'));
+  $fontLink = 'https://fonts.googleapis.com/css?family=' . $fontName . ':' . $fontStyles . '&amp;subset=cyrillic,cyrillic-ext';
+  JHtml::stylesheet( $fontLink, false ); 
 ?>
 <!doctype html>
-<html lang="<?php echo $this->language; ?>">
-<!-- template:<?php echo $this->template; ?> -->
-<!--   itemId:<?php echo $itemId; ?>         -->
+<html lang="<?= $this->language ?>">
+<!-- template: <?= $this->template . str_repeat(' ', 20 - strlen($this->template)) ?> -->
+<!--   itemId: <?= $itemId . str_repeat(' ', 20 - strlen($itemId)) ?> -->
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-  <link href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i&amp;subset=cyrillic,cyrillic-ext" rel="stylesheet">
   <!--
        TODO bootstrap 3.3.7 plugins: collapse, transition, modal, buttons,
        TODO remove redundand & debug css/js in production:
@@ -35,9 +39,9 @@
   <header class="container-fluid">
     <div class="b-topRow row">
       <div class="col-xs-12 col-sm-8 col-md-3 col-lg-4">
-        <a title="StarLink" href="<?php JURI::base() ?>">
+        <a title="StarLink" href="<?= JURI::base() ?>">
           <div class="b-logo">
-            <img class="b-logo__image" src="<?=$assetsPath?>/images/logo-vector.svg">
+            <img class="b-logo__image" src="<?= $assetsPath ?>/images/logo-vector.svg">
             <!--<svg class="b-logo__image">
               <use xlink:href="#iconStarlink" class="" />
             </svg>-->
@@ -84,8 +88,9 @@
   <?php
   foreach (array('s03-HeroPosition', 's04-SubMenu', 's05-Offer') as $position) {
     if ($this->countModules($position)) : ?>
-      <!-- begin jdoc:include type="modules" name="< ?= $position ? >" -->
-        <jdoc:include type="modules" name="<?=$position?>" />
+      <!-- begin jdoc:include type="modules" name="<?= $position ?>" -->
+        <jdoc:include type="modules" name="<?= $position ?>" />
+      <!--   end jdoc:include type="modules" name="<?= $position ?>" -->
     <?php endif;
   } ?>
 
@@ -99,8 +104,9 @@
   <?php
   foreach (array('s06-Details', 's07-AllServices', 's08-CalltoAction', 's09-InfoBlock', 's10-BottomBlock') as $position) {
     if ($this->countModules($position)) : ?>
-      <!-- begin jdoc:include type="modules" name="< ?=$position? >" -->
-        <jdoc:include type="modules" name="<?=$position?>" />
+      <!-- begin jdoc:include type="modules" name="<?= $position ?>" -->
+        <jdoc:include type="modules" name="<?= $position ?>" />
+      <!--   end jdoc:include type="modules" name="<?= $position ?>" -->
     <?php endif;
   } ?>
 
